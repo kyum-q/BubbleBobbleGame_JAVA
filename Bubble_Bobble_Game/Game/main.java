@@ -7,6 +7,8 @@ public class main {
 		System.out.println("testTEst");
 		
 		System.out.println("°æ¹Ì");
+		
+		GameFrame game = new GameFrame();
 	}
 
 }
