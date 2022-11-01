@@ -12,7 +12,7 @@ public class BubbleBobbleGame  extends JFrame {
 	   public BubbleBobbleGame() {
 	      setTitle("bubble-bobble");
 	      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	      setSize(500,500);
+	      setSize(600,600);
 	      
 	      gamePanel = new GamePanel();
 	      setContentPane(gamePanel);
