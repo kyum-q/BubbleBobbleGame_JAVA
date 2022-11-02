@@ -1,21 +1,21 @@
 package BubbleGame;
+
 import javax.swing.*;
 
-
 public class GamePanel extends JPanel {
-	   private ImageIcon img = new ImageIcon("src/image/player-blue-move-left/frame-01.png");
-	   
-	   /**
-	    * Create the panel.
-	    */
-	   public GamePanel() {
-	      //setLayout(null);
-	      
-	      JLabel label = new JLabel("hello");
-	      add(label);
-	      
-	      JLabel player = new JLabel(img);
-	      add(player);
-	   }
+	private ImageIcon img = new ImageIcon("src/image/bubble-green"+'/'+"frame-01.png");
+
+	/**
+	 * Create the panel.
+	 */
+	public GamePanel() {
+		setLayout(null);
+
+		//Player2 player = new Player2(img);
+		//add(player);
+		
+		Bubble b = new Bubble(50,50);
+		add(b);
+	}
 
 }
