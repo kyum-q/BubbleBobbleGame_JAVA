@@ -8,9 +8,9 @@ import javax.swing.JLabel;
  * This class will load the sprites (image).
  */
 @SuppressWarnings("deprecation")
-public class SpriteBase {
 
-	private String dirPath;
+public class SpriteBase {
+	
     private Coordinates coordinates;
     private double w;
     private double h;
@@ -19,6 +19,7 @@ public class SpriteBase {
     private int timeCount = 0;
 
 	private boolean spriteChanged;
+	private String dirPath;
     private String [] imagePaths;
     /**
      * The constructor. It needs all the parameters and creates the image where planned.
@@ -57,7 +58,6 @@ public class SpriteBase {
     	}
     	fileName = fileNames[frameCount%(fileNames.length)];
     	String imagePath = this.getDirPath()+"/"+ fileName;
-    	System.out.println("getImage : " + imagePath);
     	return imagePath;
     }
 
@@ -209,6 +209,7 @@ public class SpriteBase {
     public void setDxCoordinate(double dx) {
         coordinates.setDXCoordinate(dx);
     }
+    
 
     /**
      * Sets the Dy.
@@ -234,6 +235,7 @@ public class SpriteBase {
         return coordinates.getDXCoordinate();
     }
 
+    
     /**
      * Gets the Dy.
      * @return The Dy.

@@ -43,7 +43,7 @@ public class GamePanel extends JPanel {
 			   while(true) {
 				   try {			
 						repaint();
-						Thread.sleep(40);
+						Thread.sleep(20);
 							
 					}catch (InterruptedException e) {
 							return;
@@ -51,7 +51,6 @@ public class GamePanel extends JPanel {
 			   }
 		   }
 	   }
-
 	   @Override
 		public void paintComponent(Graphics g) { 
 			
@@ -62,55 +61,54 @@ public class GamePanel extends JPanel {
 					
 		}
 
-class KeyListener extends KeyAdapter {
-	@Override
-	public void keyPressed(KeyEvent e) { // Ű�� ������ ��
-
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_DOWN:
-			player1.setMoveDown(true);
-			break;
-		case KeyEvent.VK_UP:
-			player1.setMoveUp(true);
-			break;
-		case KeyEvent.VK_LEFT:
-			player1.setMoveLeft(true);
-			System.out.println("왼쪽");
-			break;
-		case KeyEvent.VK_RIGHT:
-			player1.setMoveRight(true);
-			System.out.println("오른쪽");
-			break;
-		case KeyEvent.VK_SPACE:
-			player1.setJumping(true);
-			player1.setMoveUp(true);
-			break;
-		case KeyEvent.VK_ESCAPE:
-			System.exit(0);
-			break;
+	class KeyListener extends KeyAdapter {
+		@Override
+		public void keyPressed(KeyEvent e) { 
+	
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_DOWN:
+				player1.setMoveDown(true);
+				break;
+			case KeyEvent.VK_UP:
+				if(player1.getAbleToJump())
+					player1.setMoveUp(true);
+					player1.setJumping(true);
+				break;
+			case KeyEvent.VK_LEFT:
+				player1.setMoveLeft(true);
+				System.out.println("왼쪽");
+				break;
+			case KeyEvent.VK_RIGHT:
+				player1.setMoveRight(true);
+				System.out.println("오른쪽");
+				break;
+			
+			case KeyEvent.VK_ESCAPE:
+				System.exit(0);
+				break;
+			}
+	
 		}
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) { // Ű�� ����� ��
-
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_DOWN:
-			player1.setMoveDown(false);
-			break;
-		case KeyEvent.VK_UP:
-			player1.setMoveUp(false);
-			break;
-		case KeyEvent.VK_LEFT:
-			player1.setMoveLeft(false);
-			break;
-		case KeyEvent.VK_RIGHT:
-			player1.setMoveRight(false);
-			break;
-
+	
+		@Override
+		public void keyReleased(KeyEvent e) { // Ű�� ����� ��
+	
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_DOWN:
+				player1.setMoveDown(false);
+				break;
+			case KeyEvent.VK_UP:
+				player1.setMoveUp(false);
+				break;
+			case KeyEvent.VK_LEFT:
+				player1.setMoveLeft(false);
+				break;
+			case KeyEvent.VK_RIGHT:
+				player1.setMoveRight(false);
+				break;
+	
+			}
 		}
 	}
-}
 }
 
