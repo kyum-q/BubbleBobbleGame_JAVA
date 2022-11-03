@@ -20,11 +20,10 @@ public class GamePanel extends JPanel {
 	   
 	   //Coordinates coordinates, String dirPath, int playerNumber
 	   public GamePanel() {
-	      //setLayout(null);
+	      setLayout(null);
 		   //Coordinates coordinates, String dirPath, int playerNumber
 		  player1= new Player("src/image/player1-move-right", 1);
-	      JLabel label = new JLabel("hello");
-	      add(label);
+	      add(player1);
 	      
 //	      JLabel player = new JLabel(img);
 //	      add(player);
@@ -54,11 +53,10 @@ public class GamePanel extends JPanel {
 	   @Override
 		public void paintComponent(Graphics g) { 
 			
+	        System.out.println("(x,y) : " + player1.getY()+"," + player1.getX());
 			super.paintComponent(g); 
 			
-			Image player1Image = player1.getImage();
-			g.drawImage(player1Image, (int)player1.getX(), (int)player1.getY(),null);
-					
+				
 		}
 
 	class KeyListener extends KeyAdapter {

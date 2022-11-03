@@ -1,5 +1,6 @@
 package BubbleGame.gameObject;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import javax.swing.JLabel;
 import utility.Settings;
 
 
-public class Player {
+public class Player extends JLabel{
 	private final int playerNumber;
 	private double xStartLocation = 10;
 	private double yStartLocation = 400;
@@ -21,10 +22,10 @@ public class Player {
 	private double height = 50;
 	private Coordinates coordinate;
 
-	 private double playerMinX;
-	 private double playerMaxX;
-	 private double playerMinY;
-	 private double playerMaxY;
+	private double playerMinX;
+	private double playerMaxX;
+	private double playerMinY;
+	private double playerMaxY;
 	    
 	private boolean isJumping;
     private boolean isFacingRight;
@@ -37,10 +38,12 @@ public class Player {
     private boolean isMoveRight;
     private boolean isMoveUp;
     private boolean isMoveDown;
+    private boolean isDirection;
     
 
 
 	public Player(String dirPath, int playerNumber) {
+		super();
 		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
 		this.spriteBase = new SpriteBase(dirPath, coordinate);
 		this.playerNumber = playerNumber;
@@ -55,7 +58,9 @@ public class Player {
 		this.isDead = false;
         this.setUp();
 		// 사진 목록 받아오기
-		
+        
+        this.setBounds(0,0,(int)width, (int)height);
+		//this.setSize((int)width, (int)height );
 
 	}
 	private void setUp() {
@@ -65,6 +70,7 @@ public class Player {
         this.isAbleToJump = true;
         this.isJumping = false;
         this.isFacingRight = true;
+        this.isDirection = true;
 
         playerMinX = Settings.SPRITE_SIZE / 2;
         playerMaxX = Settings.SCENE_WIDTH - Settings.SPRITE_SIZE / 2;
@@ -75,12 +81,12 @@ public class Player {
         moveThread.start();
     }
 
-	public double getX() {
-		return this.spriteBase.getXCoordinate();
+	public int getX() {
+		return (int)this.spriteBase.getXCoordinate();
 		
 	}
-	public double getY() {
-		return this.spriteBase.getYCoordinate();
+	public int getY() {
+		return (int)this.spriteBase.getYCoordinate();
 	}
 	
 	class moveThread extends Thread {
@@ -92,7 +98,7 @@ public class Player {
 				move();
 				setDirImage();
 				try {		
-					Thread.sleep(30);
+					Thread.sleep(20);
 
 				} catch (InterruptedException e) {
 					return;
@@ -101,14 +107,20 @@ public class Player {
 		}
 	}
 
-	
+	@Override
+	public void paintComponent(Graphics g) { 
+		
+		Image player1Image = this.getImage();
+		g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),this);
+				
+	}
+
 	public void processInput() {
 		if (isJumping && spriteBase.getDyCoordinate() <= 0) {
 			spriteBase.setDyCoordinate(spriteBase.getDyCoordinate() + 0.6);
-			System.out.println("111111");
 		} else if (isJumping && spriteBase.getDyCoordinate() > 0) {
 			spriteBase.setDyCoordinate(spriteBase.getDyCoordinate() + 0.6);
-			System.out.println("22222");
+
 			setJumping(false);
 		} else {
 			spriteBase.setDyCoordinate(0);
@@ -135,7 +147,7 @@ public class Player {
         double x = spriteBase.getXCoordinate();
         double y = spriteBase.getYCoordinate();
         
-        System.out.println("getY : " + y);
+
         //점프 상태가 아닐 때
         if (!isJumping) {
         	//제일 밑보다 작으면 중력 안받음 
@@ -195,7 +207,7 @@ public class Player {
 				//getImagePaths();
 			//왼쪽으로 갈 때
 			} else if(isMoveLeft) {
-				System.out.println("isMoveLeft");
+
 				spriteBase.setDirPath("src/image/player1-move-left");
 				//getImagePaths();
 			}
@@ -282,6 +294,7 @@ public class Player {
 		spriteBase.setDxCoordinate(speed);
 		
 		isMoveRight = true;
+		isDirection = true;
 	}
 
 	/**
@@ -294,6 +307,7 @@ public class Player {
 		spriteBase.setDxCoordinate(-speed);
 		
 		isMoveLeft = true;
+		isDirection = false;
 	}
 	
 	public boolean isMoveLeft() {
