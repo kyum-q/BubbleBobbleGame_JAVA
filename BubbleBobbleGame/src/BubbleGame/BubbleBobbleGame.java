@@ -16,8 +16,8 @@ public class BubbleBobbleGame extends JFrame {
 
 		gamePanel = new GamePanel();
 		setContentPane(gamePanel);
-		// setLocationRelativeTo(null); // À©µµ¿ì °¡¿îµ¥ ¹èÄ¡
-		setResizable(false); // Ã¢Å©±â °íÁ¤
+		// setLocationRelativeTo(null); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½îµ¥ ï¿½ï¿½Ä¡
+		setResizable(false); // Ã¢Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		setVisible(true);
 	}
 

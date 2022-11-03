@@ -9,7 +9,6 @@ import javax.swing.JLabel;
  */
 @SuppressWarnings("deprecation")
 public class SpriteBase {
-
 	private String dirPath;
     private Coordinates coordinates;
     private double w;
@@ -18,7 +17,6 @@ public class SpriteBase {
     private int frameCount = 0;
     private int timeCount = 0;
     private int operationTime = 5;
-
 	private boolean spriteChanged;
     private String [] imagePaths;
     /**
