@@ -18,8 +18,8 @@ public class Player extends JLabel{
 	private int score;
 	private int lives;
 	private SpriteBase spriteBase;
-	private double width = 50;
-	private double height = 50;
+	private double width = 35;
+	private double height = 35;
 	private Coordinates coordinate;
 
 	private double playerMinX;
@@ -57,12 +57,11 @@ public class Player extends JLabel{
 		
 		this.isDead = false;
         this.setUp();
-		// 사진 목록 받아오기
         
         this.setBounds(0,0,(int)width, (int)height);
-		//this.setSize((int)width, (int)height );
 
 	}
+	//변수들 초기 셋팅
 	private void setUp() {
         this.score = 0;
         this.speed = 5;
@@ -80,23 +79,35 @@ public class Player extends JLabel{
         Thread moveThread = new moveThread();
         moveThread.start();
     }
-
+	
+	@Override
+	public void paintComponent(Graphics g) { 
+		
+		Image player1Image = this.getImage();
+		g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),this);
+				
+	}
+	//Player의 현재 X좌표 리턴
 	public int getX() {
 		return (int)this.spriteBase.getXCoordinate();
 		
 	}
+	
+	//Player의 현재 Y좌표 리턴
 	public int getY() {
 		return (int)this.spriteBase.getYCoordinate();
 	}
 	
+	//상태변수, 키보드 입력에 따른 좌표 변화 실행
 	class moveThread extends Thread {
 
 		@Override
 		public void run() {
 			while (true) {
+				setDirImage();
 				processInput();
 				move();
-				setDirImage();
+				
 				try {		
 					Thread.sleep(20);
 
@@ -107,13 +118,7 @@ public class Player extends JLabel{
 		}
 	}
 
-	@Override
-	public void paintComponent(Graphics g) { 
-		
-		Image player1Image = this.getImage();
-		g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),this);
-				
-	}
+	
 
 	public void processInput() {
 		if (isJumping && spriteBase.getDyCoordinate() <= 0) {
@@ -151,7 +156,7 @@ public class Player extends JLabel{
         //점프 상태가 아닐 때
         if (!isJumping) {
         	//제일 밑보다 작으면 중력 안받음 
-        	if(!(this.spriteBase.getYCoordinate() >= 400))
+        	if(!(this.spriteBase.getYCoordinate() >= 450))
         		spriteBase.setDyCoordinate(-calculateGravity());
         } else {
             setAbleToJump(true);
@@ -203,6 +208,7 @@ public class Player extends JLabel{
 		if (!isDead) {
 			//오른쪽으로 갈 때
 			if (isMoveRight) {
+				//이미지 디렉토리 변경
 				spriteBase.setDirPath("src/image/player1-move-right");
 				//getImagePaths();
 			//왼쪽으로 갈 때
@@ -227,15 +233,7 @@ public class Player extends JLabel{
 //		}
 	}
 //
-//	public void getImagePaths() {
-//		String dirPath = spriteBase.getDirPath();
-//		File dir = new File(dirPath);
-//		
-//		//이미지 파일이름들 배열에 저장
-//		this.spriteBase.setImagePaths(dir.list());
-//
-//
-//	}
+
 	
 	public SpriteBase getSpriteBase() {
 		return spriteBase;

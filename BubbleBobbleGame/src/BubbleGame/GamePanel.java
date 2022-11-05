@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -16,23 +17,23 @@ public class GamePanel extends JPanel {
 	   /**
 	    * Create the panel.
 	    */
-	   
-	   //Coordinates coordinates, String dirPath, int playerNumber
 	   public GamePanel() {
 	      setLayout(null);
-		   //Coordinates coordinates, String dirPath, int playerNumber
 		  player1= new Player("src/image/player1-move-right", 1);
 	      add(player1);
 	      
-//	      JLabel player = new JLabel(img);
-//	      add(player);
-	      DrawThread drawThread = new DrawThread();
-	      drawThread.start();
-	      
+	      //맵 그리기
+	      Map map1 = new Map("src/resource/map4.txt");
+	      ArrayList<Block> blocks = map1.getBlocks();
+	      for(Block block : blocks)
+	    	  this.add(block);
 	      this.setBackground(Color.black);
 	      this.addKeyListener(new KeyListener());
 			this.requestFocus();
 			this.setFocusable(true);
+
+		     DrawThread drawThread = new DrawThread();
+		      drawThread.start();
 	   }
 	   
 	   class DrawThread extends Thread {
@@ -52,8 +53,7 @@ public class GamePanel extends JPanel {
 	   @Override
 		public void paintComponent(Graphics g) { 
 			
-	        System.out.println("(x,y) : " + player1.getY()+"," + player1.getX());
-			super.paintComponent(g); 
+	       super.paintComponent(g); 
 			
 				
 		}
@@ -72,11 +72,9 @@ public class GamePanel extends JPanel {
 				break;
 			case KeyEvent.VK_LEFT:
 				player1.setMoveLeft(true);
-				System.out.println("왼쪽");
 				break;
 			case KeyEvent.VK_RIGHT:
 				player1.setMoveRight(true);
-				System.out.println("오른쪽");
 				break;
 			case KeyEvent.VK_SPACE:
 				if(player1.isMoveRight()) {
@@ -88,8 +86,6 @@ public class GamePanel extends JPanel {
 				else {
 					add(new Bubble("src/image/bubble-green", player1.getX(), player1.getY(), 1));
 				}
-				//player1.setJumping(true);
-				//player1.setMoveUp(true);
 				break;
 			
 			case KeyEvent.VK_ESCAPE:
@@ -100,7 +96,7 @@ public class GamePanel extends JPanel {
 		}
 	
 		@Override
-		public void keyReleased(KeyEvent e) { // Ű�� ����� ��
+		public void keyReleased(KeyEvent e) { 
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
 				player1.setMoveDown(false);

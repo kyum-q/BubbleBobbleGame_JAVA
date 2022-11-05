@@ -19,9 +19,11 @@ import java.util.Set;
  */
 public final class Settings {
 
-    public static final double SCENE_WIDTH = 832;
-    public static final double SCENE_HEIGHT = 832;
-    public static final double SPRITE_SIZE = 64;
+	public static final int BLOCK_SIZE = 23;
+	
+    public static final int SCENE_WIDTH = 650;
+    public static final int SCENE_HEIGHT = 650;
+    public static final int SPRITE_SIZE = 64;
 
     public static final int AMOUNT_MAPS = 6;
     public static final float GRAVITY_CONSTANT = 5.f;

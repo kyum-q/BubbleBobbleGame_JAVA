@@ -1,7 +1,7 @@
 package BubbleGame;
 
 import javax.swing.*;
-
+import utility.Settings;
 public class BubbleBobbleGame extends JFrame {
 
 	private GamePanel gamePanel = null;
@@ -12,17 +12,15 @@ public class BubbleBobbleGame extends JFrame {
 	public BubbleBobbleGame() {
 		setTitle("bubble-bobble");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(600, 600);
-
+		//setSize(665, 750);
+		setSize(Settings.SCENE_WIDTH, Settings.SCENE_HEIGHT);
+		
 		gamePanel = new GamePanel();
 		setContentPane(gamePanel);
-		// setLocationRelativeTo(null); // ������ ��� ��ġ
-		setResizable(false); // âũ�� ����
+		//setResizable(false); 
 		setVisible(true);
 	}
 
-	public void setGame() {
 
-	}
 
 }
