@@ -13,7 +13,7 @@ import utility.Settings;
 public class Player extends JLabel{
 	private final int playerNumber;
 	private double xStartLocation = 10;
-	private double yStartLocation = 400;
+	private double yStartLocation = 500;
 	private double speed;
 	private int score;
 	private int lives;
@@ -37,8 +37,10 @@ public class Player extends JLabel{
     private boolean isMoveLeft;
     private boolean isMoveRight;
     private boolean isMoveUp;
-    private boolean isMoveDown;
+   
+	private boolean isMoveDown;
     private boolean isDirection;
+    private boolean isWallCrush;
     
 
 
@@ -64,12 +66,13 @@ public class Player extends JLabel{
 	//변수들 초기 셋팅
 	private void setUp() {
         this.score = 0;
-        this.speed = 5;
+        this.speed = Settings.PLAYER_SPEED;
         this.counter = 31;
         this.isAbleToJump = true;
         this.isJumping = false;
         this.isFacingRight = true;
         this.isDirection = true;
+        this.isWallCrush = false;
 
         playerMinX = Settings.SPRITE_SIZE / 2;
         playerMaxX = Settings.SCENE_WIDTH - Settings.SPRITE_SIZE / 2;
@@ -87,16 +90,8 @@ public class Player extends JLabel{
 		g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),this);
 				
 	}
-	//Player의 현재 X좌표 리턴
-	public int getX() {
-		return (int)this.spriteBase.getXCoordinate();
-		
-	}
 	
-	//Player의 현재 Y좌표 리턴
-	public int getY() {
-		return (int)this.spriteBase.getYCoordinate();
-	}
+	
 	
 	//상태변수, 키보드 입력에 따른 좌표 변화 실행
 	class moveThread extends Thread {
@@ -107,6 +102,7 @@ public class Player extends JLabel{
 				setDirImage();
 				processInput();
 				move();
+				wallCrush();
 				
 				try {		
 					Thread.sleep(20);
@@ -119,10 +115,20 @@ public class Player extends JLabel{
 	}
 
 	
-
+	public void wallCrush() {
+		if(isWallCrush) {
+			if( spriteBase.getDyCoordinate()== 0 ) {
+				spriteBase.setDyCoordinate(0);
+				setJumping(false);
+			}
+		}
+	}
 	public void processInput() {
-		if (isJumping && spriteBase.getDyCoordinate() <= 0) {
+		//DY가 음수이면 올라가고 있다는 거
+		if (isJumping && spriteBase.getDyCoordinate() <0) {
 			spriteBase.setDyCoordinate(spriteBase.getDyCoordinate() + 0.6);
+		
+		// 양수는 떨어지는 중
 		} else if (isJumping && spriteBase.getDyCoordinate() > 0) {
 			spriteBase.setDyCoordinate(spriteBase.getDyCoordinate() + 0.6);
 
@@ -131,6 +137,7 @@ public class Player extends JLabel{
 			spriteBase.setDyCoordinate(0);
 		}
 
+		//System.out.println("DY : " + this.spriteBase.getDyCoordinate());
 		moveVertical();
 		moveHorizontal();
 		
@@ -138,10 +145,12 @@ public class Player extends JLabel{
 		checkBounds() ;
 	}
 
-//	 private boolean wallCollision(double minX, double maxX, double minY,
-//             double maxY) {
-//		 return spriteBase.causesCollisionWall(minX, maxX, minY, maxY);
-//	}
+	//minX 들은 자기가 아닌 다른 객체 좌표
+	 public boolean wallCollision(double minX, double maxX, double minY,
+             double maxY) {
+		 
+		 return spriteBase.causesCollision(minX, maxX, minY, maxY);
+	}
 	 public float calculateGravity() {
 	        return -Settings.GRAVITY_CONSTANT;
 	    }
@@ -152,15 +161,25 @@ public class Player extends JLabel{
         double x = spriteBase.getXCoordinate();
         double y = spriteBase.getYCoordinate();
         
-
-        //점프 상태가 아닐 때
-        if (!isJumping) {
-        	//제일 밑보다 작으면 중력 안받음 
-        	if(!(this.spriteBase.getYCoordinate() >= 450))
-        		spriteBase.setDyCoordinate(-calculateGravity());
-        } else {
-            setAbleToJump(true);
+        //벽에 부딪히게 아니고
+        if(!isWallCrush) {
+        	//떨어지는 중
+            if (!isJumping) {
+            	
+            	//중력 작용
+            	spriteBase.setDyCoordinate(-calculateGravity());
+            //올라가는 중
+            } else {
+            	//재점프 불가
+                setAbleToJump(false);
+            }
+          //벽에 부딪히고 올라가는 중이 아니면 
+        }else {
+        	if (!isJumping) {
+              setAbleToJump(true);
+         }
         }
+      
 //        if (!wallCollision(x, x + width,
 //                y - calculateGravity(), y + height - calculateGravity()
 //           )
@@ -223,27 +242,11 @@ public class Player extends JLabel{
 		
 		//이미지 파일이름들 배열에 저장
 		this.spriteBase.setImagePaths(dir.list());
-
-//		else {
-//			if (isFacingRight) {
-//				spriteBase.setImage("Bub" + playerNumber + "RightDeath.png");
-//			} else {
-//				spriteBase.setImage("Bub" + playerNumber + "LeftDeath.png");
-//			}
-//		}
 	}
 //
 
 	
-	public SpriteBase getSpriteBase() {
-		return spriteBase;
-	}
-	public void setSpriteBase(SpriteBase spriteBase) {
-		this.spriteBase = spriteBase;
-	}
-	public boolean isAbleToJump() {
-		return isAbleToJump;
-	}
+
 	public Image getImage() {
 		String path = this.spriteBase.getImage();
 		Image image = new ImageIcon(path).getImage();
@@ -265,7 +268,8 @@ public class Player extends JLabel{
 	private void jump() {
 		setAbleToJump(false);
 		setJumping(true);
-		spriteBase.setDyCoordinate(-5);
+		//점프 하는 속도
+		spriteBase.setDyCoordinate(-Settings.JUMP_SPEED);
 	}
 
 	
@@ -286,8 +290,6 @@ public class Player extends JLabel{
 	 * This function handles moving to the right.
 	 */
 	private void moveRight() {
-		double x = spriteBase.getXCoordinate();
-		double y = spriteBase.getYCoordinate();
 
 		spriteBase.setDxCoordinate(speed);
 		
@@ -295,12 +297,8 @@ public class Player extends JLabel{
 		isDirection = true;
 	}
 
-	/**
-	 * This function handles moving to the left.
-	 */
+
 	private void moveLeft() {
-		double x = spriteBase.getXCoordinate();
-		double y = spriteBase.getYCoordinate();
 
 		spriteBase.setDxCoordinate(-speed);
 		
@@ -308,6 +306,25 @@ public class Player extends JLabel{
 		isDirection = false;
 	}
 	
+	//Player의 현재 X좌표 리턴
+	public int getX() {
+		return (int)this.spriteBase.getXCoordinate();
+		
+	}
+	
+	//Player의 현재 Y좌표 리턴
+	public int getY() {
+		return (int)this.spriteBase.getYCoordinate();
+	}
+	public SpriteBase getSpriteBase() {
+		return spriteBase;
+	}
+	public void setSpriteBase(SpriteBase spriteBase) {
+		this.spriteBase = spriteBase;
+	}
+	public boolean isAbleToJump() {
+		return isAbleToJump;
+	}
 	public boolean isMoveLeft() {
 		return isMoveLeft;
 	}
@@ -341,5 +358,13 @@ public class Player extends JLabel{
 	public void setAbleToJump(boolean ableToJump) {
 		isAbleToJump = ableToJump;
 		
+	} public boolean isWallCrush() {
+		return isWallCrush;
+	}
+	public void setWallCrush(boolean isWallCrush) {
+		this.isWallCrush = isWallCrush;
+	}
+	public boolean isJumping() {
+		return isJumping;
 	}
 }

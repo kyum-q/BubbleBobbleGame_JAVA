@@ -43,7 +43,7 @@ public final class Settings {
 
     public static final double MONSTER_SPEED = 3.5;
 
-    public static final double JUMP_SPEED = 3 * PLAYER_SPEED;
+    public static final double JUMP_SPEED = 12;
     public static final double JUMP_SPEED_WALKER = 3 * MONSTER_SPEED;
     public static final double JUMP_HEIGHT_WALKER = 200;
 

@@ -12,26 +12,9 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import BubbleGame.gameObject.Block;
 import utility.Settings;
 
-
-
-class Block extends JLabel{
-	Image img = new ImageIcon("src/image/wall.png").getImage();
-	int x, y, w, h;
-	public Block() {}
-	
-	public Block(int x, int y) {
-		this.x= x;
-		this.y = y;
-
-		this.setBounds(x,y, Settings.BLOCK_SIZE, Settings.BLOCK_SIZE);
-	}
-	public void paintComponent(Graphics g) {
-		setLocation(x,y);
-		g.drawImage(img, 0, 0, Settings.BLOCK_SIZE,  Settings.BLOCK_SIZE, this);
-	}
-}
 
 
 public class Map {
@@ -48,6 +31,10 @@ public class Map {
 		String[] map_arr  = setMapArr(path);
 		setBlockObjects(map_arr);
 		
+	}
+
+	public void setBlocks(ArrayList<Block> blocks) {
+		this.blocks = blocks;
 	}
 
 	//map.txt 파일을 읽어 내용을 담은 문자열 배열 생성

@@ -7,7 +7,6 @@ import javax.swing.JLabel;
 /**
  * This class will load the sprites (image).
  */
-@SuppressWarnings("deprecation")
 public class SpriteBase {
 	private String dirPath;
     private Coordinates coordinates;
