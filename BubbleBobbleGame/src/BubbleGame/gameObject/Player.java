@@ -18,8 +18,8 @@ public class Player extends JLabel{
 	private int score;
 	private int lives;
 	private SpriteBase spriteBase;
-	private double width = 35;
-	private double height = 35;
+	private double width = Settings.SPRITE_SIZE;;
+	private double height = Settings.SPRITE_SIZE;;
 	private Coordinates coordinate;
 
 	private double playerMinX;
@@ -164,8 +164,7 @@ public class Player extends JLabel{
         //벽에 부딪히게 아니고
         if(!isWallCrush) {
         	//떨어지는 중
-            if (!isJumping) {
-            	
+            if (!isJumping) {        	
             	//중력 작용
             	spriteBase.setDyCoordinate(-calculateGravity());
             //올라가는 중
@@ -211,6 +210,10 @@ public class Player extends JLabel{
 
         if (y < playerMinY) {
         	 spriteBase.setYCoordinate(playerMinY);
+        	 if(!isWallCrush)
+        		 spriteBase.setYCoordinate(playerMaxY - height);
+        	 else
+        		 spriteBase.setYCoordinate(playerMinY);
 //            if (!wallCollision(x,
 //                    x + width,
 //                    y,

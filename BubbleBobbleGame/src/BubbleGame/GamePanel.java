@@ -29,7 +29,7 @@ public class GamePanel extends JPanel {
 		add(player1);
 
 		// 맵 그리기
-		map = new Map("src/resource/map2.txt");
+		map = new Map("src/resource/map3.txt");
 		ArrayList<Block> blocks = map.getBlocks();
 		for (Block block : blocks)
 			this.add(block);
