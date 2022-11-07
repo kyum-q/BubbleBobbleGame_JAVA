@@ -1,4 +1,4 @@
-package BubbleGame.gameObject;
+package gameObject;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -9,7 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import utility.Settings;
 
-
 public class Player extends JLabel{
 	private final int playerNumber;
 	private double xStartLocation = 10;
@@ -18,8 +17,8 @@ public class Player extends JLabel{
 	private int score;
 	private int lives;
 	private SpriteBase spriteBase;
-	private double width = 50;
-	private double height = 50;
+	private double width = Settings.SPRITE_SIZE;
+	private double height = Settings.SPRITE_SIZE;
 	private Coordinates coordinate;
 
 	private double playerMinX;
@@ -39,8 +38,6 @@ public class Player extends JLabel{
     private boolean isMoveUp;
     private boolean isMoveDown;
     private boolean isDirection;
-    
-
 
 	public Player(String dirPath, int playerNumber) {
 		super();
@@ -342,6 +339,11 @@ public class Player extends JLabel{
 	}
 	public void setAbleToJump(boolean ableToJump) {
 		isAbleToJump = ableToJump;
-		
+	}
+	public boolean isDirection() {
+		return isDirection;
+	}
+	public void setDirection(boolean isDirection) {
+		this.isDirection = isDirection;
 	}
 }

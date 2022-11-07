@@ -1,4 +1,4 @@
-package BubbleGame.gameObject;
+package gameObject;
 
 /**
  * This class is in charge of the coordinates.

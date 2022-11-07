@@ -1,4 +1,4 @@
-package BubbleGame.gameObject;
+package gameObject;
 
 import java.awt.Graphics;
 
