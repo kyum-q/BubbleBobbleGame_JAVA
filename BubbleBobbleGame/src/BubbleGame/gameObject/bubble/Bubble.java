@@ -1,4 +1,4 @@
-package gameObject.Bubble;
+package BubbleGame.gameObject.bubble;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -8,11 +8,11 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import BubbleGame.gameObject.Coordinates;
+import BubbleGame.gameObject.Player;
+import BubbleGame.gameObject.SpriteBase;
+import BubbleGame.gameObject.monster.Monster;
 import BubbleGame.GamePanel;
-import gameObject.Coordinates;
-import gameObject.Player;
-import gameObject.SpriteBase;
-import gameObject.Monster.Monster;
 import utility.Settings;
 
 public class Bubble extends JLabel {

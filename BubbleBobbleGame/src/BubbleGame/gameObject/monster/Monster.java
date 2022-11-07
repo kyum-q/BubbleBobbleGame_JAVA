@@ -1,4 +1,4 @@
-package gameObject.Monster;
+package BubbleGame.gameObject.monster;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -7,8 +7,8 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import gameObject.Coordinates;
-import gameObject.SpriteBase;
+import BubbleGame.gameObject.Coordinates;
+import BubbleGame.gameObject.SpriteBase;
 import utility.Settings;
 
 public class Monster extends JLabel {

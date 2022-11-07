@@ -17,21 +17,15 @@ import java.util.Set;
  * This class is used for storing default settings.
  */
 public final class Settings {
-
-	/*
-	public static final double SCENE_WIDTH = 832/1.2;
-	public static final double SCENE_HEIGHT = 832/1.2;
-	public static final double SPRITE_SIZE = 64/1.3;
-	public static final double BUBBLE_SIZE = 55/1.3;
-*/
 	
 	public static final double SCENE_WIDTH = 650;
 	public static final double SCENE_HEIGHT = 650;
-	public static final double SPRITE_SIZE = 40;
+	public static final double SPRITE_SIZE = 35;
 	public static final double BUBBLE_SIZE = 35;
 	
 	public static final int AMOUNT_MAPS = 6;
 	public static final float GRAVITY_CONSTANT = 5.f;
+	public static final int BLOCK_SIZE = 23;
 
 	public static final double BUBBLE_INIT_SPEED = 10;
 	public static final double BUBBLE_FLY_SPEED = 3;
@@ -55,9 +49,9 @@ public final class Settings {
 
 	public static final double MONSTER_SPEED = 3.5;
 
-	public static final double JUMP_SPEED = 3 * PLAYER_SPEED;
-	public static final double JUMP_SPEED_WALKER = 3 * MONSTER_SPEED;
-	public static final double JUMP_HEIGHT_WALKER = 200;
+    public static final double JUMP_SPEED = 12;
+    public static final double JUMP_SPEED_WALKER = 3 * MONSTER_SPEED;
+    public static final double JUMP_HEIGHT_WALKER = 200;
 
 	/**
 	 * Get the name of the player.

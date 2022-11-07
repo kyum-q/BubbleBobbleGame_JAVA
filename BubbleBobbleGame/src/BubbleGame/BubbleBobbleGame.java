@@ -1,6 +1,9 @@
 package BubbleGame;
 
+
 import javax.swing.JFrame;
+import utility.Settings;
+import javax.swing.*;
 import utility.Settings;
 
 public class BubbleBobbleGame extends JFrame {
@@ -19,11 +22,10 @@ public class BubbleBobbleGame extends JFrame {
 		setContentPane(gamePanel);
 		// setLocationRelativeTo(null); 
 		setResizable(false); 
+
 		setVisible(true);
 	}
 
-	public void setGame() {
 
-	}
 
 }
