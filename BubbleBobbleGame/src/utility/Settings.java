@@ -19,14 +19,15 @@ import java.util.Set;
 public final class Settings {
 	
 
-	public static final double SCENE_WIDTH = 650;
-	public static final double SCENE_HEIGHT = 650;
+	public static final double SCENE_WIDTH = 693;
+	public static final double SCENE_HEIGHT = 630;
 	public static final double SPRITE_SIZE = 35;
 	public static final double BUBBLE_SIZE = 35;
 	
 	public static final int AMOUNT_MAPS = 6;
 	public static final float GRAVITY_CONSTANT = 5.f;
-	public static final int BLOCK_SIZE = 23;
+	public static final int BLOCK_WIDTH = 26;
+	public static final int BLOCK_Height = 23;
 
 
 	public static final double BUBBLE_INIT_SPEED = 10;

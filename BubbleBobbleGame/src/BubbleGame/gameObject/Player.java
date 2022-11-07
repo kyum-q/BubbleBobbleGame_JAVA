@@ -44,13 +44,14 @@ public class Player extends JLabel{
     
 	public Player(String dirPath, int playerNumber) {
 		super();
+		this.xStartLocation = Settings.SPRITE_SIZE;
+        this.yStartLocation = 600;
+        
 		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
 		this.spriteBase = new SpriteBase(dirPath, coordinate);
 		this.playerNumber = playerNumber;
 
-		this.xStartLocation = Settings.SPRITE_SIZE;
-        this.yStartLocation = Settings.SPRITE_SIZE;
-        
+		
 		this.spriteBase.setHeight(height);
 		this.spriteBase.setWidth(width);
 		//getImagePaths();
@@ -321,6 +322,7 @@ public class Player extends JLabel{
 		return spriteBase;
 	}
 	public void setSpriteBase(SpriteBase spriteBase) {
+		
 		this.spriteBase = spriteBase;
 	}
 	public boolean isAbleToJump() {

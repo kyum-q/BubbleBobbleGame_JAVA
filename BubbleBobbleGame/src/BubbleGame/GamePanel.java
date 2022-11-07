@@ -26,8 +26,8 @@ public class GamePanel extends JPanel {
 	private Player player1;
 	private Map map;
 	private ArrayList<Monster> monster = new ArrayList<Monster>();
-	 private ArrayList<Bubble> bubble = new ArrayList<Bubble>();
-	 private int score = 0;
+	private ArrayList<Bubble> bubble = new ArrayList<Bubble>();
+	private int score = 0;
 
 	/**
 	 * Create the panel.
@@ -37,12 +37,18 @@ public class GamePanel extends JPanel {
 		player1 = new Player("src/image/player1-move-right", 1);
 		add(player1);
 
-		monster.add(new Monster(400,400,"zenchan",1));
+		monster.add(new Monster(400,470,"zenchan",1));
+	      add(monster.get(monster.size()-1));
+	      monster.add(new Monster(400,240,"zenchan",1));
+	      add(monster.get(monster.size()-1));
+	      monster.add(new Monster(100,470,"zenchan",-1));
+	      add(monster.get(monster.size()-1));
+	      monster.add(new Monster(200,240,"zenchan",-1));
 	      add(monster.get(monster.size()-1));
 	      
 		
 		// 맵 그리기
-		map = new Map("src/resource/map3.txt");
+		map = new Map("src/resource/map1.txt");
 		ArrayList<Block> blocks = map.getBlocks();
 		for (Block block : blocks)
 			this.add(block);
@@ -117,9 +123,9 @@ public class GamePanel extends JPanel {
 	public void playerWallCrushCheck() {
 		ArrayList<Block> blocks = map.getBlocks();
 		for(Block block : blocks) {
-			if(player1.wallCollision(block.getX(), block.getX() + Settings.BLOCK_SIZE,
-					block.getY(), block.getY()+Settings.BLOCK_SIZE)) {
-				System.out.println("X : " +block.getX() +",Y: " +block.getY() +" 블록 부딪힘");
+			if(player1.wallCollision(block.getX(), block.getX() + Settings.BLOCK_WIDTH,
+					block.getY(), block.getY()+Settings.BLOCK_Height)) {
+				//System.out.println("X : " +block.getX() +",Y: " +block.getY() +" 블록 부딪힘");
 				player1.setWallCrush(true);
 				return;
 			}else {

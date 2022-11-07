@@ -18,8 +18,8 @@ import utility.Settings;
 
 
 public class Map {
-	final static public int BLOCK_SIZE = 25;
-	final static public int BLOCK_WIDTH_SIZE = 26; //한 줄에 26개
+
+	final static public int BLOCK_WIDTH_LENGTH = 26; //한 줄에 26개
 	
 	public ArrayList<Block> blocks =new ArrayList<>();
 	public String path;
@@ -78,8 +78,8 @@ public class Map {
 		for(int i=0; i< map_arr.length; i++) {
 			int state = Integer.parseInt(map_arr[i]);
 			if(state>0) {
-				int x = (i%26)* Settings.BLOCK_SIZE;
-				int y = (i/26)* Settings.BLOCK_SIZE;
+				int x = (i%BLOCK_WIDTH_LENGTH)* Settings.BLOCK_WIDTH;
+				int y = (i/BLOCK_WIDTH_LENGTH)* Settings.BLOCK_Height;
 				Block block = new Block(x,y);
 				blocks.add(block);
 			}
