@@ -9,7 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import utility.Settings;
 
-
 public class Player extends JLabel{
 	private final int playerNumber;
 	private double xStartLocation = 10;
@@ -18,8 +17,9 @@ public class Player extends JLabel{
 	private int score;
 	private int lives;
 	private SpriteBase spriteBase;
-	private double width = Settings.SPRITE_SIZE;;
-	private double height = Settings.SPRITE_SIZE;;
+	private double width = Settings.SPRITE_SIZE;
+	private double height = Settings.SPRITE_SIZE;
+
 	private Coordinates coordinate;
 
 	private double playerMinX;
@@ -42,8 +42,6 @@ public class Player extends JLabel{
     private boolean isDirection;
     private boolean isWallCrush;
     
-
-
 	public Player(String dirPath, int playerNumber) {
 		super();
 		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
@@ -360,6 +358,12 @@ public class Player extends JLabel{
 	}
 	public void setAbleToJump(boolean ableToJump) {
 		isAbleToJump = ableToJump;
+	}
+	public boolean isDirection() {
+		return isDirection;
+	}
+	public void setDirection(boolean isDirection) {
+		this.isDirection = isDirection;
 		
 	} public boolean isWallCrush() {
 		return isWallCrush;
@@ -371,3 +375,4 @@ public class Player extends JLabel{
 		return isJumping;
 	}
 }
+

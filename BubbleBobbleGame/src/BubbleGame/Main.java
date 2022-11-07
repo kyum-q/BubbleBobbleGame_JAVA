@@ -1,6 +1,6 @@
 package BubbleGame;
 
-import BubbleGame.BubbleObject.Bubble;
+import BubbleGame.gameObject.bubble.Bubble;
 
 public class Main {
 

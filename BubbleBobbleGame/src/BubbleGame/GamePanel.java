@@ -1,24 +1,33 @@
 package BubbleGame;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.*;
 
-import BubbleGame.BubbleObject.Bubble;
+import BubbleGame.gameObject.Coordinates;
+import javax.swing.*;
+
+import BubbleGame.gameObject.*;
 import BubbleGame.gameObject.Block;
 import BubbleGame.gameObject.Coordinates;
 import BubbleGame.gameObject.Player;
+import BubbleGame.gameObject.bubble.Bubble;
+import BubbleGame.gameObject.monster.Monster;
 import utility.Settings;
-import BubbleGame.gameObject.Block;
 
 public class GamePanel extends JPanel {
 	private Player player1;
 	private Map map;
+	private ArrayList<Monster> monster = new ArrayList<Monster>();
+	 private ArrayList<Bubble> bubble = new ArrayList<Bubble>();
+	 private int score = 0;
 
 	/**
 	 * Create the panel.
@@ -28,6 +37,10 @@ public class GamePanel extends JPanel {
 		player1 = new Player("src/image/player1-move-right", 1);
 		add(player1);
 
+		monster.add(new Monster(400,400,"zenchan",1));
+	      add(monster.get(monster.size()-1));
+	      
+		
 		// 맵 그리기
 		map = new Map("src/resource/map3.txt");
 		ArrayList<Block> blocks = map.getBlocks();
@@ -41,6 +54,24 @@ public class GamePanel extends JPanel {
 		GameThread gameThread = new GameThread();
 		gameThread.start();
 	}
+	
+	public void addScore(int score) {
+		   this.score += score;
+		   System.out.println("score: "+score);
+	   }
+	   
+	   @Override
+	   public void remove(Component comp) {
+		   super.remove(comp);
+		   
+		   // bubble객체일 경우, bubble Arraylist객체에서도 삭제
+		    if(comp instanceof Bubble) 
+			   bubble.remove(comp);
+		   //moster객체일 경우, moster Arraylist객체에서도 삭제
+		   else if(comp instanceof Monster) 
+			   monster.remove(comp);
+		   
+	   }
 
 	class GameThread extends Thread {
 		@Override
@@ -49,6 +80,7 @@ public class GamePanel extends JPanel {
 				try {
 					gameControll();
 					repaint();
+					checkBubbleMonster();
 					Thread.sleep(20);
 
 				} catch (InterruptedException e) {
@@ -56,6 +88,25 @@ public class GamePanel extends JPanel {
 				}
 			}
 		}
+		private void checkBubbleMonster() {
+			// bubble에 monster 닿았는지 체크 후 닿았으면 제거
+				Iterator<Bubble> bu = bubble.iterator();
+				while(bu.hasNext()) { // 버블
+					Bubble b = bu.next();
+					Iterator<Monster> mo = monster.iterator();
+					while(mo.hasNext()) { // 몬스터
+						Monster m = mo.next();		
+						// 버블하고 몬스터 만났는지 확인
+						if(b.checkBubbleMit(m)) { 
+							remove(m); //몬스터 삭제
+							break;
+						}
+					}
+					if(b.checkBubbleMit(player1)) {
+						
+					}
+				}
+		   }
 	}
 
 	//캐릭터가 벽에 부딪히거나, 몬스터와 충돌하거나, 아이템을 먹는 등 필요한 요소를 체크하는 함수
@@ -103,13 +154,14 @@ public class GamePanel extends JPanel {
 				player1.setMoveRight(true);
 				break;
 			case KeyEvent.VK_SPACE:
-				if (player1.isMoveRight()) {
-					add(new Bubble("src/image/bubble-green", player1.getX(), player1.getY(), 1));
-				} else if (player1.isMoveLeft()) {
-					add(new Bubble("src/image/bubble-green", player1.getX(), player1.getY(), -1));
-				} else {
-					add(new Bubble("src/image/bubble-green", player1.getX(), player1.getY(), 1));
+				if(player1.isDirection()) {
+					bubble.add(new Bubble(player1.getX(), player1.getY(), 1));
 				}
+				else {
+					bubble.add(new Bubble(player1.getX(), player1.getY(), -1));
+				}
+				add(bubble.get(bubble.size()-1));
+
 				break;
 
 			case KeyEvent.VK_ESCAPE:
@@ -120,7 +172,7 @@ public class GamePanel extends JPanel {
 		}
 
 		@Override
-		public void keyReleased(KeyEvent e) {
+		public void keyReleased(KeyEvent e) { 
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
 				player1.setMoveDown(false);
