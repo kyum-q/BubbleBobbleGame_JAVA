@@ -86,7 +86,7 @@ public class GamePanel extends JPanel {
 				try {
 					gameControll();
 					repaint();
-					checkBubbleMonster();
+					//checkBubbleMonster();
 					Thread.sleep(20);
 
 				} catch (InterruptedException e) {
@@ -94,30 +94,13 @@ public class GamePanel extends JPanel {
 				}
 			}
 		}
-		private void checkBubbleMonster() {
-			// bubble에 monster 닿았는지 체크 후 닿았으면 제거
-				Iterator<Bubble> bu = bubble.iterator();
-				while(bu.hasNext()) { // 버블
-					Bubble b = bu.next();
-					Iterator<Monster> mo = monster.iterator();
-					while(mo.hasNext()) { // 몬스터
-						Monster m = mo.next();		
-						// 버블하고 몬스터 만났는지 확인
-						if(b.checkBubbleMit(m)) { 
-							remove(m); //몬스터 삭제
-							break;
-						}
-					}
-					if(b.checkBubbleMit(player1)) {
-						
-					}
-				}
-		   }
+
 	}
 
 	//캐릭터가 벽에 부딪히거나, 몬스터와 충돌하거나, 아이템을 먹는 등 필요한 요소를 체크하는 함수
 	public void gameControll() {
 		playerWallCrushCheck();
+		checkBubbleMonster();
 	}
 	
 	public void playerWallCrushCheck() {
@@ -133,6 +116,26 @@ public class GamePanel extends JPanel {
 			}
 		}
 	}
+	
+	private void checkBubbleMonster() {
+		// bubble에 monster 닿았는지 체크 후 닿았으면 제거
+			Iterator<Bubble> bu = bubble.iterator();
+			while(bu.hasNext()) { // 버블
+				Bubble b = bu.next();
+				Iterator<Monster> mo = monster.iterator();
+				while(mo.hasNext()) { // 몬스터
+					Monster m = mo.next();		
+					// 버블하고 몬스터 만났는지 확인
+					if(b.checkBubbleMit(m)) { 
+						remove(m); //몬스터 삭제
+						break;
+					}
+				}
+				if(b.checkBubbleMit(player1)) {
+					
+				}
+			}
+	   }
 	@Override
 	public void paintComponent(Graphics g) {
 

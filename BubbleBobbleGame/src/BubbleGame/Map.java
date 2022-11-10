@@ -72,7 +72,7 @@ public class Map {
 		return map_arr;	
 	}
 	
-	//배열 내용으로 객체 생성
+	//배열 내용으로 Block 객체 생성
 	public void setBlockObjects(String [] map_arr) {
 		
 		for(int i=0; i< map_arr.length; i++) {
