@@ -79,7 +79,7 @@ public class Map {
 			int state = Integer.parseInt(map_arr[i]);
 			if(state>0) {
 				int x = (i%BLOCK_WIDTH_LENGTH)* Settings.BLOCK_WIDTH;
-				int y = (i/BLOCK_WIDTH_LENGTH)* Settings.BLOCK_Height;
+				int y = (i/BLOCK_WIDTH_LENGTH)* Settings.BLOCK_HEIGHT;
 				Block block = new Block(x,y);
 				blocks.add(block);
 			}

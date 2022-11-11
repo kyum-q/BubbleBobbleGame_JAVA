@@ -15,32 +15,32 @@ public class Monster extends JLabel {
 	private Coordinates coordinate; // 위치 설정 도와주는 class
 	private SpriteBase spriteBase; // 이미지 설정을 도와주는 class
 	private int direction;
-	
+
 	private String monsterName;
 	private String monsterLeftPath;
 	private String monsterRightPath;
-	
+
 	public Monster(int x, int y, String monsterName, int direction) {
 		super();
-		
+
 		this.monsterName = monsterName;
-		monsterLeftPath = "src/image/"+monsterName+"-move-left";
-		monsterRightPath = "src/image/"+monsterName+"-move-right";
-		
-		this.coordinate = new Coordinates(x, y, 1, 3, 3, 1);
+		monsterLeftPath = "src/image/" + monsterName + "-move-left";
+		monsterRightPath = "src/image/" + monsterName + "-move-right";
+
+		this.coordinate = new Coordinates(x, y, 1, Settings.MONSTER_SPEED, Settings.MONSTER_SPEED, 1);
 		this.direction = direction;
-		if(this.direction == 1)
+		if (this.direction == 1)
 			this.spriteBase = new SpriteBase(monsterRightPath, coordinate);
 		else
 			this.spriteBase = new SpriteBase(monsterLeftPath, coordinate);
-		
+
 		this.spriteBase.setHeight(Settings.SPRITE_SIZE);
 		this.spriteBase.setWidth(Settings.SPRITE_SIZE);
 		this.spriteBase.setOperationTime(10);
 		getImagePaths(); // imagePath 알아내기
-		this.setBounds(x,y,(int) Settings.SPRITE_SIZE, (int) Settings.SPRITE_SIZE);
+		this.setBounds(x, y, (int) Settings.SPRITE_SIZE, (int) Settings.SPRITE_SIZE);
 	}
-	
+
 	/* 이미지 Path 설정 */
 	private void getImagePaths() {
 		String dirPath = spriteBase.getDirPath();
@@ -55,40 +55,73 @@ public class Monster extends JLabel {
 		Image image = new ImageIcon(path).getImage();
 		return image;
 	}
-	
+
 	public String getMonsterName() {
 		return monsterName;
 	}
-	
+
 	private void moveMonster() {
 		if (checkWall()) {
 			setDirection();
 		}
-		this.coordinate.setXCoordinate(getX() + (Settings.MONSTER_SPEED*direction));
+		applyGravity();
+		//this.coordinate.setXCoordinate(getX() + (coordinate.getDXCoordinate() * direction));
 	}
-	
+
 	private boolean checkWall() {
-		return (getX()<=0 || getX()+getWidth()>=this.getParent().getWidth());
+		return (getX() <= 0 || getX() + getWidth() >= this.getParent().getWidth());
 	}
-	
+
 	public void setDirection() {
-		if(direction == 1) {
+		if (direction == 1) {
 			spriteBase.setDirPath(monsterLeftPath);
 			direction = -1;
-		}
-		else {
+		} else {
 			spriteBase.setDirPath(monsterRightPath);
 			direction = 1;
 		}
 	}
-	
+
+	private boolean isWallCrush = false;
+	private boolean isJumping = false;
+
+	public boolean isWallCrush() {
+		return isWallCrush;
+	}
+
+	public void setWallCrush(boolean isWallCrush) {
+		this.isWallCrush = isWallCrush;
+	}
+
+	public boolean wallCollision(double minX, double maxX, double minY, double maxY) {
+		return spriteBase.causesCollision(minX, maxX, minY, maxY);
+	}
+
+	public void applyGravity() {
+		double x = spriteBase.getXCoordinate();
+		double y = spriteBase.getYCoordinate();
+
+		// 벽에 부딪히게 아니고
+		if (!isWallCrush) {
+			// 떨어지는 중
+			spriteBase.setDyCoordinate(Settings.GRAVITY_CONSTANT);
+			spriteBase.setDxCoordinate(0);
+			spriteBase.move();
+		}
+		else {
+			spriteBase.setDxCoordinate(Settings.MONSTER_SPEED * direction);
+			spriteBase.setDyCoordinate(0);
+			spriteBase.move();
+		}
+	}
+
 	@Override
 	public int getX() {
 		return (int) this.spriteBase.getXCoordinate();
 	}
 
 	@Override
-	public int  getY() {
+	public int getY() {
 		return (int) this.spriteBase.getYCoordinate();
 	}
 
