@@ -52,6 +52,7 @@ public class GamePanel extends JPanel {
 		ArrayList<Block> blocks = map.getBlocks();
 		for (Block block : blocks)
 			this.add(block);
+		
 		this.setBackground(Color.black);
 		this.addKeyListener(new KeyListener());
 		this.requestFocus();
@@ -109,7 +110,9 @@ public class GamePanel extends JPanel {
 			if(player1.wallCollision(block.getX(), block.getX() + Settings.BLOCK_WIDTH,
 					block.getY(), block.getY()+Settings.BLOCK_Height)) {
 				//System.out.println("X : " +block.getX() +",Y: " +block.getY() +" 블록 부딪힘");
+				player1.setCrushBlock(block);
 				player1.setWallCrush(true);
+
 				return;
 			}else {
 				player1.setWallCrush(false);

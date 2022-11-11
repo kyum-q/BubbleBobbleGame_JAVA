@@ -20,7 +20,7 @@ public final class Settings {
 	
 
 	public static final double SCENE_WIDTH = 693;
-	public static final double SCENE_HEIGHT = 630;
+	public static final double SCENE_HEIGHT = 650;
 	public static final double SPRITE_SIZE = 35;
 	public static final double BUBBLE_SIZE = 35;
 	

@@ -21,6 +21,7 @@ public class Player extends JLabel{
 	private double height = Settings.SPRITE_SIZE;
 
 	private Coordinates coordinate;
+	private Block crushBlock;
 
 	private double playerMinX;
 	private double playerMaxX;
@@ -116,11 +117,15 @@ public class Player extends JLabel{
 	
 	public void wallCrush() {
 		if(isWallCrush) {
+			//떨어지고 있거나, 블록위에 서 있는 상태
 			if( spriteBase.getDyCoordinate()== 0 ) {
-				spriteBase.setDyCoordinate(0);
+				spriteBase.setDyCoordinate(0);			
 				setJumping(false);
 			}
 		}
+	}
+	public void setCrushBlock(Block crushBlock) {
+		this.crushBlock = crushBlock;
 	}
 	public void processInput() {
 		//DY가 음수이면 올라가고 있다는 거
@@ -225,6 +230,7 @@ public class Player extends JLabel{
             spriteBase.setYCoordinate(playerMinY);
         }
     }
+    
 	public void setDirImage() {
 		if (!isDead) {
 			//오른쪽으로 갈 때
