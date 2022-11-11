@@ -52,7 +52,7 @@ public class GamePanel extends JLayeredPane {
 		add(monster.get(monster.size() - 1));
 
 		// 맵 그리기
-		map = new Map("src/resource/map1.txt");
+		map = new Map("src/resource/map4.txt");
 		ArrayList<Block> blocks = map.getBlocks();
 		for (Block block : blocks)
 			this.add(block,new Integer(0));
@@ -101,10 +101,23 @@ public class GamePanel extends JLayeredPane {
 	// 캐릭터가 벽에 부딪히거나, 몬스터와 충돌하거나, 아이템을 먹는 등 필요한 요소를 체크하는 함수
 	public void gameControll() {
 		playerWallCrushCheck();
+		playerMonsterCrushCheck();
 		monsterWallCrushCheck();
 		checkBubbleMonster();
 	}
-
+	
+	public void playerMonsterCrushCheck() {
+		for(Monster m : this.monster) {
+			if(player1.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE,
+					m.getY(), m.getY() + Settings.SPRITE_SIZE)) {
+				//System.out.println("몬스터 충돌");
+				player1.setMonsterCrush(true);
+				return;
+			}else {
+				player1.setMonsterCrush(false);
+			}
+		}
+	}
 	public void playerWallCrushCheck() {
 		ArrayList<Block> blocks = map.getBlocks();
 
@@ -119,6 +132,8 @@ public class GamePanel extends JLayeredPane {
 				player1.setWallCrush(false);
 			}
 		}
+		
+		
 	}
 	
 	public void monsterWallCrushCheck() {
@@ -179,6 +194,7 @@ public class GamePanel extends JLayeredPane {
 				player1.setMoveRight(true);
 				break;
 			case KeyEvent.VK_SPACE:
+				player1.setShoot(true);
 				if (player1.isDirection()) {
 					bubble.add(new Bubble(player1.getX(), player1.getY(), 1));
 				} else {
@@ -209,6 +225,8 @@ public class GamePanel extends JLayeredPane {
 			case KeyEvent.VK_RIGHT:
 				player1.setMoveRight(false);
 				break;
+			case KeyEvent.VK_SPACE:
+				player1.setShoot(false);
 			}
 		}
 	}

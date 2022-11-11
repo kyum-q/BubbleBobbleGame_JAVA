@@ -16,7 +16,7 @@ public class SpriteBase {
     private int frameCount = 0;
     private int timeCount = 0;
     private int operationTime = 5;
-	private boolean spriteChanged;
+
     private String [] imagePaths;
     /**
      * The constructor. It needs all the parameters and creates the image where planned.
@@ -31,7 +31,7 @@ public class SpriteBase {
         this.h = 0;
         this.w = 0;
         this.canMove = true;
-        this.spriteChanged = false;
+        //this.spriteChanged = false;
     }
 
     /**
@@ -135,26 +135,11 @@ public class SpriteBase {
         this.w = width;
     }
 
-    /**
-     * This function returns whether the sprite has changed or not.
-     * @return The boolean if the sprite changed
-     */
-    public boolean getSpriteChanged() {
-        return spriteChanged;
-    }
-
-    /**
-     * With this function you can set whether you have changed the sprite or not.
-     * @param spriteChanged The boolean whether the sprite has changed.
-     */
-    public void setSpriteChanged(boolean spriteChanged) {
-        this.spriteChanged = spriteChanged;
-    }
 
 
     public void setDirPath( String dirPath) {
         this.dirPath = dirPath;
-        spriteChanged = true;
+      //  spriteChanged = true;
     }
 
     /**

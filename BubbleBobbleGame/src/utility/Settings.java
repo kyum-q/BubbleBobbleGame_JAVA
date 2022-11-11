@@ -19,12 +19,12 @@ import java.util.Set;
 public final class Settings {
 
 	public static final double SCENE_WIDTH = 693;
-	public static final double SCENE_HEIGHT = 650;
+	public static final double SCENE_HEIGHT = 675;
 	public static final double SPRITE_SIZE = 35;
 	public static final double BUBBLE_SIZE = 35;
 
 	public static final int AMOUNT_MAPS = 6;
-	public static final float GRAVITY_CONSTANT = 5.f;
+	public static final float GRAVITY_CONSTANT = 8.f;
 	public static final int BLOCK_WIDTH = 26;
 	public static final int BLOCK_HEIGHT = 23;
 
@@ -36,7 +36,7 @@ public final class Settings {
 	public static final double BUBBLE_BURST_TIME = BUBBLE_LIVE_TIME + 800;
 
 	public static final double PLAYER_SPEED = 5.0;
-	public static final int PLAYER_LIVES = 5;
+	public static final int PLAYER_LIVES = 3;
 
 	public static final int POINTS_PLAYER_DIE = -25;
 	public static final int POINTS_KILL_MONSTER = 10;
@@ -44,7 +44,7 @@ public final class Settings {
 
 	public static final double MONSTER_SPEED = 4;
 
-	public static final double JUMP_SPEED = 12;
+	public static final double JUMP_SPEED = 11.7;
 	public static final double JUMP_SPEED_WALKER = 3 * MONSTER_SPEED;
 	public static final double JUMP_HEIGHT_WALKER = 200;
 
