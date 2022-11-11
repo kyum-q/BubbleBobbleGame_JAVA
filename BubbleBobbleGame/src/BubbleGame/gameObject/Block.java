@@ -17,11 +17,11 @@ public class Block extends JLabel{
 		this.x= x;
 		this.y= y;
 		this.w = Settings.BLOCK_WIDTH;
-		this.h = Settings.BLOCK_Height;
+		this.h = Settings.BLOCK_HEIGHT;
 		this.setBounds(x,y, w, h);
 	}
 	public void paintComponent(Graphics g) {
 		setLocation(x,y);
-		g.drawImage(img, 0, 0,w,  h, this);
+		g.drawImage(img, 0, 0, w,  h, this);
 	}
 }

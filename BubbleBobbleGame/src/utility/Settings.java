@@ -17,31 +17,23 @@ import java.util.Set;
  * This class is used for storing default settings.
  */
 public final class Settings {
-	
 
 	public static final double SCENE_WIDTH = 693;
 	public static final double SCENE_HEIGHT = 650;
 	public static final double SPRITE_SIZE = 35;
 	public static final double BUBBLE_SIZE = 35;
-	
+
 	public static final int AMOUNT_MAPS = 6;
 	public static final float GRAVITY_CONSTANT = 5.f;
 	public static final int BLOCK_WIDTH = 26;
-	public static final int BLOCK_Height = 23;
+	public static final int BLOCK_HEIGHT = 23;
 
-
-	public static final double BUBBLE_INIT_SPEED = 10;
+	public static final double BUBBLE_INIT_SPEED = 8;
 	public static final double BUBBLE_FLY_SPEED = 3;
 	public static final double BUBBLE_FLY_TIME = 600;
-	public static final double BUBBLE_POWERUP_FLY_TIME = 3 * BUBBLE_FLY_TIME;
-	public static final double BUBBLE_LIVE_TIME = BUBBLE_POWERUP_FLY_TIME + 1500;
+	public static final double BUBBLE_POWERUP_FLY_TIME = BUBBLE_FLY_TIME + 4000;
+	public static final double BUBBLE_LIVE_TIME = BUBBLE_POWERUP_FLY_TIME + 3000;
 	public static final double BUBBLE_BURST_TIME = BUBBLE_LIVE_TIME + 800;
-
-//	public static final double BUBBLE_INIT_SPEED = 7; 
-//	  public static final double BUBBLE_FLY_SPEED = 3; 
-//	  public static final double BUBBLE_LIVE_TIME = 300;
-//	  public static final double BUBBLE_FLY_TIME = 30; 
-//	  public static final double BUBBLE_POWERUP_FLY_TIME = 3 * BUBBLE_FLY_TIME;
 
 	public static final double PLAYER_SPEED = 5.0;
 	public static final int PLAYER_LIVES = 5;
@@ -50,11 +42,11 @@ public final class Settings {
 	public static final int POINTS_KILL_MONSTER = 10;
 	public static final int POINTS_LEVEL_COMPLETE = 30;
 
-	public static final double MONSTER_SPEED = 3.5;
+	public static final double MONSTER_SPEED = 4;
 
-    public static final double JUMP_SPEED = 12;
-    public static final double JUMP_SPEED_WALKER = 3 * MONSTER_SPEED;
-    public static final double JUMP_HEIGHT_WALKER = 200;
+	public static final double JUMP_SPEED = 12;
+	public static final double JUMP_SPEED_WALKER = 3 * MONSTER_SPEED;
+	public static final double JUMP_HEIGHT_WALKER = 200;
 
 	/**
 	 * Get the name of the player.

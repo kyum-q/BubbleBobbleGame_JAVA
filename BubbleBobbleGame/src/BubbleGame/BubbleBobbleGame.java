@@ -4,6 +4,7 @@ package BubbleGame;
 import utility.Settings;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 
 import javax.swing.*;
@@ -33,7 +34,6 @@ public class BubbleBobbleGame extends JFrame {
 		
 		gamePanel = new GamePanel();
 		splitpane.setBottomComponent(gamePanel);
-		//setContentPane(gamePanel);
 		// setLocationRelativeTo(null); 
 		c.add(splitpane, BorderLayout.CENTER);
 		setResizable(false); 

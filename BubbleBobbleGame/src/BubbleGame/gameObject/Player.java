@@ -150,8 +150,7 @@ public class Player extends JLabel{
 	}
 
 	//minX 들은 자기가 아닌 다른 객체 좌표
-	 public boolean wallCollision(double minX, double maxX, double minY,
-             double maxY) {
+	 public boolean wallCollision(double minX, double maxX, double minY, double maxY) {
 		 
 		 return spriteBase.causesCollision(minX, maxX, minY, maxY);
 	}
