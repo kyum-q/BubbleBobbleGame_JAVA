@@ -134,7 +134,7 @@ public class Player extends JLabel{
 		
 		// 양수는 떨어지는 중
 		} else if (isJumping && spriteBase.getDyCoordinate() > 0) {
-			spriteBase.setDyCoordinate(spriteBase.getDyCoordinate() + 0.6);
+//			spriteBase.setDyCoordinate(spriteBase.getDyCoordinate() + 0.6);
 
 			setJumping(false);
 		} else {
