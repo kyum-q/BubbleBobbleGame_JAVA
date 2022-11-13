@@ -24,7 +24,7 @@ public class SpriteBase {
      * @param imagePath The path to the image to load.
      * @param  coordinates The coordinates of the Sprite.
      */
-    public SpriteBase(String dirPath, Coordinates coordinates) {
+    public SpriteBase(String dirPath, Coordinates coordinates)  {
 
     	this.dirPath = dirPath;
         this.coordinates = coordinates;
@@ -54,6 +54,15 @@ public class SpriteBase {
     		frameCount++;      	
     	}
     	fileName = fileNames[frameCount%(fileNames.length)];
+    	String imagePath = this.getDirPath()+"/"+ fileName;
+    	//System.out.println("getImage : " + imagePath);
+    	return imagePath;
+    }
+    
+    public String getImage(int i) {
+    	String [] fileNames = this.getImagePaths();
+    	String fileName;
+    	fileName = fileNames[i];
     	String imagePath = this.getDirPath()+"/"+ fileName;
     	//System.out.println("getImage : " + imagePath);
     	return imagePath;

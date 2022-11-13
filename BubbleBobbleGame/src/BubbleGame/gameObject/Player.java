@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+import BubbleGame.ScorePanel.ScoreLabel;
 import utility.Settings;
 
 public class Player extends JLabel{
@@ -43,10 +45,13 @@ public class Player extends JLabel{
     private boolean isDirection;
     private boolean isWallCrush;
     
-	public Player(String dirPath, int playerNumber) {
+    private ScoreLabel scoreLabel;
+    
+	public Player(String dirPath, int playerNumber, ScoreLabel scoreLabel) {
 		super();
 		this.xStartLocation = Settings.SPRITE_SIZE;
         this.yStartLocation = 460;
+        this.scoreLabel = scoreLabel;
         
 		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
 		this.spriteBase = new SpriteBase(dirPath, coordinate);
@@ -87,8 +92,7 @@ public class Player extends JLabel{
 	public void paintComponent(Graphics g) { 
 		
 		Image player1Image = this.getImage();
-		g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),this);
-				
+		g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),this);	
 	}
 	
 	
@@ -151,7 +155,7 @@ public class Player extends JLabel{
 
 	//minX 들은 자기가 아닌 다른 객체 좌표
 	 public boolean wallCollision(double minX, double maxX, double minY, double maxY) {
-		 
+
 		 return spriteBase.causesCollision(minX, maxX, minY, maxY);
 	}
 	 public float calculateGravity() {
@@ -380,6 +384,9 @@ public class Player extends JLabel{
 	}
 	public boolean isJumping() {
 		return isJumping;
+	}
+	public void addScore(int i) {
+		scoreLabel.addScore(i);
 	}
 }
 

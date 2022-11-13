@@ -21,20 +21,28 @@ public final class Settings {
 	public static final double SCENE_WIDTH = 693;
 	public static final double SCENE_HEIGHT = 650;
 	public static final double SPRITE_SIZE = 35;
-	public static final double BUBBLE_SIZE = 35;
-
+	
 	public static final int AMOUNT_MAPS = 6;
 	public static final float GRAVITY_CONSTANT = 5.f;
 	public static final int BLOCK_WIDTH = 26;
 	public static final int BLOCK_HEIGHT = 23;
 
+	public static final double BUBBLE_SIZE = 35;
+	public static final double MONSTER_BUBBLE_SIZE = 43;
 	public static final double BUBBLE_INIT_SPEED = 8;
 	public static final double BUBBLE_FLY_SPEED = 3;
 	public static final double BUBBLE_FLY_TIME = 600;
 	public static final double BUBBLE_POWERUP_FLY_TIME = BUBBLE_FLY_TIME + 4000;
 	public static final double BUBBLE_LIVE_TIME = BUBBLE_POWERUP_FLY_TIME + 3000;
-	public static final double BUBBLE_BURST_TIME = BUBBLE_LIVE_TIME + 800;
+	public static final double BUBBLE_BURST_TIME = BUBBLE_LIVE_TIME + 700;
 
+	public static final double ITEM_SIZE = 25;
+	public static final double ITEM_DOWN_SPEED = 4;
+	
+	public static final int MONSTER_KILL_SCORE = 1000;
+	public static final int ITEM_MIN_SCORE = 400;
+	public static final int ITEM_MAX_SCORE = 1500 - ITEM_MIN_SCORE;
+	
 	public static final double PLAYER_SPEED = 5.0;
 	public static final int PLAYER_LIVES = 5;
 
