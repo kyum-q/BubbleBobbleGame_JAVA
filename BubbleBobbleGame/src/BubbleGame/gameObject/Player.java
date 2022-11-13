@@ -40,10 +40,13 @@ public class Player extends JLabel{
     private boolean isMoveLeft;
     private boolean isMoveRight;
     private boolean isMoveUp;
+    private boolean isShoot;
    
 	private boolean isMoveDown;
-    private boolean isDirection;
+    
+	private boolean isDirection;
     private boolean isWallCrush;
+    private boolean isMonsterCrush;
     
     private ScoreLabel scoreLabel;
     
@@ -78,8 +81,11 @@ public class Player extends JLabel{
         this.isFacingRight = true;
         this.isDirection = true;
         this.isWallCrush = false;
+        this.isShoot = false;
+        this.isMonsterCrush = false;
 
-        playerMinX = Settings.SPRITE_SIZE / 2;
+        //playerMinX = Settings.SPRITE_SIZE / 2;
+        playerMinX = 27;
         playerMaxX = Settings.SCENE_WIDTH - Settings.SPRITE_SIZE / 2;
         playerMinY = Settings.SPRITE_SIZE / 2;
         playerMaxY = Settings.SCENE_HEIGHT - Settings.SPRITE_SIZE / 2;
@@ -88,14 +94,13 @@ public class Player extends JLabel{
         moveThread.start();
     }
 	
+
 	@Override
 	public void paintComponent(Graphics g) { 
 		
 		Image player1Image = this.getImage();
 		g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),this);	
 	}
-	
-	
 	
 	//상태변수, 키보드 입력에 따른 좌표 변화 실행
 	class moveThread extends Thread {
@@ -106,7 +111,7 @@ public class Player extends JLabel{
 				setDirImage();
 				processInput();
 				move();
-				wallCrush();
+				//wallCrush();
 				
 				try {		
 					Thread.sleep(20);
@@ -119,18 +124,16 @@ public class Player extends JLabel{
 	}
 
 	
-	public void wallCrush() {
-		if(isWallCrush) {
-			//떨어지고 있거나, 블록위에 서 있는 상태
-			if( spriteBase.getDyCoordinate()== 0 ) {
-				spriteBase.setDyCoordinate(0);			
-				setJumping(false);
-			}
-		}
-	}
-	public void setCrushBlock(Block crushBlock) {
-		this.crushBlock = crushBlock;
-	}
+//	public void wallCrush() {
+//		if(isWallCrush) {
+//			//떨어지고 있거나, 블록위에 서 있는 상태
+//			if( spriteBase.getDyCoordinate()== 0 ) {
+//				spriteBase.setDyCoordinate(0);			
+//				setJumping(false);
+//			}
+//		}
+//	}
+
 	public void processInput() {
 		//DY가 음수이면 올라가고 있다는 거
 		if (isJumping && spriteBase.getDyCoordinate() <0) {
@@ -138,26 +141,39 @@ public class Player extends JLabel{
 		
 		// 양수는 떨어지는 중
 		} else if (isJumping && spriteBase.getDyCoordinate() > 0) {
-//			spriteBase.setDyCoordinate(spriteBase.getDyCoordinate() + 0.6);
+			spriteBase.setDyCoordinate(spriteBase.getDyCoordinate() + 0.6);
 
 			setJumping(false);
 		} else {
 			spriteBase.setDyCoordinate(0);
 		}
-
-		//System.out.println("DY : " + this.spriteBase.getDyCoordinate());
 		moveVertical();
 		moveHorizontal();
-		
-		//applyGravity();
 		checkBounds() ;
 	}
 
-	//minX 들은 자기가 아닌 다른 객체 좌표
-	 public boolean wallCollision(double minX, double maxX, double minY, double maxY) {
-
-		 return spriteBase.causesCollision(minX, maxX, minY, maxY);
+	//벽 위에 있는지 체크
+	 public boolean wallCollision(double minX, double maxX, double minY, double  maxY) {
+		 	double minX2 = this.getX();
+	        double maxX2 = minX2 + getWidth();
+	        double minY2 = this.getY()+getHeight() +3;
+	        double maxY2 = minY2;
+	        return ((minX > minX2 && minX < maxX2)
+	                || (maxX > minX2 && maxX < maxX2)
+	                || (minX2 > minX && minX2 < maxX)
+	                || (maxX2 > minX && maxX2 < maxX))
+	                && ((minY > minY2 && minY < maxY2)
+	                || (maxY > minY2 && maxY < maxY2)
+	                || (minY2 > minY && minY2 < maxY)
+	                || (maxY2 > minY && maxY2 < maxY));
+		// return spriteBase.causesCollision(minX, maxX, minY, maxY);
 	}
+	 
+	 //몬스터와 부딪혔는지 체크
+	 public boolean monsterCollision(double minX, double maxX, double minY, double  maxY) {
+		 return spriteBase.causesCollision(minX, maxX, minY, maxY);
+	 }
+	 
 	 public float calculateGravity() {
 	        return -Settings.GRAVITY_CONSTANT;
 	    }
@@ -203,16 +219,14 @@ public class Player extends JLabel{
 //        }
     }
     
-    /**
-     * This function returns the player if it is out of bounds.
-     */
+    //양 끝 벽쪽 체크
     public void checkBounds() {
         double x = spriteBase.getXCoordinate();
         double y = spriteBase.getYCoordinate();
         if (x < playerMinX) {
             spriteBase.setXCoordinate(playerMinX);
-        } else if (x + width > playerMaxX) {
-            spriteBase.setXCoordinate(playerMaxX - width);
+        } else if (x + width > playerMaxX -Settings.BLOCK_WIDTH ) {
+            spriteBase.setXCoordinate(playerMaxX -Settings.BLOCK_WIDTH- width);
         }
 
         if (y < playerMinY) {
@@ -229,15 +243,30 @@ public class Player extends JLabel{
 //            } else {
 //                spriteBase.setYCoordinate(playerMinY);
 //            }
-        } else if (y + height > playerMaxY) {
+        }
+        else if (y + height > playerMaxY) {
             spriteBase.setYCoordinate(playerMinY);
         }
     }
     
+    //상태에 따라 이미지 폴더 변경 
 	public void setDirImage() {
 		if (!isDead) {
+			//버블 발사
+			 if(isShoot) {
+				if(this.isDirection)
+					spriteBase.setDirPath("src/image/player1-shoot-right");
+				else
+					spriteBase.setDirPath("src/image/player1-shoot-left");
+			}
+			 else if(this.isMonsterCrush) {
+				 if(this.isDirection)
+						spriteBase.setDirPath("src/image/player1-death-right");
+					else
+						spriteBase.setDirPath("src/image/player1-death-left");
+			 }
 			//오른쪽으로 갈 때
-			if (isMoveRight) {
+			 else if (isMoveRight) {
 				//이미지 디렉토리 변경
 				spriteBase.setDirPath("src/image/player1-move-right");
 				//getImagePaths();
@@ -246,6 +275,12 @@ public class Player extends JLabel{
 
 				spriteBase.setDirPath("src/image/player1-move-left");
 				//getImagePaths();
+			//가만히 있을 때	
+			} else {
+				if(this.isDirection && !(spriteBase.getDirPath().equals("src/image/player1-move-right")))
+					spriteBase.setDirPath("src/image/player1-move-right");
+				else if(!(this.isDirection) &&!(spriteBase.getDirPath().equals("src/image/player1-move-left")))
+					spriteBase.setDirPath("src/image/player1-move-left");
 			}
 		} 
 		String dirPath = spriteBase.getDirPath();
@@ -254,9 +289,7 @@ public class Player extends JLabel{
 		//이미지 파일이름들 배열에 저장
 		this.spriteBase.setImagePaths(dir.list());
 	}
-//
 
-	
 
 	public Image getImage() {
 		String path = this.spriteBase.getImage();
@@ -387,6 +420,23 @@ public class Player extends JLabel{
 	}
 	public void addScore(int i) {
 		scoreLabel.addScore(i);
+	}
+
+	public boolean isShoot() {
+		return isShoot;
+	}
+	public void setShoot(boolean isShoot) {
+		this.isShoot = isShoot;
+	}
+	
+	public boolean isMonsterCrush() {
+		return isMonsterCrush;
+	}
+	public void setMonsterCrush(boolean isMonsterCrush) {
+		this.isMonsterCrush = isMonsterCrush;
+	}
+	public void setCrushBlock(Block crushBlock) {
+		this.crushBlock = crushBlock;
 	}
 }
 
