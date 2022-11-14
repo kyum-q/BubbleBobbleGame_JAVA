@@ -52,7 +52,7 @@ public class GamePanel extends JLayeredPane {
 		add(monster.get(monster.size() - 1));
 
 		// 맵 그리기
-		map = new Map("src/resource/map4.txt");
+		map = new Map("src/resource/map1.txt");
 		ArrayList<Block> blocks = map.getBlocks();
 		for (Block block : blocks)
 			this.add(block,new Integer(0));
