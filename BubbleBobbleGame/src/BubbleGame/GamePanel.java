@@ -55,6 +55,8 @@ public class GamePanel extends JLayeredPane {
 		map = new Map("src/resource/map1.txt");
 		blocks = map.getBlocks();
 
+
+
 		for (Block block : blocks)
 			this.add(block, new Integer(0));
 		monsters = map.getMonster();
