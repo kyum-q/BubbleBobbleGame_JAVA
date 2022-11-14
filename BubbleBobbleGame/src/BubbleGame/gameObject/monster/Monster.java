@@ -19,6 +19,7 @@ public class Monster extends JLabel {
 	private String monsterName;
 	private String monsterLeftPath;
 	private String monsterRightPath;
+	private boolean isWallCrush = false;
 
 	public Monster(int x, int y, String monsterName, int direction) {
 		super();
@@ -69,7 +70,7 @@ public class Monster extends JLabel {
 	}
 
 	private boolean checkWall() {
-		return (getX() <= 0 || getX() + getWidth() >= this.getParent().getWidth());
+		return (getX() <= 0 + Settings.BLOCK_WIDTH  || getX() + getWidth() >= this.getParent().getWidth()-Settings.BLOCK_WIDTH);
 	}
 
 	public void setDirection() {
@@ -81,9 +82,6 @@ public class Monster extends JLabel {
 			direction = 1;
 		}
 	}
-
-	private boolean isWallCrush = false;
-	private boolean isJumping = false;
 
 	public boolean isWallCrush() {
 		return isWallCrush;
@@ -98,9 +96,6 @@ public class Monster extends JLabel {
 	}
 
 	public void applyGravity() {
-		double x = spriteBase.getXCoordinate();
-		double y = spriteBase.getYCoordinate();
-
 		// 벽에 부딪히게 아니고
 		if (!isWallCrush) {
 			// 떨어지는 중

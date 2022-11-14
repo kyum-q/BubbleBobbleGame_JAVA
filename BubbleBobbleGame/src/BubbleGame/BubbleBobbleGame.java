@@ -24,23 +24,36 @@ public class BubbleBobbleGame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize((int)Settings.SCENE_WIDTH, (int)Settings.SCENE_HEIGHT);
 
+		setSplitPane();
+		setResizable(false); 
+		setVisible(true);
+	}
+	
+	private void setSplitPane() {
 		Container c = getContentPane();
 		c.setLayout(new BorderLayout());
 		
 		splitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		scorePanel = new ScorePanel();
 		splitpane.setTopComponent(scorePanel);
-		splitpane.setDividerLocation(50);
 		
-		gamePanel = new GamePanel();
+		splitpane.setDividerLocation(55);
+		splitpane.setEnabled(false); // splitPane 위치 고정
+		splitpane.setDividerSize(0);
+		splitpane.setBorder(null);
+		
+		gamePanel = new GamePanel(scorePanel);
 		splitpane.setBottomComponent(gamePanel);
 		// setLocationRelativeTo(null); 
 		c.add(splitpane, BorderLayout.CENTER);
-		setResizable(false); 
-
-		setVisible(true);
 	}
 
+	public ScorePanel getScorePanel() {
+		return scorePanel;
+	}
 
+	public void setScorePanel(ScorePanel scorePanel) {
+		this.scorePanel = scorePanel;
+	}
 
 }

@@ -16,7 +16,7 @@ public class SpriteBase {
     private int frameCount = 0;
     private int timeCount = 0;
     private int operationTime = 5;
-	private boolean spriteChanged;
+
     private String [] imagePaths;
     /**
      * The constructor. It needs all the parameters and creates the image where planned.
@@ -24,14 +24,14 @@ public class SpriteBase {
      * @param imagePath The path to the image to load.
      * @param  coordinates The coordinates of the Sprite.
      */
-    public SpriteBase(String dirPath, Coordinates coordinates) {
+    public SpriteBase(String dirPath, Coordinates coordinates)  {
 
     	this.dirPath = dirPath;
         this.coordinates = coordinates;
         this.h = 0;
         this.w = 0;
         this.canMove = true;
-        this.spriteChanged = false;
+        //this.spriteChanged = false;
     }
 
     /**
@@ -54,6 +54,15 @@ public class SpriteBase {
     		frameCount++;      	
     	}
     	fileName = fileNames[frameCount%(fileNames.length)];
+    	String imagePath = this.getDirPath()+"/"+ fileName;
+    	//System.out.println("getImage : " + imagePath);
+    	return imagePath;
+    }
+    
+    public String getImage(int i) {
+    	String [] fileNames = this.getImagePaths();
+    	String fileName;
+    	fileName = fileNames[i];
     	String imagePath = this.getDirPath()+"/"+ fileName;
     	//System.out.println("getImage : " + imagePath);
     	return imagePath;
@@ -135,26 +144,11 @@ public class SpriteBase {
         this.w = width;
     }
 
-    /**
-     * This function returns whether the sprite has changed or not.
-     * @return The boolean if the sprite changed
-     */
-    public boolean getSpriteChanged() {
-        return spriteChanged;
-    }
-
-    /**
-     * With this function you can set whether you have changed the sprite or not.
-     * @param spriteChanged The boolean whether the sprite has changed.
-     */
-    public void setSpriteChanged(boolean spriteChanged) {
-        this.spriteChanged = spriteChanged;
-    }
 
 
     public void setDirPath( String dirPath) {
         this.dirPath = dirPath;
-        spriteChanged = true;
+      //  spriteChanged = true;
     }
 
     /**

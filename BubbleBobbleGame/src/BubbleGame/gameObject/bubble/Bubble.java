@@ -30,6 +30,8 @@ public class Bubble extends JLabel {
 	private String BubbleBurstPath = "src/image/bubble-green-burst";
 	private String BubbleRedPath = "src/image/bubble-red";
 
+	// private BubbleThread bubbleThread; // 버블 움직임을 도와주는 thread
+	
 	public void setBubblePath(String monsterName) {
 		this.bubbleGreenPath = "src/image/bubble-" + monsterName + "-green";
 		BubbleRedPath = "src/image/bubble-" + monsterName + "-red";
@@ -38,9 +40,8 @@ public class Bubble extends JLabel {
 
 	private Coordinates coordinate; // 위치 설정 도와주는 class
 	private SpriteBase spriteBase; // 이미지 설정을 도와주는 class
-	// private BubbleThread bubbleThread; // 버블 움직임을 도와주는 thread
 
-	/* Bubble 생성자 : 기본 설정 및 이미지 설정 --> 스레드 실행 */
+	/* Bubble 생성자 : 기본 설정 및 이미지 설정 */
 	public Bubble(double xStartLocation, double yStartLocation, int moveDirection) {
 		super();
 		this.moveDirection = moveDirection;
@@ -55,8 +56,6 @@ public class Bubble extends JLabel {
 		this.spriteBase.setOperationTime(10);
 		getImagePaths(); // imagePath 알아내기
 		this.setSize((int) Settings.BUBBLE_SIZE, (int) Settings.BUBBLE_SIZE);
-		// bubbleThread = new BubbleThread(this); // thread 제작 후 실행
-		// bubbleThread.start();
 		beforeTime = System.currentTimeMillis(); // 코드 실행 전에 시간 받아오기
 	}
 	
@@ -108,7 +107,11 @@ public class Bubble extends JLabel {
 		}
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> main
 	/* Bubble이 monster랑 만났을 경우 */
 	public void monsterCatch(Monster m) {
 		if (!monsterCapture) {
@@ -116,6 +119,7 @@ public class Bubble extends JLabel {
 			setBubblePath(monsterName);
 			this.setSize((int) Settings.MONSTER_BUBBLE_SIZE, (int) Settings.MONSTER_BUBBLE_SIZE);
 			monsterCapture = true; // 몬스터 잡았음 true
+<<<<<<< HEAD
 			if(this.getParent() != null) getParent().remove(m); // 몬스터 삭제
 		}
 	}
@@ -127,10 +131,41 @@ public class Bubble extends JLabel {
 				bubblePushing(p);
 			}
 			return true;
+=======
+			getParent().remove(m); // 몬스터 삭제
+>>>>>>> main
 		}
-		return false;
 	}
-
+	
+	/* Bubble이 player랑 만났을 경우 */
+	public void bubbleMeetPlayer(Player p) {
+		if (bubbleState != 2) {
+			if (!(p).isJumping() && !(p).isMoveDown()) {
+				bubblePushing(p);
+			}
+			bubbleBomb(p);
+		}
+	}
+	
+	/* 버블이 밀리는 경우 (플레이어가 점프가 아니라 옆으로 움직였을 때) */
+	public void bubblePushing(Player p) {
+		if (p.isMoveLeft() && !checkWallMeetX()) {
+			this.moveDirection = -1;
+			this.coordinate.setXCoordinate(p.getX() - getWidth());
+		} else if (p.isMoveRight() && !checkWallMeetX()) {
+			this.moveDirection = 1;
+			this.coordinate.setXCoordinate(p.getX() + p.getWidth());
+		}
+	}
+	
+	/* 버블이 터지는 경우 (버블이 점프했을 경우) */
+	public void bubbleBomb(Player p) {
+		beforeTime = (long) (System.currentTimeMillis() - Settings.BUBBLE_LIVE_TIME); // 코드 실행 전에 시간 받아오기
+		spriteBase.setDirPath(BubbleBurstPath);
+		bubbleState = 2;
+		p.addScore(Settings.MONSTER_KILL_SCORE);
+	}
+	
 	private void moveBubble() {
 		long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
 		long secDiffTime = (afterTime - beforeTime); // 두 시간에 차 계산
@@ -148,7 +183,10 @@ public class Bubble extends JLabel {
 			}
 			// 터지기 전에 버블의 움직임 설정
 			if (!checkWallMeetX() && !monsterCapture && secDiffTime <= Settings.BUBBLE_FLY_TIME) {
+<<<<<<< HEAD
 				this.spriteBase.setOperationTime(4);
+=======
+>>>>>>> main
 				spriteBase.move();
 			}
 			else if (!checkWallMeetY()) {
@@ -161,8 +199,14 @@ public class Bubble extends JLabel {
 		// 버블이 터질 때 움직임 (BubbleState == 2)
 		else {
 			if (secDiffTime >= Settings.BUBBLE_BURST_TIME) {
+<<<<<<< HEAD
 				if (monsterCapture) 
 					((GamePanel) this.getParent()).addItem(this.getX(), this.getY());
+=======
+				if (monsterCapture) {
+					((GamePanel) this.getParent()).addItem(this.getX(), this.getY());
+				}
+>>>>>>> main
 				this.getParent().remove(this);
 			}
 		}
@@ -171,7 +215,14 @@ public class Bubble extends JLabel {
 	public boolean wallCollision(double minX, double maxX, double minY, double maxY) {
 		return spriteBase.causesCollision(minX, maxX, minY, maxY);
 	}
-
+	
+	@Override
+	public void setSize(int x, int y) {
+		super.setSize(x,y);
+		this.spriteBase.setWidth(x);
+		this.spriteBase.setHeight(y);
+	}
+	
 	@Override
 	public int getX() {
 		return (int) this.spriteBase.getXCoordinate();

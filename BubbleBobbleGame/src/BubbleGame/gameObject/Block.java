@@ -20,6 +20,7 @@ public class Block extends JLabel{
 		this.h = Settings.BLOCK_HEIGHT;
 		this.setBounds(x,y, w, h);
 	}
+	
 	public void paintComponent(Graphics g) {
 		setLocation(x,y);
 		g.drawImage(img, 0, 0, w,  h, this);
