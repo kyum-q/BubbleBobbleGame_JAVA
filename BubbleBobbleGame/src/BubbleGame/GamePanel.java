@@ -178,13 +178,15 @@ public class GamePanel extends JLayeredPane {
 				player1.setMoveRight(true);
 				break;
 			case KeyEvent.VK_SPACE:
-				if (player1.isDirection()) {
-					bubble.add(new Bubble(player1.getX(), player1.getY(), 1));
-				} else {
-					bubble.add(new Bubble(player1.getX(), player1.getY(), -1));
-				}
-				add(bubble.get(bubble.size() - 1),new Integer(5));
+				player1.setShoot(true);
 				break;
+//				if (player1.isDirection()) {
+//					bubbles.add(new Bubble(player1.getX(), player1.getY(), 1));
+//				} else {
+//					bubbles.add(new Bubble(player1.getX(), player1.getY(), -1));
+//				}
+//				add(bubbles.get(bubbles.size() - 1), new Integer(5));
+//				break;
 
 			case KeyEvent.VK_ESCAPE:
 				System.exit(0);
@@ -207,6 +209,15 @@ public class GamePanel extends JLayeredPane {
 				break;
 			case KeyEvent.VK_RIGHT:
 				player1.setMoveRight(false);
+				break;
+			case KeyEvent.VK_SPACE:
+				player1.setShoot(false);
+				if (player1.isDirection()) {
+					bubbles.add(new Bubble(player1.getX(), player1.getY(), 1));
+				} else {
+					bubbles.add(new Bubble(player1.getX(), player1.getY(), -1));
+				}
+				add(bubbles.get(bubbles.size() - 1), new Integer(5));
 				break;
 			}
 		}

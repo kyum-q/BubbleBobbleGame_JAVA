@@ -108,39 +108,23 @@ public class Bubble extends JLabel {
 		}
 		return false;
 	}
-	
-	/* Bubble과 label이 닿았는지 확인하는 함수 */
-	public boolean checkBubbleMit(JLabel label) {
-		if (wallCollision (label.getX(), label.getX() + label.getWidth(), label.getY(),
-				label.getY() + label.getHeight())) {
-			//System.out.println("checkBubbleMeet");
-			if (label instanceof Monster) {
-				if (!monsterCapture) {
-					String monsterName = ((Monster) label).getMonsterName();
-					setBubblePath(monsterName);
-					monsterCapture = true; // 몬스터 잡았음 true
-				} else {
-					return false;
-				}
-			} else if (label instanceof Player) {
 
-				if (bubbleState != 2) {
-					if (!((Player) label).isJumping() && !((Player) label).isMoveDown()) {
-						if (((Player) label).isMoveLeft() && !checkWallMeetX()) {
-							this.moveDirection = -1;
-							this.coordinate.setXCoordinate(label.getX() - getWidth());
-							return false;
-						} else if (((Player) label).isMoveRight() && !checkWallMeetX()) {
-							this.moveDirection = 1;
-							this.coordinate.setXCoordinate(label.getX() + label.getWidth());
-							return false;
-						}
-						return false;
-					}
-					beforeTime = (long) (System.currentTimeMillis() - Settings.BUBBLE_LIVE_TIME); // 코드 실행 전에 시간 받아오기
-					spriteBase.setDirPath(BubbleBurstPath);
-					bubbleState = 2;
-				}
+	/* Bubble이 monster랑 만났을 경우 */
+	public void monsterCatch(Monster m) {
+		if (!monsterCapture) {
+			String monsterName = m.getMonsterName();
+			setBubblePath(monsterName);
+			this.setSize((int) Settings.MONSTER_BUBBLE_SIZE, (int) Settings.MONSTER_BUBBLE_SIZE);
+			monsterCapture = true; // 몬스터 잡았음 true
+			if(this.getParent() != null) getParent().remove(m); // 몬스터 삭제
+		}
+	}
+	
+	/* Bubble이 player랑 만났을 경우 */
+	public void bubbleMeetPlayer(Player p) {
+		if (bubbleState != 2) {
+			if (!(p).isJumping() && !(p).isMoveDown()) {
+				bubblePushing(p);
 			}
 			return true;
 		}
@@ -164,8 +148,7 @@ public class Bubble extends JLabel {
 			}
 			// 터지기 전에 버블의 움직임 설정
 			if (!checkWallMeetX() && !monsterCapture && secDiffTime <= Settings.BUBBLE_FLY_TIME) {
-				//coordinate.setDYCoordinate(0);
-				//coordinate.setDXCoordinate(Settings.BUBBLE_INIT_SPEED * this.moveDirection);
+				this.spriteBase.setOperationTime(4);
 				spriteBase.move();
 			}
 			else if (!checkWallMeetY()) {
@@ -178,8 +161,8 @@ public class Bubble extends JLabel {
 		// 버블이 터질 때 움직임 (BubbleState == 2)
 		else {
 			if (secDiffTime >= Settings.BUBBLE_BURST_TIME) {
-				if (monsterCapture)
-					((GamePanel) this.getParent()).addScore(100);
+				if (monsterCapture) 
+					((GamePanel) this.getParent()).addItem(this.getX(), this.getY());
 				this.getParent().remove(this);
 			}
 		}

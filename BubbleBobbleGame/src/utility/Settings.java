@@ -33,8 +33,15 @@ public final class Settings {
 	public static final double BUBBLE_FLY_TIME = 600;
 	public static final double BUBBLE_POWERUP_FLY_TIME = BUBBLE_FLY_TIME + 4000;
 	public static final double BUBBLE_LIVE_TIME = BUBBLE_POWERUP_FLY_TIME + 3000;
-	public static final double BUBBLE_BURST_TIME = BUBBLE_LIVE_TIME + 800;
+	public static final double BUBBLE_BURST_TIME = BUBBLE_LIVE_TIME + 400;
 
+	public static final double ITEM_SIZE = 25;
+	public static final double ITEM_DOWN_SPEED = 4;
+	
+	public static final int MONSTER_KILL_SCORE = 1000;
+	public static final int ITEM_MIN_SCORE = 400;
+	public static final int ITEM_MAX_SCORE = 1500 - ITEM_MIN_SCORE;
+	
 	public static final double PLAYER_SPEED = 5.0;
 	public static final int PLAYER_LIVES = 5;
 
