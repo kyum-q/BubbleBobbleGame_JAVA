@@ -1,6 +1,8 @@
 package BubbleGame.gameObject;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
@@ -13,11 +15,12 @@ import utility.Settings;
 
 public class Player extends JLabel{
 	private final int playerNumber;
-	private double xStartLocation = 10;
-	private double yStartLocation = 500;
+	private double xStartLocation ;
+	private double yStartLocation;
 	private double speed;
 	private int score;
 	private int lives;
+	private float alpha = 255;
 	private SpriteBase spriteBase;
 	private double width = Settings.SPRITE_SIZE;
 	private double height = Settings.SPRITE_SIZE;
@@ -47,13 +50,16 @@ public class Player extends JLabel{
 	private boolean isDirection;
     private boolean isWallCrush;
     private boolean isMonsterCrush;
-    
+    private boolean isImmortal;
+
+    private boolean isBlink = false;
     private ScoreLabel scoreLabel;
+    private long beforeTime;// 코드 실행 전에 시간 받아오기
     
 	public Player(String dirPath, int playerNumber, ScoreLabel scoreLabel) {
 		super();
-		this.xStartLocation = Settings.SPRITE_SIZE;
-        this.yStartLocation = 460;
+		this.xStartLocation = 40;
+        this.yStartLocation = 510;
         this.scoreLabel = scoreLabel;
         
 		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
@@ -65,7 +71,8 @@ public class Player extends JLabel{
 		this.spriteBase.setWidth(width);
 		//getImagePaths();
 		
-		this.isDead = false;
+	
+		this.score = 0;
         this.setUp();
         
         this.setBounds(0,0,(int)width, (int)height);
@@ -73,7 +80,8 @@ public class Player extends JLabel{
 	}
 	//변수들 초기 셋팅
 	private void setUp() {
-        this.score = 0;
+        
+		this.isDead = false;
         this.speed = Settings.PLAYER_SPEED;
         this.counter = 31;
         this.isAbleToJump = true;
@@ -83,6 +91,7 @@ public class Player extends JLabel{
         this.isWallCrush = false;
         this.isShoot = false;
         this.isMonsterCrush = false;
+        this.isImmortal =false;
 
         //playerMinX = Settings.SPRITE_SIZE / 2;
         playerMinX = 27;
@@ -97,9 +106,18 @@ public class Player extends JLabel{
 
 	@Override
 	public void paintComponent(Graphics g) { 
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D)g;
 		
 		Image player1Image = this.getImage();
+
+		AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)this.alpha/255);
+		g2.setComposite(alphaComposite);
+
+		//this.setOpaque(false);
 		g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),this);	
+		
+		
 	}
 	
 	//상태변수, 키보드 입력에 따른 좌표 변화 실행
@@ -108,10 +126,16 @@ public class Player extends JLabel{
 		@Override
 		public void run() {
 			while (true) {
+				immortalEvent();
 				setDirImage();
 				processInput();
 				move();
+				
+				if(isDead)
+					deadEvent();
 				//wallCrush();
+				if(isBlink)
+					blinkEvent();
 				
 				try {		
 					Thread.sleep(20);
@@ -122,8 +146,86 @@ public class Player extends JLabel{
 			}
 		}
 	}
-
+   /*적과 부딪히면 일정 시간 무적*/
+	public void immortalEvent() {
+		
+		//몬스터와 처음 부딪혔을 때 무적 시작
+		if(isMonsterCrush) {
+			beforeTime = System.currentTimeMillis(); // 코드 실행 전에 시간 받아오기
+			this.setDead(true);
+			this.setImmortal(true);
+			this.setMonsterCrush(false);
+//			//무적 시작
+			
+			System.out.println("무적 시작");
+			//deadEvent();
+//			//life -1
+//			
+		}
+		if(this.isImmortal && !this.isDead) {	
+			long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
+			long secDiffTime = (afterTime - beforeTime); // 두 시간에 차 계산
+			this.isBlink = true;
+			if(secDiffTime >= 2000) {
+				this.setImmortal(false);
+				System.out.println("무적 끝");
+				//this.isBlink = false;
+			}
+		}
+	}
 	
+	/*캐릭터 부활 */
+	public void revival() {
+		
+		this.setDead(false);
+		spriteBase.setXCoordinate(this.xStartLocation);
+		spriteBase.setYCoordinate(this.yStartLocation);
+		//무적 시간 초기화
+		beforeTime = System.currentTimeMillis();	
+		this.isBlink = true;
+		
+	}
+	
+	/*캐릭터가 다시 부활할 때 깜빡이는 이벤트 */
+	public void blinkEvent() {
+		long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
+		long secDiffTime = (afterTime - beforeTime); // 두 시간에 차 계산
+		System.out.println(secDiffTime);
+		if((secDiffTime)%200<= 30) {
+			System.out.println("secDiffTime == 0");
+			if(this.alpha == 255)
+				this.alpha = 100;
+			else
+				this.alpha = 255;
+		}
+		if(secDiffTime >= 2000) {
+			this.isBlink = false;
+			this.alpha = 255;
+		}
+	}
+	public void deadEvent() {
+		this.setDead(false);
+		long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
+		long secDiffTime = (afterTime - beforeTime); // 두 시간에 차 계산
+		
+		for(int i=0; i< 55; i++) {
+			if(i< 55/2)
+				this.coordinate.setYCoordinate(this.coordinate.getYCoordinate() - 5);
+			else
+				this.coordinate.setYCoordinate(this.coordinate.getYCoordinate() + 4);
+		
+			try {
+				Thread.sleep(15);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+			//dead event 끝			
+			 revival();
+
+	}
 //	public void wallCrush() {
 //		if(isWallCrush) {
 //			//떨어지고 있거나, 블록위에 서 있는 상태
@@ -134,6 +236,12 @@ public class Player extends JLabel{
 //		}
 //	}
 
+	public boolean isDead() {
+		return isDead;
+	}
+	public void setDead(boolean isDead) {
+		this.isDead = isDead;
+	}
 	public void processInput() {
 		//DY가 음수이면 올라가고 있다는 거
 		if (isJumping && spriteBase.getDyCoordinate() <0) {
@@ -174,6 +282,7 @@ public class Player extends JLabel{
 		 return spriteBase.causesCollision(minX, maxX, minY, maxY);
 	 }
 	 
+	 //
 	 public float calculateGravity() {
 	        return -Settings.GRAVITY_CONSTANT;
 	    }
@@ -259,12 +368,6 @@ public class Player extends JLabel{
 				else
 					spriteBase.setDirPath("src/image/player1-shoot-left");
 			}
-			 else if(this.isMonsterCrush) {
-				 if(this.isDirection)
-						spriteBase.setDirPath("src/image/player1-death-right");
-					else
-						spriteBase.setDirPath("src/image/player1-death-left");
-			 }
 			//오른쪽으로 갈 때
 			 else if (isMoveRight) {
 				//이미지 디렉토리 변경
@@ -282,7 +385,13 @@ public class Player extends JLabel{
 				else if(!(this.isDirection) &&!(spriteBase.getDirPath().equals("src/image/player1-move-left")))
 					spriteBase.setDirPath("src/image/player1-move-left");
 			}
-		} 
+		//몬스터와 맞았을 때
+		} else {
+			 if(this.isDirection)
+					spriteBase.setDirPath("src/image/player1-death-right");
+				else
+					spriteBase.setDirPath("src/image/player1-death-left");
+		}
 		String dirPath = spriteBase.getDirPath();
 		File dir = new File(dirPath);
 		
@@ -437,6 +546,12 @@ public class Player extends JLabel{
 	}
 	public void setCrushBlock(Block crushBlock) {
 		this.crushBlock = crushBlock;
+	}
+	public boolean isImmortal() {
+		return isImmortal;
+	}
+	public void setImmortal(boolean isImmortal) {
+		this.isImmortal = isImmortal;
 	}
 }
 
