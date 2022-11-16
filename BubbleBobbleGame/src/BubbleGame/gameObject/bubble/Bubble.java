@@ -95,7 +95,7 @@ public class Bubble extends JLabel {
 					moveDirection = 1;
 				else {
 					moveDirection = -1;
-					this.coordinate.setYCoordinate(getY() + (1));
+  	  				this.coordinate.setYCoordinate(getY() + (1));
 				}
 				//this.coordinate.setXCoordinate(getX() + (2 * moveDirection));
 				coordinate.setDYCoordinate(0);
@@ -107,11 +107,7 @@ public class Bubble extends JLabel {
 		}
 		return false;
 	}
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> main
 	/* Bubble이 monster랑 만났을 경우 */
 	public void monsterCatch(Monster m) {
 		if (!monsterCapture) {
@@ -119,31 +115,17 @@ public class Bubble extends JLabel {
 			setBubblePath(monsterName);
 			this.setSize((int) Settings.MONSTER_BUBBLE_SIZE, (int) Settings.MONSTER_BUBBLE_SIZE);
 			monsterCapture = true; // 몬스터 잡았음 true
-<<<<<<< HEAD
-			if(this.getParent() != null) getParent().remove(m); // 몬스터 삭제
-		}
-	}
-	
-	/* Bubble이 player랑 만났을 경우 */
-	public void bubbleMeetPlayer(Player p) {
-		if (bubbleState != 2) {
-			if (!(p).isJumping() && !(p).isMoveDown()) {
-				bubblePushing(p);
-			}
-			return true;
-=======
 			getParent().remove(m); // 몬스터 삭제
->>>>>>> main
 		}
 	}
 	
 	/* Bubble이 player랑 만났을 경우 */
 	public void bubbleMeetPlayer(Player p) {
 		if (bubbleState != 2) {
-			if (!(p).isJumping() && !(p).isMoveDown()) {
-				bubblePushing(p);
+			if ((p).isJumping() || (p).isMoveDown()) {
+				bubbleBomb(p);
 			}
-			bubbleBomb(p);
+			bubblePushing(p);
 		}
 	}
 	
@@ -183,10 +165,7 @@ public class Bubble extends JLabel {
 			}
 			// 터지기 전에 버블의 움직임 설정
 			if (!checkWallMeetX() && !monsterCapture && secDiffTime <= Settings.BUBBLE_FLY_TIME) {
-<<<<<<< HEAD
 				this.spriteBase.setOperationTime(4);
-=======
->>>>>>> main
 				spriteBase.move();
 			}
 			else if (!checkWallMeetY()) {
@@ -199,14 +178,9 @@ public class Bubble extends JLabel {
 		// 버블이 터질 때 움직임 (BubbleState == 2)
 		else {
 			if (secDiffTime >= Settings.BUBBLE_BURST_TIME) {
-<<<<<<< HEAD
 				if (monsterCapture) 
 					((GamePanel) this.getParent()).addItem(this.getX(), this.getY());
-=======
-				if (monsterCapture) {
-					((GamePanel) this.getParent()).addItem(this.getX(), this.getY());
-				}
->>>>>>> main
+
 				this.getParent().remove(this);
 			}
 		}

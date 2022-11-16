@@ -62,7 +62,7 @@ public class GamePanel extends JLayeredPane {
 		monsters = map.getMonster();
 		for (Monster monster : monsters)
 			this.add(monster, new Integer(5));
-		this.setBackground(Color.black);
+		
 		this.addKeyListener(new KeyListener());
 		this.requestFocus();
 		this.setFocusable(true);
@@ -73,7 +73,7 @@ public class GamePanel extends JLayeredPane {
 	
 	public void addItem(int x, int y) {
 		items.add(new Item(x,y));
-		add(items.get(items.size() - 1));
+		add(items.get(items.size() - 1),new Integer(5)); 
 	}
 	
 	public void addMonster(int x, int y, String name, int i) {
@@ -169,7 +169,7 @@ public class GamePanel extends JLayeredPane {
 		for (Item item : items) {
 			for (Block block : blocks) {
 				if (item.wallCollision(block.getX(), block.getX() + Settings.BLOCK_WIDTH, block.getY(),
-						block.getY() + Settings.BLOCK_HEIGHT)) {
+						block.getY())) {
 					item.setWallCrush(true);
 					break;
 				} else {
@@ -231,15 +231,6 @@ public class GamePanel extends JLayeredPane {
 				break;
 			case KeyEvent.VK_SPACE:
 				player1.setShoot(true);
-<<<<<<< HEAD
-=======
-				if (player1.isDirection()) {
-					bubbles.add(new Bubble(player1.getX(), player1.getY(), 1));
-				} else {
-					bubbles.add(new Bubble(player1.getX(), player1.getY(), -1));
-				}
-				add(bubbles.get(bubbles.size() - 1), new Integer(5));
->>>>>>> main
 				break;
 //				if (player1.isDirection()) {
 //					bubbles.add(new Bubble(player1.getX(), player1.getY(), 1));
@@ -273,7 +264,6 @@ public class GamePanel extends JLayeredPane {
 				break;
 			case KeyEvent.VK_SPACE:
 				player1.setShoot(false);
-<<<<<<< HEAD
 				if (player1.isDirection()) {
 					bubbles.add(new Bubble(player1.getX(), player1.getY(), 1));
 				} else {
@@ -281,8 +271,6 @@ public class GamePanel extends JLayeredPane {
 				}
 				add(bubbles.get(bubbles.size() - 1), new Integer(5));
 				break;
-=======
->>>>>>> main
 			}
 		}
 	}

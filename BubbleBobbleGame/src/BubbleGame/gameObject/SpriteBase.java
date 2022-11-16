@@ -33,6 +33,13 @@ public class SpriteBase {
         this.canMove = true;
         //this.spriteChanged = false;
     }
+    
+    public SpriteBase(String dirPath)  {
+
+    	this.dirPath = dirPath;
+        this.canMove = true;
+        //this.spriteChanged = false;
+    }
 
     /**
      * The move function that moves the image if possible.

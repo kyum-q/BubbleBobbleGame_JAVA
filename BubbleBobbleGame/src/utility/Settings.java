@@ -34,11 +34,8 @@ public final class Settings {
 	public static final double BUBBLE_FLY_TIME = 600;
 	public static final double BUBBLE_POWERUP_FLY_TIME = BUBBLE_FLY_TIME + 4000;
 	public static final double BUBBLE_LIVE_TIME = BUBBLE_POWERUP_FLY_TIME + 3000;
-<<<<<<< HEAD
 	public static final double BUBBLE_BURST_TIME = BUBBLE_LIVE_TIME + 400;
-=======
-	public static final double BUBBLE_BURST_TIME = BUBBLE_LIVE_TIME + 700;
->>>>>>> main
+
 
 	public static final double ITEM_SIZE = 25;
 	public static final double ITEM_DOWN_SPEED = 4;
