@@ -15,8 +15,8 @@ import utility.Settings;
 
 public class Player extends JLabel{
 	private final int playerNumber;
-	private double xStartLocation ;
-	private double yStartLocation;
+	private double xStartLocation=40;
+	private double yStartLocation= 480;
 	private double speed;
 	private int score;
 	private int lives;
@@ -28,6 +28,7 @@ public class Player extends JLabel{
 	private Coordinates coordinate;
 	private Block crushBlock;
 
+    
 	private double playerMinX;
 	private double playerMaxX;
 	private double playerMinY;
@@ -50,7 +51,7 @@ public class Player extends JLabel{
 	private boolean isDirection;
     private boolean isWallCrush;
     private boolean isMonsterCrush;
-    private boolean isImmortal;
+    private boolean isImmortal=false;
 
     private boolean isBlink = false;
     private ScoreLabel scoreLabel;
@@ -58,8 +59,7 @@ public class Player extends JLabel{
     
 	public Player(String dirPath, int playerNumber, ScoreLabel scoreLabel) {
 		super();
-		this.xStartLocation = 40;
-        this.yStartLocation = 510;
+		
         this.scoreLabel = scoreLabel;
         
 		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
@@ -71,11 +71,14 @@ public class Player extends JLabel{
 		this.spriteBase.setWidth(width);
 		//getImagePaths();
 		
-	
+		this.lives = 3;
 		this.score = 0;
         this.setUp();
         
+        
         this.setBounds(0,0,(int)width, (int)height);
+        Thread moveThread = new moveThread();
+        moveThread.start();
 
 	}
 	//변수들 초기 셋팅
@@ -91,7 +94,7 @@ public class Player extends JLabel{
         this.isWallCrush = false;
         this.isShoot = false;
         this.isMonsterCrush = false;
-        this.isImmortal =false;
+        //this.isImmortal =false;
 
         //playerMinX = Settings.SPRITE_SIZE / 2;
         playerMinX = 27;
@@ -99,8 +102,7 @@ public class Player extends JLabel{
         playerMinY = Settings.SPRITE_SIZE / 2;
         playerMaxY = Settings.SCENE_HEIGHT - Settings.SPRITE_SIZE / 2;
 
-        Thread moveThread = new moveThread();
-        moveThread.start();
+        
     }
 	
 
@@ -110,12 +112,18 @@ public class Player extends JLabel{
 		Graphics2D g2 = (Graphics2D)g;
 		
 		Image player1Image = this.getImage();
-
+		//불투명도 설정. 작아질 수록 투명
 		AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)this.alpha/255);
 		g2.setComposite(alphaComposite);
 
-		//this.setOpaque(false);
-		g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),this);	
+		if(this.isDead) {
+			g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),
+					0,0,0,0 ,this);	
+			
+		}
+		//this.setOpaque(false); 
+		else
+		   g.drawImage(player1Image, 0,0,this.getWidth(), this.getHeight(),this);	
 		
 		
 	}
@@ -126,16 +134,12 @@ public class Player extends JLabel{
 		@Override
 		public void run() {
 			while (true) {
-				immortalEvent();
+				//immortalEvent();
 				setDirImage();
 				processInput();
-				move();
-				
-				if(isDead)
-					deadEvent();
+				move();		
 				//wallCrush();
-				if(isBlink)
-					blinkEvent();
+				monsterCrushEvent();
 				
 				try {		
 					Thread.sleep(20);
@@ -146,22 +150,39 @@ public class Player extends JLabel{
 			}
 		}
 	}
-   /*적과 부딪히면 일정 시간 무적*/
-	public void immortalEvent() {
-		
+	
+	public void monsterCrushEvent() {
 		//몬스터와 처음 부딪혔을 때 무적 시작
-		if(isMonsterCrush) {
-			beforeTime = System.currentTimeMillis(); // 코드 실행 전에 시간 받아오기
-			this.setDead(true);
-			this.setImmortal(true);
-			this.setMonsterCrush(false);
-//			//무적 시작
+			if(isMonsterCrush) { // immortal 상태가 아닐 때만 체크함
+				beforeTime = System.currentTimeMillis(); // 코드 실행 전에 시간 받아오기
+				this.lives -=1;
+				this.setDead(true);
+				this.setImmortal(true);
+				this.setMonsterCrush(false);
+		
+			}
+			else {
+				//일정시간 동안 깜빡여짐
+				 if(isBlink)
+					blinkEvent();
+				 //일정시간 몬스터와 맞아도 생명력이 안닳음
+				 if(isImmortal)
+					immortalEvent();
+				 //몬스터 부딪혔을 때 죽는 애니메이션이 발동하고 부활하면 무적
+				 if(isDead) {
+					 //애니메이션 발동동안 player의 스레드를 독점함 - 안움직이게
+					 deadEvent();
+					 //애니메이션 끝나고 부활
+					 revival();
+				 }		
+			}
 			
-			System.out.println("무적 시작");
-			//deadEvent();
-//			//life -1
-//			
-		}
+	}
+	
+	
+   /*2000ms 시간 무적*/
+	public void immortalEvent() {	
+		//다시 살아났을 때 일정시간 동안 깜빡임
 		if(this.isImmortal && !this.isDead) {	
 			long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
 			long secDiffTime = (afterTime - beforeTime); // 두 시간에 차 계산
@@ -183,6 +204,7 @@ public class Player extends JLabel{
 		//무적 시간 초기화
 		beforeTime = System.currentTimeMillis();	
 		this.isBlink = true;
+		setUp();
 		
 	}
 	
@@ -190,9 +212,7 @@ public class Player extends JLabel{
 	public void blinkEvent() {
 		long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
 		long secDiffTime = (afterTime - beforeTime); // 두 시간에 차 계산
-		System.out.println(secDiffTime);
-		if((secDiffTime)%200<= 30) {
-			System.out.println("secDiffTime == 0");
+		if((secDiffTime)%150<= 30) {
 			if(this.alpha == 255)
 				this.alpha = 100;
 			else
@@ -203,17 +223,22 @@ public class Player extends JLabel{
 			this.alpha = 255;
 		}
 	}
+	//
 	public void deadEvent() {
 		this.setDead(false);
 		long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
 		long secDiffTime = (afterTime - beforeTime); // 두 시간에 차 계산
 		
 		for(int i=0; i< 55; i++) {
-			if(i< 55/2)
+			if(i< 55/2) {
 				this.coordinate.setYCoordinate(this.coordinate.getYCoordinate() - 5);
-			else
-				this.coordinate.setYCoordinate(this.coordinate.getYCoordinate() + 4);
-		
+			//	this.coordinate.setRotation(this.coordinate.getRotation() + 15);;
+			}
+				
+			else {
+				this.coordinate.setYCoordinate(this.coordinate.getYCoordinate() + 5);
+				//this.coordinate.setRotation(this.coordinate.getRotation() + 30);
+			}				
 			try {
 				Thread.sleep(15);
 			} catch (InterruptedException e) {
@@ -223,7 +248,7 @@ public class Player extends JLabel{
 		}
 
 			//dead event 끝			
-			 revival();
+			 //revival();
 
 	}
 //	public void wallCrush() {

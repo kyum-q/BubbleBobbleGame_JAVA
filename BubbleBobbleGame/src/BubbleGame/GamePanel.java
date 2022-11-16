@@ -52,7 +52,7 @@ public class GamePanel extends JLayeredPane {
 		//map = new Map("src/resource/map1.txt");
 		//blocks = map.getBlocks();
 
-		map = new Map("src/resource/map1.txt");
+		map = new Map("src/resource/map2.txt");
 		blocks = map.getBlocks();
 
 
@@ -137,7 +137,7 @@ public class GamePanel extends JLayeredPane {
 	}
 	/*플레이어와 벽이 부딪히는지 체크*/
 	public void playerWallCrushCheck() {
-		//ArrayList<Block> blocks = map.getBlocks();
+		ArrayList<Block> blocks = map.getBlocks();
 		for (Block block : blocks) {
 			if (player1.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
 					block.getY() + block.getHeight())) {
@@ -153,7 +153,7 @@ public class GamePanel extends JLayeredPane {
 	}
 
 	public void monsterWallCrushCheck() {
-		//ArrayList<Block> blocks = map.getBlocks();
+		ArrayList<Block> blocks = map.getBlocks();
 		for (Monster monster : monsters) {
 			for (Block block : blocks) {
 				if (monster.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
