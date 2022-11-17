@@ -86,10 +86,16 @@ public class Map {
 				Block block = new Block(x,y);
 				blocks.add(block);
 			}
-			if(state==2) {
+			else if(state==2) {
 				int x = (i%BLOCK_WIDTH_LENGTH)* Settings.BLOCK_WIDTH;
 				int y = (i/BLOCK_WIDTH_LENGTH)* Settings.BLOCK_HEIGHT;
-				Monster monster = new Monster(x,y,"zenchan",new Random().nextInt(1)-1);
+				Monster monster = new Monster(x,y,"zenchan", -1);
+				monsters.add(monster);
+			}
+			else if(state==3) {
+				int x = (i%BLOCK_WIDTH_LENGTH)* Settings.BLOCK_WIDTH;
+				int y = (i/BLOCK_WIDTH_LENGTH)* Settings.BLOCK_HEIGHT;
+				Monster monster = new Monster(x,y,"zenchan", 1);
 				monsters.add(monster);
 			}
 		}
