@@ -19,6 +19,8 @@ public class ScorePanel extends JPanel{
 	private ScoreLabel up1Score;
 	private ScoreLabel highScore;
 	private ScoreLabel up2Score;
+	private JLabel up1;
+	private JLabel up2;
 	
 	public ScorePanel() {
 		this.setBackground(Color.black);
@@ -27,11 +29,11 @@ public class ScorePanel extends JPanel{
 	}
 	
 	private void settingPanel() {
-		JLabel up1 = new ToolBarLabel("1UP");	
+		up1 = new ToolBarLabel("1UP");	
 		up1.setForeground(Color.GREEN);
 		JLabel highScoreText = new ToolBarLabel("HIGH SCORE");
 		highScoreText.setForeground(Color.RED);
-		JLabel up2 = new ToolBarLabel("2UP");
+		up2 = new ToolBarLabel("2UP");
 		up2.setForeground(Color.BLUE);
 		
 		add(up1);
@@ -54,7 +56,15 @@ public class ScorePanel extends JPanel{
 			return up1Score;
 		return up2Score;
 	}
+
+	public void setUp1Name(String name) {
+		this.up1.setText(name);
+	}
 	
+	public void setUp2Name(String name) {
+		this.up2.setText(name);
+	}
+
 	public void HighScoreCheck(int score) {
 		if(highScore != null && highScore.getScore() <= score) {
 			highScore.setScore(score);

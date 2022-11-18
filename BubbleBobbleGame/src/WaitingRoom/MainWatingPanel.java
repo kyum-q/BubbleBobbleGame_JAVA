@@ -27,11 +27,14 @@ import utility.Settings;
 
 public class MainWatingPanel extends JPanel {
 	
-	private GamePanel gamePanel = null;
+	private WatingPanel watingPanel  = null;
 	private ScorePanel scorePanel = null;
 	private JSplitPane splitpane = null;
 	
-	public MainWatingPanel() {
+	private String userName;
+	
+	public MainWatingPanel(String userName, String ip_addr, String port_no) {
+		this.userName = userName;
 		setSplitPane(); 
 		setVisible(true);
 	}
@@ -48,8 +51,8 @@ public class MainWatingPanel extends JPanel {
 		splitpane.setDividerSize(0);
 		splitpane.setBorder(null);
 		
-		gamePanel = new GamePanel(scorePanel);
-		splitpane.setBottomComponent(gamePanel);
+		watingPanel = new WatingPanel(scorePanel, 2, userName);
+		splitpane.setBottomComponent(watingPanel);
 		// setLocationRelativeTo(null); 
 		this.add(splitpane, BorderLayout.CENTER);
 	}

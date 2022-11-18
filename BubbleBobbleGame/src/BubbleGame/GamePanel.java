@@ -45,7 +45,7 @@ public class GamePanel extends JLayeredPane {
 		setOpaque(true);
 		this.setBackground(Color.BLACK);
 
-		player1 = new Player("src/image/player1-move-right", 1, scorePanel.getScorePanel(1));
+		player1 = new Player("player1", 1, scorePanel.getScorePanel(1));
 		add(player1,new Integer(10));
 
 		// 맵 그리기

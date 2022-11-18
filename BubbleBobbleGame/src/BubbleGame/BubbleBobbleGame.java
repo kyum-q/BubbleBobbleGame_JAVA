@@ -16,6 +16,8 @@ public class BubbleBobbleGame extends JFrame {
 
 	private GameInPanel inPanel;
 	private MainGamePanel mainGamePanel;
+	private String player1Name;
+	private String player2Name;
 	
 	public BubbleBobbleGame() {
 		
@@ -31,7 +33,7 @@ public class BubbleBobbleGame extends JFrame {
 	}
 	
 	public void setPane(JPanel panel) {
-		mainGamePanel = (MainGamePanel) panel;
+		//mainGamePanel = (MainGamePanel) panel;
 		add(panel);
 	}
 

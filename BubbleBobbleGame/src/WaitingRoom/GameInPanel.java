@@ -61,23 +61,32 @@ public class GameInPanel extends JPanel {
 		
 		StartAction startAction = new StartAction();
 		
-		String serverList[] = {"server1","server2","server3"};
+		String serverList[] = {"ROOM 1","ROOM 2","ROOM 3"};
 		
 		Font font = new Font ("HBIOS-SYS", Font.PLAIN, 20);
 		serverComboBox = new JComboBox<String>(serverList);
 		serverComboBox.setFont(font);
-		serverComboBox.setBackground(Color.BLACK);
+		//serverComboBox.setBackground(Color.BLACK);
 		//serverComboBox.setForeground(Color.gray.brighter());
 		serverComboBox.setAlignmentX(JTextField.CENTER);
 		//serverComboBox.setAlignmentY(JTextField.CENTER);
-		serverComboBox.setBounds((int)Settings.SCENE_WIDTH/2-(150/2), 140, 150, 30);
+		serverComboBox.setBounds((int)Settings.SCENE_WIDTH/2-(100/2), 100, 100, 30);
 		add(serverComboBox);
 
+		
 		font = new Font ("HBIOS-SYS", Font.PLAIN, 30);
+		
+		JLabel nameLabel = new JLabel("UserName");
+		nameLabel.setBounds((int)Settings.SCENE_WIDTH/2-(200/2), 420, 200, 40);
+		nameLabel.setFont(font);
+		nameLabel.setForeground(new Color(255, 186, 0));
+		nameLabel.setHorizontalAlignment(JTextField.CENTER);
+		add(nameLabel);
+		
 		txtUserName = new JTextField(10);
 		//txtUserName.setBackground(Color.BLACK);
-		//txtUserName.setForeground(Color.gray.brighter());
-		txtUserName.setBounds((int)Settings.SCENE_WIDTH/2-(200/2), 475, 200, 30);
+		//txtUserName.setForeground(Color.WHITE);
+		txtUserName.setBounds((int)Settings.SCENE_WIDTH/2-(200/2), 460, 200, 30);
 		txtUserName.setFont(font);
 		txtUserName.setHorizontalAlignment(JTextField.CENTER);
 		txtUserName.setBorder(BorderFactory.createCompoundBorder( null, null)); //new LineBorder(Color.gray.brighter(),1)
@@ -85,7 +94,7 @@ public class GameInPanel extends JPanel {
 		
 		font = new Font ("HBIOS-SYS", Font.PLAIN, 50);
 		startText = new JButton("START");
-		startText.setBounds((int)Settings.SCENE_WIDTH/2-(370/2), 510, 370, 40);
+		startText.setBounds((int)Settings.SCENE_WIDTH/2-(370/2), 500, 370, 40);
 		//startText.setBounds((int)Settings.SCENE_WIDTH/2-(370/2), 540, 370, 40);
 		startText.setHorizontalAlignment(JLabel.CENTER);
 		startText.setFont(font);
@@ -98,7 +107,7 @@ public class GameInPanel extends JPanel {
 		startText.addActionListener(startAction);
 		
 		JLabel back = new JLabel("");
-		back.setBounds((int)Settings.SCENE_WIDTH/2-(450/2), 460, 450, 100);
+		back.setBounds((int)Settings.SCENE_WIDTH/2-(450/2), 420, 450, 100);
 		back.setOpaque(true);
 		back.setBackground(Color.BLACK);
 		add(back);
@@ -138,7 +147,7 @@ public class GameInPanel extends JPanel {
 
 		super.paintComponent(g);
 		Image img = getImage();
-		g.drawImage(img, -100, 100, this.getWidth()+200, this.getHeight()-100, null);
+		g.drawImage(img, -100, 60, this.getWidth()+200, this.getHeight()-100, null);
 	}
 	
 	class StartAction implements ActionListener // 내부클래스로 액션 이벤트 처리 클래스
@@ -148,7 +157,10 @@ public class GameInPanel extends JPanel {
 			String username = txtUserName.getText().trim();
 			String ip_addr = "127.0.0.1";
 			String port_no = "30000";
-			//JavaObjClientView view = new JavaObjClientView(username, ip_addr, port_no);
+			
+			//JavaObjClientView view = new JavaObjClientView(username, ip_addr, port_no);			
+			//bubbleBobbleGame.setPane(new MainWatingPanel(username, ip_addr, port_no));
+			
 			bubbleBobbleGame.setPane(new MainGamePanel());
 			setVisible(false);
 		}
