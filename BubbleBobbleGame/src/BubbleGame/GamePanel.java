@@ -32,7 +32,9 @@ public class GamePanel extends JLayeredPane {
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private ScorePanel scorePanel = null;
 	private int score = 0;
-
+	private GameThread gameThread;
+	
+	public boolean threadFlag = true;
 	/**
 	 * Create the panel.
 	 */
@@ -117,22 +119,32 @@ public class GamePanel extends JLayeredPane {
 		monsterWallCrushCheck();
 		ItemWallCrushCheck();
 		checkBubbleMonster();
+		
+		if(!this.threadFlag)
+			this.gameThread.interrupt();
+		
+		
 	}
-	
+	/*플레이어와 몬스터가 부딪히는지 체크*/
 	public void playerMonsterCrushCheck() {
-		for(Monster m : monsters) {
-			if(player1.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE,
-					m.getY(), m.getY() + Settings.SPRITE_SIZE)) {
-				//System.out.println("몬스터 충돌");
-				player1.setMonsterCrush(true);
-				return;
-			}else {
-				player1.setMonsterCrush(false);
+		//플레이어가 무적이 아닐 때만 체크
+		if(!player1.isImmortal()) {
+			for(Monster m : monsters) {
+				if(player1.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE,
+						m.getY(), m.getY() + Settings.SPRITE_SIZE)) {
+					//System.out.println("몬스터 충돌");
+					player1.setMonsterCrush(true);
+					return;
+				}else {
+					player1.setMonsterCrush(false);
+				}
 			}
 		}
+		
 	}
+	/*플레이어와 벽이 부딪히는지 체크*/
 	public void playerWallCrushCheck() {
-		//ArrayList<Block> blocks = map.getBlocks();
+		ArrayList<Block> blocks = map.getBlocks();
 		for (Block block : blocks) {
 			if (player1.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
 					block.getY() + block.getHeight())) {
@@ -148,7 +160,7 @@ public class GamePanel extends JLayeredPane {
 	}
 
 	public void monsterWallCrushCheck() {
-		//ArrayList<Block> blocks = map.getBlocks();
+		ArrayList<Block> blocks = map.getBlocks();
 		for (Monster monster : monsters) {
 			for (Block block : blocks) {
 				if (monster.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
