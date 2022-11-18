@@ -27,6 +27,7 @@ public class Player extends JLabel{
 
 	private Coordinates coordinate;
 	private Block crushBlock;
+	Thread moveThread;
 
     
 	private double playerMinX;
@@ -52,6 +53,7 @@ public class Player extends JLabel{
     private boolean isWallCrush;
     private boolean isMonsterCrush;
     private boolean isImmortal=false;
+    private boolean threadFlag = true;
 
     private boolean isBlink = false;
     private ScoreLabel scoreLabel;
@@ -77,7 +79,7 @@ public class Player extends JLabel{
         
         
         this.setBounds(0,0,(int)width, (int)height);
-        Thread moveThread = new moveThread();
+        moveThread = new moveThread();
         moveThread.start();
 
 	}
@@ -135,6 +137,7 @@ public class Player extends JLabel{
 		public void run() {
 			while (true) {
 				//immortalEvent();
+				threadInterrupt();
 				setDirImage();
 				processInput();
 				move();		
@@ -151,6 +154,10 @@ public class Player extends JLabel{
 		}
 	}
 	
+	public void threadInterrupt() {
+		if(!this.threadFlag)
+			this.moveThread.interrupt();
+	}
 	public void monsterCrushEvent() {
 		//몬스터와 처음 부딪혔을 때 무적 시작
 			if(isMonsterCrush) { // immortal 상태가 아닐 때만 체크함

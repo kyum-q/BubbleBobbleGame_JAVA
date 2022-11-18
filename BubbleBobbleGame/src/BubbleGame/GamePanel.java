@@ -32,7 +32,9 @@ public class GamePanel extends JLayeredPane {
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private ScorePanel scorePanel = null;
 	private int score = 0;
-
+	private GameThread gameThread;
+	
+	public boolean threadFlag = true;
 	/**
 	 * Create the panel.
 	 */
@@ -52,7 +54,7 @@ public class GamePanel extends JLayeredPane {
 		//map = new Map("src/resource/map1.txt");
 		//blocks = map.getBlocks();
 
-		map = new Map("src/resource/map2.txt");
+		map = new Map("src/resource/map1.txt");
 		blocks = map.getBlocks();
 
 
@@ -117,6 +119,11 @@ public class GamePanel extends JLayeredPane {
 		monsterWallCrushCheck();
 		ItemWallCrushCheck();
 		checkBubbleMonster();
+		
+		if(!this.threadFlag)
+			this.gameThread.interrupt();
+		
+		
 	}
 	/*플레이어와 몬스터가 부딪히는지 체크*/
 	public void playerMonsterCrushCheck() {
