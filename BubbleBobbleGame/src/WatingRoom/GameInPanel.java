@@ -1,6 +1,10 @@
-package WaitingRoom;
+package WatingRoom;
+
+
 
 import java.awt.Color;
+
+import java.awt.Toolkit;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -23,44 +27,26 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import BubbleGame.BubbleBobbleGame;
-import BubbleGame.GamePanel;
-import BubbleGame.MainGamePanel;
-import BubbleGame.Map;
-import BubbleGame.gameObject.Block;
-import BubbleGame.gameObject.Player;
-import BubbleGame.gameObject.SpriteBase;
-import BubbleGame.gameObject.monster.Monster;
 import utility.Settings;
 
 public class GameInPanel extends JPanel {
-	private BubbleBobbleGame bubbleBobbleGame;
 	
 	private Image img = null;
 	private String path[];
-	private SpriteBase spriteBase; // 이미지 설정을 도와주는 class
-
 	private JComboBox serverComboBox;
 	private JTextField txtUserName;
 	private JButton startText;
-	
-	public GameInPanel(BubbleBobbleGame bubbleBobbleGame) {
-		
-		this.bubbleBobbleGame = bubbleBobbleGame;
-		
+	private Image image;
+	private BubbleBobbleGame bubbleGame;
+	public GameInPanel(BubbleBobbleGame bubbleGame) {
 		setLayout(null);
 
-		// 배경 색 설정
 		setOpaque(true);
 		this.setBackground(Color.BLACK);
-
-		this.spriteBase = new SpriteBase("src/image/intro");
-		String dirPath = spriteBase.getDirPath();
-		File dir = new File(dirPath);
-
-		this.spriteBase.setImagePaths(dir.list());
 		
+		this.bubbleGame = bubbleGame;
+
 		StartAction startAction = new StartAction();
-		
 		String serverList[] = {"ROOM 1","ROOM 2","ROOM 3"};
 		
 		Font font = new Font ("HBIOS-SYS", Font.PLAIN, 20);
@@ -73,7 +59,6 @@ public class GameInPanel extends JPanel {
 		serverComboBox.setBounds((int)Settings.SCENE_WIDTH/2-(100/2), 100, 100, 30);
 		add(serverComboBox);
 
-		
 		font = new Font ("HBIOS-SYS", Font.PLAIN, 30);
 		
 		JLabel nameLabel = new JLabel("UserName");
@@ -112,45 +97,22 @@ public class GameInPanel extends JPanel {
 		back.setBackground(Color.BLACK);
 		add(back);
 		
-		InitThread initThread = new InitThread();
-		initThread.start();
+		image = Toolkit.getDefaultToolkit().createImage("src/image/intro.gif"); 
 		
 		//this.requestFocusInWindow();
 		//getTextField().setFocusable(true);
-	}
-
-	/* img 알아내기(전달) */
-	public Image getImage() {
-		String path = this.spriteBase.getImage();
-		Image image = new ImageIcon(path).getImage();
-		return image;
-	}
-	
-
-	class InitThread extends Thread {
-		@Override
-		public void run() {
-			while (true) {
-				try {
-					repaint();
-					Thread.sleep(30);
-					
-				} catch (InterruptedException e) {
-					return;
-				}
-			}
-		}
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
-		Image img = getImage();
-		g.drawImage(img, -100, 60, this.getWidth()+200, this.getHeight()-100, null);
+		if (image != null) {  
+		      g.drawImage(image, -100, 60, this.getWidth()+200, this.getHeight()-100, this);
+		    }  
 	}
 	
-	class StartAction implements ActionListener // 내부클래스로 액션 이벤트 처리 클래스
+	class StartAction implements ActionListener // �궡遺��겢�옒�뒪濡� �븸�뀡 �씠踰ㅽ듃 泥섎━ �겢�옒�뒪
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -159,9 +121,8 @@ public class GameInPanel extends JPanel {
 			String port_no = "30000";
 			
 			//JavaObjClientView view = new JavaObjClientView(username, ip_addr, port_no);			
-			//bubbleBobbleGame.setPane(new MainWatingPanel(username, ip_addr, port_no));
 			
-			bubbleBobbleGame.setPane(new MainGamePanel());
+			bubbleGame.setPane(new WatingPanel(username, ip_addr, port_no));
 			setVisible(false);
 		}
 	}
