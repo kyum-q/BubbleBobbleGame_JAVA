@@ -1,4 +1,4 @@
-package WatingRoom;
+package WaitingRoom;
 
 
 
@@ -35,19 +35,16 @@ public class GameInPanel extends JPanel {
 	private String path[];
 	private JComboBox serverComboBox;
 	private JTextField txtUserName;
-	private JButton startText;
+	private JButton joinBtn;
 	private Image image;
 	private BubbleBobbleGame bubbleGame;
 	public GameInPanel(BubbleBobbleGame bubbleGame) {
 		setLayout(null);
-
 		setOpaque(true);
 		this.setBackground(Color.BLACK);
-		
 		this.bubbleGame = bubbleGame;
-
-		StartAction startAction = new StartAction();
-		String serverList[] = {"ROOM 1","ROOM 2","ROOM 3"};
+		
+		String serverList[] = {"1","2","3"};
 		
 		Font font = new Font ("HBIOS-SYS", Font.PLAIN, 20);
 		serverComboBox = new JComboBox<String>(serverList);
@@ -78,18 +75,20 @@ public class GameInPanel extends JPanel {
 		add(txtUserName);
 		
 		font = new Font ("HBIOS-SYS", Font.PLAIN, 50);
-		startText = new JButton("START");
-		startText.setBounds((int)Settings.SCENE_WIDTH/2-(370/2), 500, 370, 40);
+		joinBtn = new JButton("JOIN");
+		joinBtn.setBounds((int)Settings.SCENE_WIDTH/2-(370/2), 500, 370, 40);
 		//startText.setBounds((int)Settings.SCENE_WIDTH/2-(370/2), 540, 370, 40);
-		startText.setHorizontalAlignment(JLabel.CENTER);
-		startText.setFont(font);
-		startText.setForeground(Color.RED);
-		startText.setOpaque(true);
-		startText.setBackground(Color.BLACK);
-		startText.setBorder(BorderFactory.createCompoundBorder( null, null));
-		add(startText);
+		joinBtn.setHorizontalAlignment(JLabel.CENTER);
+		joinBtn.setFont(font);
+		joinBtn.setOpaque(true);
+		joinBtn.setBackground(Color.BLACK);
+		joinBtn.setForeground(Color.RED);
+		joinBtn.setBorderPainted(false);
+		joinBtn.setFocusPainted(false);
+		add(joinBtn);
 		
-		startText.addActionListener(startAction);
+		JoinAction joinAction = new JoinAction();
+		joinBtn.addActionListener(joinAction);
 		
 		JLabel back = new JLabel("");
 		back.setBounds((int)Settings.SCENE_WIDTH/2-(450/2), 420, 450, 100);
@@ -112,17 +111,15 @@ public class GameInPanel extends JPanel {
 		    }  
 	}
 	
-	class StartAction implements ActionListener // �궡遺��겢�옒�뒪濡� �븸�뀡 �씠踰ㅽ듃 泥섎━ �겢�옒�뒪
+	class JoinAction implements ActionListener // �궡遺��겢�옒�뒪濡� �븸�뀡 �씠踰ㅽ듃 泥섎━ �겢�옒�뒪
 	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String username = txtUserName.getText().trim();
-			String ip_addr = "127.0.0.1";
-			String port_no = "30000";
-			
+
 			//JavaObjClientView view = new JavaObjClientView(username, ip_addr, port_no);			
 			
-			bubbleGame.setPane(new WatingPanel(username, ip_addr, port_no));
+			bubbleGame.setPane(new WaitingPanel(username, serverComboBox.getSelectedItem().toString(), bubbleGame));
 			setVisible(false);
 		}
 	}

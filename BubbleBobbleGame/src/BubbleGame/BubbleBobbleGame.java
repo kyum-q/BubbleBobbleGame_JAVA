@@ -9,12 +9,12 @@ import java.awt.Container;
 
 import javax.swing.*;
 
-import WatingRoom.WatingPanel;
+import WaitingRoom.WaitingPanel;
 import utility.Settings;
 
 public class BubbleBobbleGame extends JFrame {
 
-	private WatingRoom.GameInPanel inPanel;
+	private WaitingRoom.GameInPanel inPanel;
 	private MainGamePanel mainGamePanel;
 	private String player1Name;
 	private String player2Name;
@@ -26,15 +26,15 @@ public class BubbleBobbleGame extends JFrame {
 		setSize((int)Settings.SCENE_WIDTH, (int)Settings.SCENE_HEIGHT);
 
 		//this.setContentPane(new MainGamePanel());
-		inPanel = new WatingRoom.GameInPanel(this);
+		inPanel = new WaitingRoom.GameInPanel(this);
 		add(inPanel);
 		setResizable(false); 
 		setVisible(true);
 	}
 	
-	public void setPane(WatingPanel watingPanel) {
+	public void setPane(JLayeredPane panel) {
 		//mainGamePanel = (MainGamePanel) panel;
-		add(watingPanel);
+		add(panel);
 	}
 
 }

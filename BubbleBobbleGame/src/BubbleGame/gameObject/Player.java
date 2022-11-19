@@ -13,7 +13,6 @@ import utility.Settings;
 
 public class Player extends JLabel{
 	private final int playerNumber;
-	private String playerImgPath;
 	private double xStartLocation = 10;
 	private double yStartLocation = 500;
 	private double speed;
@@ -32,7 +31,6 @@ public class Player extends JLabel{
 	private double playerMaxY;
 	    
 	private boolean isJumping;
-    private boolean isFacingRight;
     private int counter;
     private boolean isDelayed;
     private boolean isAbleToJump;
@@ -51,19 +49,15 @@ public class Player extends JLabel{
     
     private ScoreLabel scoreLabel;
     
-	public Player(String playerImgPath, int playerNumber, ScoreLabel scoreLabel) {
+	public Player(int playerNumber, ScoreLabel scoreLabel) {
 		super();
 		this.xStartLocation = Settings.SPRITE_SIZE;
         this.yStartLocation = 460;
         this.scoreLabel = scoreLabel;
-        this.playerImgPath = playerImgPath;
         
 		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
 		String path;
-		if(playerNumber==1)
-			path = "src/image/"+playerImgPath+"-move-right";
-		else
-			path = "src/image/"+playerImgPath+"-move-left";
+		path = "src/image/player"+playerNumber+"-move-left";
 		System.out.println("path: "+path);
 		this.spriteBase = new SpriteBase(path, coordinate);
 		this.playerNumber = playerNumber;
@@ -85,8 +79,7 @@ public class Player extends JLabel{
         this.counter = 31;
         this.isAbleToJump = true;
         this.isJumping = false;
-        this.isFacingRight = true;
-        this.isDirection = true;
+        this.isDirection = (playerNumber==1);
         this.isWallCrush = false;
         this.isShoot = false;
         this.isMonsterCrush = false;
@@ -262,32 +255,32 @@ public class Player extends JLabel{
 			//버블 발사
 			 if(isShoot) {
 				if(this.isDirection)
-					spriteBase.setDirPath("src/image/"+playerImgPath+"-shoot-right");
+					spriteBase.setDirPath("src/image/player"+playerNumber+"-shoot-right");
 				else
-					spriteBase.setDirPath("src/image/"+playerImgPath+"-shoot-left");
+					spriteBase.setDirPath("src/image/player"+playerNumber+"-shoot-left");
 			}
 			 else if(this.isMonsterCrush) {
 				 if(this.isDirection)
-						spriteBase.setDirPath("src/image/"+playerImgPath+"-death-right");
+						spriteBase.setDirPath("src/image/player"+playerNumber+"-death-right");
 					else
-						spriteBase.setDirPath("src/image/"+playerImgPath+"-death-left");
+						spriteBase.setDirPath("src/image/player"+playerNumber+"-death-left");
 			 }
 			//오른쪽으로 갈 때
 			 else if (isMoveRight) {
 				//이미지 디렉토리 변경
-				spriteBase.setDirPath("src/image/"+playerImgPath+"-move-right");
+				spriteBase.setDirPath("src/image/player"+playerNumber+"-move-right");
 				//getImagePaths();
 			//왼쪽으로 갈 때
 			} else if(isMoveLeft) {
 
-				spriteBase.setDirPath("src/image/"+playerImgPath+"-move-left");
+				spriteBase.setDirPath("src/image/player"+playerNumber+"-move-left");
 				//getImagePaths();
 			//가만히 있을 때	
 			} else {
-				if(this.isDirection && !(spriteBase.getDirPath().equals("src/image/"+playerImgPath+"-move-right")))
-					spriteBase.setDirPath("src/image/"+playerImgPath+"-move-right");
-				else if(!(this.isDirection) &&!(spriteBase.getDirPath().equals("src/image/"+playerImgPath+"-move-left")))
-					spriteBase.setDirPath("src/image/"+playerImgPath+"-move-left");
+				if(this.isDirection && !(spriteBase.getDirPath().equals("src/image/player"+playerNumber+"-move-right")))
+					spriteBase.setDirPath("src/image/player"+playerNumber+"-move-right");
+				else if(!(this.isDirection) &&!(spriteBase.getDirPath().equals("src/image/player"+playerNumber+"-move-left")))
+					spriteBase.setDirPath("src/image/player"+playerNumber+"-move-left");
 			}
 		} 
 		String dirPath = spriteBase.getDirPath();
