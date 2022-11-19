@@ -24,7 +24,7 @@ public class WatingPanel extends JLayeredPane {
 
 		this.scorePanel = scorePanel;
 
-		map = new Map("src/resource/map1.txt");
+		map = new Map(1);
 		blocks = map.getBlocks();
 		for (Block block : blocks)
 			this.add(block, new Integer(0));

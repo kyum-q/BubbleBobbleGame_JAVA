@@ -22,7 +22,7 @@ public LoadingPanel() {
 		title.setFont(font);
 		title.setForeground(Color.white);
 		title.setSize(270, 70);
-		title.setLocation(430, 300);
+		title.setLocation(240, 300);
 		
 		add(title);
 	}		

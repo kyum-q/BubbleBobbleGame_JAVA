@@ -30,11 +30,13 @@ public class Map {
 	//public String[] map_arr = new String[packet.size()];
 	
 	
-	public Map(String path) {
-		String[] map_arr  = setMapArr(path);
-		setBlockObjects(map_arr);
-		
-	}
+	 public Map(int StageNumber) {
+	      String[] map_arr  = setMapArr("src/resource/map"+StageNumber+".txt");
+	      System.out.println("MAP src/resource/map"+StageNumber+".txt 생성");
+	      setBlockObjects(map_arr);
+	      
+	   }
+
 
 	public void setBlocks(ArrayList<Block> blocks) {
 		this.blocks = blocks;

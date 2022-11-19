@@ -59,7 +59,10 @@ public class Player extends JLabel{
     private boolean isImmortal=false;
     private boolean threadFlag = true;
 
-    private boolean isBlink = false;
+    public void setThreadFlag(boolean threadFlag) {
+		this.threadFlag = threadFlag;
+	}
+	private boolean isBlink = false;
     private ScoreLabel scoreLabel;
     private long beforeTime;// 코드 실행 전에 시간 받아오기
     
@@ -69,12 +72,16 @@ public class Player extends JLabel{
         this.scoreLabel = scoreLabel;
         this.playerImgPath = playerImgPath;
         
-		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
+		
 		String path;
-		if(playerNumber==1)
-			path = "src/image/"+playerImgPath+"-move-right";
-		else
+		if(playerNumber==1) {
+			path = "src/image/"+playerImgPath+"-move-right";		
+		}			
+		else {
 			path = "src/image/"+playerImgPath+"-move-left";
+			this.xStartLocation = 550;
+		}
+		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
 		System.out.println("path: "+path);
 		this.spriteBase = new SpriteBase(path, coordinate);
 		this.playerNumber = playerNumber;
@@ -90,6 +97,7 @@ public class Player extends JLabel{
         
         this.setBounds(0,0,(int)width, (int)height);
         moveThread = new moveThread();
+        System.out.println("player : " +Thread.currentThread() + "start");
         moveThread.start();
 
 	}
@@ -158,6 +166,7 @@ public class Player extends JLabel{
 					Thread.sleep(20);
 
 				} catch (InterruptedException e) {
+					 System.out.println("player : " +Thread.currentThread() + "stop");
 					return;
 				}
 			}
