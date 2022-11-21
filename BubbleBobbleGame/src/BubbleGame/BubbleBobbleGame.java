@@ -83,11 +83,11 @@ public class BubbleBobbleGame extends JFrame {
 	      splitpane.setBorder(null);
 	      
 	      splitpane.setBottomComponent(gamePanel);
-	      setLocationRelativeTo(null); 
+	     // setLocationRelativeTo(null); 
 	      c.add(splitpane, BorderLayout.CENTER);
 	      this.isGame = false;
 	      	  
-	      repaint();
+	     // repaint();
 	      //이거 안주면 안보임 왜 안보이지..??
 	      setVisible(true);
 	      //포커스 지정
