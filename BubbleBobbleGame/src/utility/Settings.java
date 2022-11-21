@@ -18,6 +18,8 @@ import java.util.Set;
  */
 public final class Settings {
 
+	public static final int WAITING_SPACE = 80;
+	
 	public static final double SCENE_WIDTH = 693;
 	public static final double SCENE_HEIGHT = 675;
 	public static final double SPRITE_SIZE = 35;

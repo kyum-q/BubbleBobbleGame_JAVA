@@ -4,18 +4,24 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import WaitingRoom.WaitingPanel;
 import utility.Settings;
 
-public class MainGamePanel extends JPanel {
+public class MainGamePanel extends JLayeredPane {
 
 	private GamePanel gamePanel = null;
 	private ScorePanel scorePanel = null;
 	private JSplitPane splitpane = null;
 
 	public MainGamePanel() {
+		scorePanel = new ScorePanel();
+		scorePanel.setUp1Name(WaitingPanel.getP1Name());
+		scorePanel.setUp2Name(WaitingPanel.getP2Name());
+		//gamePanel = new GamePanel(scorePanel);
 		setSplitPane(); 
 		setVisible(true);
 	}
@@ -24,7 +30,6 @@ public class MainGamePanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		splitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		scorePanel = new ScorePanel();
 		splitpane.setTopComponent(scorePanel);
 		
 		splitpane.setDividerLocation(55);
@@ -32,7 +37,6 @@ public class MainGamePanel extends JPanel {
 		splitpane.setDividerSize(0);
 		splitpane.setBorder(null);
 		
-		//gamePanel = new GamePanel(scorePanel);
 		splitpane.setBottomComponent(gamePanel);
 		// setLocationRelativeTo(null); 
 		this.add(splitpane, BorderLayout.CENTER);

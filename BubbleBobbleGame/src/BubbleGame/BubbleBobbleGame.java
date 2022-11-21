@@ -12,11 +12,13 @@ import java.util.TimerTask;
 import javax.swing.*;
 
 import WaitingRoom.GameInPanel;
+import WaitingRoom.WaitingPanel;
 import utility.Settings;
 
 public class BubbleBobbleGame extends JFrame {
 
 	private GameInPanel inPanel;
+	private WaitingPanel waitingPanel;
 	private MainGamePanel mainGamePanel;
 	private String player1Name;
 	private String player2Name;
@@ -32,7 +34,8 @@ public class BubbleBobbleGame extends JFrame {
 	public static boolean isGame;
 	public static boolean isChange;
 	public static boolean isNext;
-	public static boolean isIn;
+	public static boolean isInit;
+	public static boolean isWaitingRoom;
 	GameProcessThread gameThread;
 	int check = 0;
 	public int stage =1;
@@ -56,9 +59,10 @@ public class BubbleBobbleGame extends JFrame {
 	}
 	public void init() {	
 		isMain = false;
-		isGame = true;
+		isGame = false;
 		isChange= true;
-		isIn = true;
+		isInit = true;
+		isWaitingRoom = false;
 	}
 
 	public void setPane(JPanel panel) {
@@ -156,9 +160,14 @@ public class BubbleBobbleGame extends JFrame {
 	         this.gamePanel = new GamePanel(scorePanel, map);
 	         setGamePanel(gamePanel);
 	         isGame= false;
-		}else if(isIn) {
+		} else if(isInit) {
+			this.isInit = false;
 			inPanel = new GameInPanel(this);
 			add(inPanel);
+		} else if(isWaitingRoom) {
+			this.isWaitingRoom = false;
+			waitingPanel = new WaitingPanel(inPanel.getName(), inPanel.getServerNum(), this);
+			add(waitingPanel);
 		}
 	
 
