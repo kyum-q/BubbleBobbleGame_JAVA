@@ -116,8 +116,11 @@ public class Player extends JLabel{
 
         
     }
-	
 
+	public int getPlayerNumber() {
+		return playerNumber;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) { 
 		super.paintComponent(g);

@@ -301,8 +301,9 @@ public class GamePanel extends JLayeredPane {
 	public void movePlayerTrue(String KeyCode) {	
 		System.out.println("GamePanel ###### "+KeyCode);
 		Player other;
-		//if(myself == player1) other = player2;
-		other = player1;
+		int myNumber = myself.getPlayerNumber();
+		if(myNumber == 1) other = player2;
+		else other = player1;
 		
 		switch (KeyCode) {
 		case "VK_DOWN":
@@ -332,8 +333,9 @@ public class GamePanel extends JLayeredPane {
 	public void movePlayerFalse(String KeyCode) {	
 		System.out.println("GamePanel ###### "+KeyCode);
 		Player other;
-		//if(myself == player1) other = player2;
-		other = player1;
+		int myNumber = myself.getPlayerNumber();
+		if(myNumber == 1) other = player2;
+		else other = player1;
 		
 		switch (KeyCode) {
 		case "VK_DOWN":
@@ -380,9 +382,8 @@ public class GamePanel extends JLayeredPane {
 				if (myself.getAbleToJump()) {
 					myself.setMoveUp(true);
 					myself.setJumping(true);
-					obcm = new ChatMsg(userName, "401", "VK_UP");
 				}
-				
+				obcm = new ChatMsg(userName, "401", "VK_UP");
 				break;
 			case KeyEvent.VK_LEFT:
 				myself.setMoveLeft(true);
