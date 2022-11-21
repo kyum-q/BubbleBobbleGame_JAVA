@@ -59,7 +59,7 @@ public class GamePanel extends JLayeredPane {
 
 		player1 = new Player(1, scorePanel.getScorePanel(1));
 		player2 = new Player(2, scorePanel.getScorePanel(2));
-		player2.setX(Settings.SCENE_WIDTH-10);
+//		player2.setX(Settings.SCENE_WIDTH-10);
 		add(player1,new Integer(10));
 		add(player2,new Integer(10));
 		
@@ -85,7 +85,6 @@ public class GamePanel extends JLayeredPane {
 		this.setFocusable(true);
 
 		this.gameThread = new GameThread();
-		System.out.println("gamePaenl : " +Thread.currentThread() + "start");
 		gameThread.start();
 	}
 	
@@ -127,7 +126,6 @@ public class GamePanel extends JLayeredPane {
 					repaint();
 					Thread.sleep(20);
 				} catch (InterruptedException e) {
-					System.out.println("gamePaenl :" +Thread.currentThread() + "stop");
 					return;
 				}
 			}
@@ -300,10 +298,11 @@ public class GamePanel extends JLayeredPane {
 		}
 	}
 	
-	public void movePlayer(String KeyCode) {		
+	public void movePlayerTrue(String KeyCode) {	
+		System.out.println("GamePanel ###### "+KeyCode);
 		Player other;
-		if(myself == player1) other = player2;
-		else other = player2;
+		//if(myself == player1) other = player2;
+		other = player1;
 		
 		switch (KeyCode) {
 		case "VK_DOWN":
@@ -330,6 +329,37 @@ public class GamePanel extends JLayeredPane {
 		}
 	}
 	
+	public void movePlayerFalse(String KeyCode) {	
+		System.out.println("GamePanel ###### "+KeyCode);
+		Player other;
+		//if(myself == player1) other = player2;
+		other = player1;
+		
+		switch (KeyCode) {
+		case "VK_DOWN":
+			myself.setMoveDown(false);
+			break;
+		case "VK_UP":
+			myself.setMoveUp(false);
+			break;
+		case "VK_LEFT":
+			myself.setMoveLeft(false);
+			break;
+		case "VK_RIGHT":
+			myself.setMoveRight(false);
+			break;
+		case "VK_SPACE":
+			myself.setShoot(false);
+			if (myself.isDirection()) {
+				bubbles.add(new Bubble(myself.getX(), myself.getY(), 1));
+			} else {
+				bubbles.add(new Bubble(myself.getX(), myself.getY(), -1));
+			}
+			add(bubbles.get(bubbles.size() - 1), new Integer(5));
+			break;
+		}
+	}
+	
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -340,28 +370,31 @@ public class GamePanel extends JLayeredPane {
 	class KeyListener extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
+			ChatMsg obcm = null;
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
 				myself.setMoveDown(true);
+				obcm = new ChatMsg(userName, "401", "VK_DOWN");
 				break;
 			case KeyEvent.VK_UP:
 				if (myself.getAbleToJump()) {
 					myself.setMoveUp(true);
 					myself.setJumping(true);
+					obcm = new ChatMsg(userName, "401", "VK_UP");
 				}
+				
 				break;
 			case KeyEvent.VK_LEFT:
 				myself.setMoveLeft(true);
-				ChatMsg obcm = new ChatMsg(userName, "400", "VK_LEFT");
-				WaitingPanel.SendObject(obcm);
+				obcm = new ChatMsg(userName, "401", "VK_LEFT");
 				break;
 			case KeyEvent.VK_RIGHT:
 				myself.setMoveRight(true);
-				obcm = new ChatMsg(userName, "400", "VK_RIGHT");
-				WaitingPanel.SendObject(obcm);
+				obcm = new ChatMsg(userName, "401", "VK_RIGHT");
 				break;
 			case KeyEvent.VK_SPACE:
 				myself.setShoot(true);
+				obcm = new ChatMsg(userName, "401", "VK_SPACE");
 				break;
 //				if (player1.isDirection()) {
 //					bubbles.add(new Bubble(player1.getX(), player1.getY(), 1));
@@ -370,7 +403,7 @@ public class GamePanel extends JLayeredPane {
 //				}
 //				add(bubbles.get(bubbles.size() - 1), new Integer(5));
 //				break;
-			case KeyEvent.VK_S:
+			/*case KeyEvent.VK_S:
 				player2.setMoveDown(true);
 				break;
 			case KeyEvent.VK_W:
@@ -388,28 +421,34 @@ public class GamePanel extends JLayeredPane {
 			case KeyEvent.VK_SHIFT:
 				player2.setShoot(true);
 				break;
-				
+				*/
 			case KeyEvent.VK_ESCAPE:
 				System.exit(0);
+				obcm = new ChatMsg(userName, "401", "VK_ESCAPE");
 				break;
 			}
-
+			WaitingPanel.SendObject(obcm);
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
+			ChatMsg obcm = null;
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
 				myself.setMoveDown(false);
+				obcm = new ChatMsg(userName, "402", "VK_DOWN");
 				break;
 			case KeyEvent.VK_UP:
 				myself.setMoveUp(false);
+				obcm = new ChatMsg(userName, "402", "VK_UP");
 				break;
 			case KeyEvent.VK_LEFT:
 				myself.setMoveLeft(false);
+				obcm = new ChatMsg(userName, "402", "VK_LEFT");
 				break;
 			case KeyEvent.VK_RIGHT:
 				myself.setMoveRight(false);
+				obcm = new ChatMsg(userName, "402", "VK_RIGHT");
 				break;
 			case KeyEvent.VK_SPACE:
 				myself.setShoot(false);
@@ -419,6 +458,7 @@ public class GamePanel extends JLayeredPane {
 					bubbles.add(new Bubble(myself.getX(), myself.getY(), -1));
 				}
 				add(bubbles.get(bubbles.size() - 1), new Integer(5));
+				obcm = new ChatMsg(userName, "402", "VK_SPACE");
 				break;
 				
 			case KeyEvent.VK_S:
@@ -443,6 +483,7 @@ public class GamePanel extends JLayeredPane {
 				add(bubbles.get(bubbles.size() - 1), new Integer(5));
 				break;
 			}
+			WaitingPanel.SendObject(obcm);
 		}
 	}
 

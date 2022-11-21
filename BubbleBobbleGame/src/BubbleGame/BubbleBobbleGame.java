@@ -87,7 +87,7 @@ public class BubbleBobbleGame extends JFrame {
 	      splitpane.setBorder(null);
 	      
 	      splitpane.setBottomComponent(gamePanel);
-	      setLocationRelativeTo(null); 
+	      //setLocationRelativeTo(null); 
 	      c.add(splitpane, BorderLayout.CENTER);
 	      this.isGame = false;
 	      	  
@@ -150,8 +150,9 @@ public class BubbleBobbleGame extends JFrame {
 	         
 	         ScorePanel scorePanel = gamePanel.getScorePanel();
 	         Map map = new Map(this.stage);
-	         GamePanel gamePeanl = new GamePanel(scorePanel, map);
-	         changePanelTimer(1000, gamePeanl);
+	         GamePanel gamePanel = new GamePanel(scorePanel, map);
+	         waitingPanel.setGamePanel(gamePanel);
+	         changePanelTimer(1000, gamePanel);
 		}		
 		else if(isGame) {
 			 System.out.println("			IsGame");  
@@ -159,20 +160,19 @@ public class BubbleBobbleGame extends JFrame {
 	         Map map = new Map(1);
 	         this.gamePanel = new GamePanel(scorePanel, map);
 	         setGamePanel(gamePanel);
+	         waitingPanel.setGamePanel(gamePanel);
 	         isGame= false;
 		} else if(isInit) {
 			this.isInit = false;
-			inPanel = new GameInPanel(this);
+			inPanel = new GameInPanel();
 			add(inPanel);
+			this.setVisible(true);
 		} else if(isWaitingRoom) {
 			this.isWaitingRoom = false;
-			waitingPanel = new WaitingPanel(inPanel.getName(), inPanel.getServerNum(), this);
+			waitingPanel = new WaitingPanel(inPanel.getUserName(), inPanel.getServerNum());
 			add(waitingPanel);
+			this.setVisible(true);
 		}
-	
-
-	
-	
 	}
 
 	public ScorePanel getScorePanel() {

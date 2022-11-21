@@ -34,7 +34,6 @@ import WaitingRoom.GameInPanel.JoinAction;
 import utility.Settings;
 
 public class WaitingPanel extends JLayeredPane {
-	private BubbleBobbleGame bubbleGame;
 	private GamePanel gamePanel;
 	
 	private String ip_addr = "127.0.0.1";
@@ -64,12 +63,11 @@ public class WaitingPanel extends JLayeredPane {
 	private ObjectInputStream ois;
 	private static ObjectOutputStream oos;
 	
-	public WaitingPanel(String userName, String roomNum, BubbleBobbleGame bubbleGame) {
+	public WaitingPanel(String userName, String roomNum) {
 		setLayout(null);
 		this.userName = userName;
 		this.roomNum = roomNum;
-		this.bubbleGame = bubbleGame;
-		
+
 		Font font = new Font ("HBIOS-SYS", Font.PLAIN, 90);
 		
 		joinPlayer = new JLabel("1 / 2");
@@ -114,6 +112,10 @@ public class WaitingPanel extends JLayeredPane {
 		this.setBackground(Color.BLACK);
 		
 		connectSet();
+	}
+	
+	public void setGamePanel(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
 	}
 	
 	private void connectSet() {
@@ -201,12 +203,15 @@ public class WaitingPanel extends JLayeredPane {
 					case "104": // 상대방 방 나감
 						startGame();
 						break;
-					case "400": // 게임 player 움직임
-						
+					case "401": // 게임 player 움직임
+						if(gamePanel != null) {
+							gamePanel.movePlayerTrue(cm.getData());
+						}
 						break;
-					case "300": // Image 첨부
-						AppendText("[" + cm.getId() + "]");
-						AppendImage(cm.img);
+					case "402": // 게임 player 움직임
+						if(gamePanel != null) {
+							gamePanel.movePlayerFalse(cm.getData());
+						}
 						break;
 					}
 				} catch (IOException e) {
@@ -323,7 +328,9 @@ public class WaitingPanel extends JLayeredPane {
 	}
 	
 	public void startGame() {
-		bubbleGame.setPane(new MainGamePanel());
+		BubbleBobbleGame.isChange = true;
+		BubbleBobbleGame.isGame = true;
+		//bubbleGame.setPane(new MainGamePanel());
 		setVisible(false);
 	}
 	

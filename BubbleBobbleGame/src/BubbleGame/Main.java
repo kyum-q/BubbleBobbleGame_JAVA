@@ -8,5 +8,4 @@ public class Main {
 		BubbleBobbleGame game = new BubbleBobbleGame();
 		//Map map = new Map("src/resource/map1.txt");
 	}
-
 }

@@ -71,6 +71,9 @@ public class Player extends JLabel{
 		
 		String path;
 		path = "src/image/player"+playerNumber+"-move-left";
+		
+		if(playerNumber==2) this.xStartLocation = 550;
+		
 		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
 		System.out.println("path: "+path);
 		this.spriteBase = new SpriteBase(path, coordinate);
@@ -87,7 +90,7 @@ public class Player extends JLabel{
         
         this.setBounds(0,0,(int)width, (int)height);
         moveThread = new moveThread();
-        System.out.println("player : " +Thread.currentThread() + "start");
+
         moveThread.start();
 
 	}
@@ -156,7 +159,7 @@ public class Player extends JLabel{
 					Thread.sleep(20);
 
 				} catch (InterruptedException e) {
-					 System.out.println("player : " +Thread.currentThread() + "stop");
+	
 					return;
 				}
 			}
