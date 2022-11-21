@@ -28,8 +28,7 @@ import WaitingRoom.WaitingPanel;
 import utility.Settings;
 
 public class GamePanel extends JLayeredPane {
-	private WaitingPanel waitingPanel;
-	
+
 	private Player player1;
 	private Player player2;
 	
@@ -47,11 +46,10 @@ public class GamePanel extends JLayeredPane {
 	/**
 	 * Create the panel.
 	 */
-	public GamePanel(ScorePanel scorePanel, WaitingPanel waitingPanel) {
+	public GamePanel(ScorePanel scorePanel) {
 		setLayout(null);
 		
 		this.scorePanel = scorePanel;
-		this.waitingPanel = waitingPanel;
 		
 		// 배경 색 설정
 		setOpaque(true);
@@ -63,8 +61,8 @@ public class GamePanel extends JLayeredPane {
 		add(player1,new Integer(10));
 		add(player2,new Integer(10));
 		
-		userName = waitingPanel.getName();
-		if(waitingPanel.getMyPlayerNum() == 1) myself = player1;
+		userName = WaitingPanel.userName;
+		if(WaitingPanel.getMyPlayerNum() == 1) myself = player1;
 		else myself = player2;
 		
 		// 맵 그리기
@@ -287,13 +285,13 @@ public class GamePanel extends JLayeredPane {
 				break;
 			case KeyEvent.VK_LEFT:
 				myself.setMoveLeft(true);
-				ChatMsg obcm = new ChatMsg(getUserName(), "400", "VK_LEFT");
-				waitingPanel.SendObject(obcm);
+				ChatMsg obcm = new ChatMsg(userName, "400", "VK_LEFT");
+				WaitingPanel.SendObject(obcm);
 				break;
 			case KeyEvent.VK_RIGHT:
 				myself.setMoveRight(true);
-				obcm = new ChatMsg(getUserName(), "400", "VK_RIGHT");
-				waitingPanel.SendObject(obcm);
+				obcm = new ChatMsg(userName, "400", "VK_RIGHT");
+				WaitingPanel.SendObject(obcm);
 				break;
 			case KeyEvent.VK_SPACE:
 				myself.setShoot(true);

@@ -17,11 +17,11 @@ public class MainGamePanel extends JLayeredPane {
 	private ScorePanel scorePanel = null;
 	private JSplitPane splitpane = null;
 
-	public MainGamePanel(WaitingPanel waitingPanel) {
+	public MainGamePanel() {
 		scorePanel = new ScorePanel();
-		scorePanel.setUp1Name(waitingPanel.getP1Name());
-		scorePanel.setUp2Name(waitingPanel.getP2Name());
-		gamePanel = new GamePanel(scorePanel, waitingPanel);
+		scorePanel.setUp1Name(WaitingPanel.getP1Name());
+		scorePanel.setUp2Name(WaitingPanel.getP2Name());
+		gamePanel = new GamePanel(scorePanel);
 		setSplitPane(); 
 		setVisible(true);
 	}

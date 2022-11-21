@@ -28,26 +28,28 @@ import javax.swing.JLayeredPane;
 import javax.swing.JTextField;
 
 import BubbleGame.BubbleBobbleGame;
+import BubbleGame.GamePanel;
 import BubbleGame.MainGamePanel;
 import WaitingRoom.GameInPanel.JoinAction;
 import utility.Settings;
 
 public class WaitingPanel extends JLayeredPane {
 	private BubbleBobbleGame bubbleGame;
+	private GamePanel gamePanel;
 	
 	private String ip_addr = "127.0.0.1";
 	private String port_no = "30000";
 
 	private String roomNum;
-	private String userName;
+	public static String userName;
 	
-	private int myPlayerNum;
+	private static int myPlayerNum;
 	
 	private Image player1;
 	private Image player2;
 	
-	private JLabel p1NameLabel;
-	private JLabel p2NameLabel;
+	private static JLabel p1NameLabel;
+	private static JLabel p2NameLabel;
 	private JLabel joinPlayer;
 	private JButton startBtn;
 	
@@ -60,7 +62,7 @@ public class WaitingPanel extends JLayeredPane {
 	private DataOutputStream dos;
 
 	private ObjectInputStream ois;
-	private ObjectOutputStream oos;
+	private static ObjectOutputStream oos;
 	
 	public WaitingPanel(String userName, String roomNum, BubbleBobbleGame bubbleGame) {
 		setLayout(null);
@@ -137,19 +139,16 @@ public class WaitingPanel extends JLayeredPane {
 		}
 	}
 	
-	public String getRoomNum() {
-		return roomNum;
-	}
 
-	public int getMyPlayerNum() {
+	static public int getMyPlayerNum() {
 		return myPlayerNum;
 	}
 
-	public String getP1Name() {
+	static public String getP1Name() {
 		return p1NameLabel.getText();
 	}
 
-	public String getP2Name() {
+	static public String getP2Name() {
 		return p2NameLabel.getText();
 	}
 
@@ -314,17 +313,17 @@ public class WaitingPanel extends JLayeredPane {
 		}
 	}
 
-	public void SendObject(Object ob) { // 서버로 메세지를 보내는 메소드
+	static public void SendObject(Object ob) { // 서버로 메세지를 보내는 메소드
 		try {
 			oos.writeObject(ob);
 		} catch (IOException e) {
 			// textArea.append("메세지 송신 에러!!\n");
-			AppendText("SendObject Error");
+			//AppendText("SendObject Error");
 		}
 	}
 	
 	public void startGame() {
-		bubbleGame.setPane(new MainGamePanel(this));
+		bubbleGame.setPane(new MainGamePanel());
 		setVisible(false);
 	}
 	
