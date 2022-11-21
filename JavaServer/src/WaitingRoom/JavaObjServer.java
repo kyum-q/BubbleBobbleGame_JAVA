@@ -409,8 +409,10 @@ public class JavaObjServer extends JFrame {
 						WriteOthers("start","103");
 					} else if (cm.getCode().matches("401")) { // player 움직임 keyPressed
 						WriteOthers(cm.getData(),"401"); 
+						WriteOne(cm.getData(),"401");
 					} else if (cm.getCode().matches("402")) { // player 움직임 keyReleased
 						WriteOthers(cm.getData(),"402"); 
+						WriteOne(cm.getData(),"402");
 					} 
 				} catch (IOException e) {
 					AppendText("ois.readObject() error");

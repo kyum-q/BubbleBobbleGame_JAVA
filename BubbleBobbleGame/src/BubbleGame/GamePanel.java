@@ -34,6 +34,7 @@ public class GamePanel extends JLayeredPane {
 	
 	private Player myself;
 	private String userName;
+	private int myPlayerNum;
 	
 	private Map map;
 	private ArrayList<Monster> monsters = null;
@@ -64,8 +65,10 @@ public class GamePanel extends JLayeredPane {
 		add(player2,new Integer(10));
 		
 		userName = WaitingPanel.userName;
+		myPlayerNum = WaitingPanel.getMyPlayerNum();
 		if(WaitingPanel.getMyPlayerNum() == 1) myself = player1;
 		else myself = player2;
+		
 		
 		// 맵 그리기
 		//map = new Map("src/resource/map1.txt");
@@ -298,12 +301,12 @@ public class GamePanel extends JLayeredPane {
 		}
 	}
 	
-	public void movePlayerTrue(String KeyCode) {	
-		System.out.println("GamePanel ###### "+KeyCode);
+	public void movePlayerTrue(String[] playerInfo) {	
+		String KeyCode = playerInfo[1];
+		System.out.println("GamePanel ###### "+playerInfo[1]);
 		Player other;
-		int myNumber = myself.getPlayerNumber();
-		if(myNumber == 1) other = player2;
-		else other = player1;
+		if(playerInfo[0].equals("1")) other = player1;
+		else other = player2;
 		
 		switch (KeyCode) {
 		case "VK_DOWN":
@@ -330,32 +333,32 @@ public class GamePanel extends JLayeredPane {
 		}
 	}
 	
-	public void movePlayerFalse(String KeyCode) {	
-		System.out.println("GamePanel ###### "+KeyCode);
+	public void movePlayerFalse(String[] playerInfo) {	
+		String KeyCode = playerInfo[1];
+		System.out.println("GamePanel ###### "+playerInfo[0]+":"+playerInfo[1]);
 		Player other;
-		int myNumber = myself.getPlayerNumber();
-		if(myNumber == 1) other = player2;
-		else other = player1;
+		if(Integer.parseInt(playerInfo[0])==1) other = player1;
+		else other = player2;
 		
 		switch (KeyCode) {
 		case "VK_DOWN":
-			myself.setMoveDown(false);
+			other.setMoveDown(false);
 			break;
 		case "VK_UP":
-			myself.setMoveUp(false);
+			other.setMoveUp(false);
 			break;
 		case "VK_LEFT":
-			myself.setMoveLeft(false);
+			other.setMoveLeft(false);
 			break;
 		case "VK_RIGHT":
-			myself.setMoveRight(false);
+			other.setMoveRight(false);
 			break;
 		case "VK_SPACE":
-			myself.setShoot(false);
-			if (myself.isDirection()) {
-				bubbles.add(new Bubble(myself.getX(), myself.getY(), 1));
+			other.setShoot(false);
+			if (other.isDirection()) {
+				bubbles.add(new Bubble(other.getX(), other.getY(), 1));
 			} else {
-				bubbles.add(new Bubble(myself.getX(), myself.getY(), -1));
+				bubbles.add(new Bubble(other.getX(), other.getY(), -1));
 			}
 			add(bubbles.get(bubbles.size() - 1), new Integer(5));
 			break;
@@ -375,27 +378,27 @@ public class GamePanel extends JLayeredPane {
 			ChatMsg obcm = null;
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
-				myself.setMoveDown(true);
-				obcm = new ChatMsg(userName, "401", "VK_DOWN");
+				//myself.setMoveDown(true);
+				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_DOWN");
 				break;
 			case KeyEvent.VK_UP:
-				if (myself.getAbleToJump()) {
-					myself.setMoveUp(true);
-					myself.setJumping(true);
-				}
-				obcm = new ChatMsg(userName, "401", "VK_UP");
+//				if (myself.getAbleToJump()) {
+//					myself.setMoveUp(true);
+//					myself.setJumping(true);
+//				}
+				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_UP");
 				break;
 			case KeyEvent.VK_LEFT:
-				myself.setMoveLeft(true);
-				obcm = new ChatMsg(userName, "401", "VK_LEFT");
+				//myself.setMoveLeft(true);
+				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_LEFT");
 				break;
 			case KeyEvent.VK_RIGHT:
-				myself.setMoveRight(true);
-				obcm = new ChatMsg(userName, "401", "VK_RIGHT");
+				//myself.setMoveRight(true);
+				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_RIGHT");
 				break;
 			case KeyEvent.VK_SPACE:
-				myself.setShoot(true);
-				obcm = new ChatMsg(userName, "401", "VK_SPACE");
+				//myself.setShoot(true);
+				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_SPACE");
 				break;
 //				if (player1.isDirection()) {
 //					bubbles.add(new Bubble(player1.getX(), player1.getY(), 1));
@@ -424,8 +427,8 @@ public class GamePanel extends JLayeredPane {
 				break;
 				*/
 			case KeyEvent.VK_ESCAPE:
-				System.exit(0);
-				obcm = new ChatMsg(userName, "401", "VK_ESCAPE");
+				//System.exit(0);
+				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_ESCAPE");
 				break;
 			}
 			WaitingPanel.SendObject(obcm);
@@ -436,53 +439,53 @@ public class GamePanel extends JLayeredPane {
 			ChatMsg obcm = null;
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
-				myself.setMoveDown(false);
-				obcm = new ChatMsg(userName, "402", "VK_DOWN");
+				//myself.setMoveDown(false);
+				obcm = new ChatMsg(userName, "402", myPlayerNum+"@@VK_DOWN");
 				break;
 			case KeyEvent.VK_UP:
-				myself.setMoveUp(false);
-				obcm = new ChatMsg(userName, "402", "VK_UP");
+				//myself.setMoveUp(false);
+				obcm = new ChatMsg(userName, "402", myPlayerNum+"@@VK_UP");
 				break;
 			case KeyEvent.VK_LEFT:
-				myself.setMoveLeft(false);
-				obcm = new ChatMsg(userName, "402", "VK_LEFT");
+				//myself.setMoveLeft(false);
+				obcm = new ChatMsg(userName, "402", myPlayerNum+"@@VK_LEFT");
 				break;
 			case KeyEvent.VK_RIGHT:
-				myself.setMoveRight(false);
-				obcm = new ChatMsg(userName, "402", "VK_RIGHT");
+				//myself.setMoveRight(false);
+				obcm = new ChatMsg(userName, "402", myPlayerNum+"@@VK_RIGHT");
 				break;
 			case KeyEvent.VK_SPACE:
-				myself.setShoot(false);
-				if (myself.isDirection()) {
-					bubbles.add(new Bubble(myself.getX(), myself.getY(), 1));
-				} else {
-					bubbles.add(new Bubble(myself.getX(), myself.getY(), -1));
-				}
-				add(bubbles.get(bubbles.size() - 1), new Integer(5));
-				obcm = new ChatMsg(userName, "402", "VK_SPACE");
+//				myself.setShoot(false);
+//				if (myself.isDirection()) {
+//					bubbles.add(new Bubble(myself.getX(), myself.getY(), 1));
+//				} else {
+//					bubbles.add(new Bubble(myself.getX(), myself.getY(), -1));
+//				}
+//				add(bubbles.get(bubbles.size() - 1), new Integer(5));
+				obcm = new ChatMsg(userName, "402", myPlayerNum+"@@VK_SPACE");
 				break;
 				
-			case KeyEvent.VK_S:
-				player2.setMoveDown(false);
-				break;
-			case KeyEvent.VK_W:
-				player2.setMoveUp(false);
-				break;
-			case KeyEvent.VK_A:
-				player2.setMoveLeft(false);
-				break;
-			case KeyEvent.VK_D:
-				player2.setMoveRight(false);
-				break;
-			case KeyEvent.VK_SHIFT:
-				player2.setShoot(false);
-				if (player2.isDirection()) {
-					bubbles.add(new Bubble(player2.getX(), player2.getY(), 1));
-				} else {
-					bubbles.add(new Bubble(player2.getX(), player2.getY(), -1));
-				}
-				add(bubbles.get(bubbles.size() - 1), new Integer(5));
-				break;
+//			case KeyEvent.VK_S:
+//				player2.setMoveDown(false);
+//				break;
+//			case KeyEvent.VK_W:
+//				player2.setMoveUp(false);
+//				break;
+//			case KeyEvent.VK_A:
+//				player2.setMoveLeft(false);
+//				break;
+//			case KeyEvent.VK_D:
+//				player2.setMoveRight(false);
+//				break;
+//			case KeyEvent.VK_SHIFT:
+//				player2.setShoot(false);
+//				if (player2.isDirection()) {
+//					bubbles.add(new Bubble(player2.getX(), player2.getY(), 1));
+//				} else {
+//					bubbles.add(new Bubble(player2.getX(), player2.getY(), -1));
+//				}
+//				add(bubbles.get(bubbles.size() - 1), new Integer(5));
+//				break;
 			}
 			WaitingPanel.SendObject(obcm);
 		}

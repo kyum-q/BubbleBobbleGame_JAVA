@@ -205,12 +205,12 @@ public class WaitingPanel extends JLayeredPane {
 						break;
 					case "401": // 게임 player 움직임
 						if(gamePanel != null) {
-							gamePanel.movePlayerTrue(cm.getData());
+							gamePanel.movePlayerTrue(cm.getData().split("@@"));
 						}
 						break;
 					case "402": // 게임 player 움직임
 						if(gamePanel != null) {
-							gamePanel.movePlayerFalse(cm.getData());
+							gamePanel.movePlayerFalse(cm.getData().split("@@"));
 						}
 						break;
 					}
