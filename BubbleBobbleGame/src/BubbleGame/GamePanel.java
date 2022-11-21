@@ -158,6 +158,11 @@ public class GamePanel extends JLayeredPane {
 				}else {
 					player1.setMonsterCrush(false);
 				}
+				
+			}
+		}
+		if(!player2.isImmortal()) {
+			for(Monster m : monsters) {
 				if(player2.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE,
 						m.getY(), m.getY() + Settings.SPRITE_SIZE)) {
 					//System.out.println("몬스터 충돌");

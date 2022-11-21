@@ -158,7 +158,8 @@ public class Player extends JLabel{
 				threadInterrupt();
 				setDirImage();
 				processInput();
-				move();		
+				move();	
+				//repaint();
 				//wallCrush();
 				monsterCrushEvent();
 				
@@ -265,17 +266,13 @@ public class Player extends JLabel{
 				this.coordinate.setYCoordinate(this.coordinate.getYCoordinate() + 5);
 				//this.coordinate.setRotation(this.coordinate.getRotation() + 30);
 			}				
-			try {
-				Thread.sleep(15);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				Thread.sleep(15);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
-
-			//dead event 끝			
-			 //revival();
-
 	}
 //	public void wallCrush() {
 //		if(isWallCrush) {
@@ -422,9 +419,9 @@ public class Player extends JLabel{
 
 			 else if(this.isMonsterCrush) {
 				 if(this.isDirection)
-						spriteBase.setDirPath("src/image/"+playerImgPath+"-death-right");
+						spriteBase.setDirPath("src/image/player1-death-right");
 					else
-						spriteBase.setDirPath("src/image/"+playerImgPath+"-death-left");
+						spriteBase.setDirPath("src/image/player1-death-left");
 			 }
 
 			//오른쪽으로 갈 때
