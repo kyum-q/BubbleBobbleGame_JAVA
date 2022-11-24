@@ -119,7 +119,7 @@ public class GameInPanel extends JPanel {
 
 			//JavaObjClientView view = new JavaObjClientView(username, ip_addr, port_no);			
 			
-			bubbleGame.setPane(new WaitingPanel(username, serverComboBox.getSelectedItem().toString(), bubbleGame));
+			
 			setVisible(false);
 		}
 	}

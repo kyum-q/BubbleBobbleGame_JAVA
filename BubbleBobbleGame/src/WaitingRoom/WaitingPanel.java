@@ -323,7 +323,7 @@ public class WaitingPanel extends JLayeredPane {
 	}
 	
 	public void startGame() {
-		bubbleGame.setPane(new MainGamePanel());
+		
 		setVisible(false);
 	}
 	
