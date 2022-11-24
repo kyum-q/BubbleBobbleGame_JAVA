@@ -16,8 +16,6 @@ import utility.Settings;
 public class Player extends JLabel{
 	private final int playerNumber;
 
-	private String playerImgPath;
-
 	private double xStartLocation=40;
 	private double yStartLocation= 480;
 
@@ -72,10 +70,9 @@ public class Player extends JLabel{
         
 		String path;
 		path = "src/image/player"+playerNumber+"-move-left";
+		
+		if(playerNumber==2) this.xStartLocation = 550;
 
-		if(playerNumber!=1) {
-			this.xStartLocation = 550;
-		}
 		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
 		System.out.println("path: "+path);
 		this.spriteBase = new SpriteBase(path, coordinate);
@@ -92,7 +89,7 @@ public class Player extends JLabel{
         
         this.setBounds(0,0,(int)width, (int)height);
         moveThread = new moveThread();
-        System.out.println("player : " +Thread.currentThread() + "start");
+
         moveThread.start();
 
 	}
@@ -118,8 +115,11 @@ public class Player extends JLabel{
 
         
     }
-	
 
+	public int getPlayerNumber() {
+		return playerNumber;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) { 
 		super.paintComponent(g);
@@ -161,7 +161,7 @@ public class Player extends JLabel{
 					Thread.sleep(20);
 
 				} catch (InterruptedException e) {
-					 System.out.println("player : " +Thread.currentThread() + "stop");
+	
 					return;
 				}
 			}
@@ -420,6 +420,7 @@ public class Player extends JLabel{
 						spriteBase.setDirPath("src/image/player1-death-right");
 					else
 						spriteBase.setDirPath("src/image/player1-death-left");
+
 			 }
 
 			//오른쪽으로 갈 때

@@ -37,12 +37,10 @@ public class GameInPanel extends JPanel {
 	private JTextField txtUserName;
 	private JButton joinBtn;
 	private Image image;
-	private BubbleBobbleGame bubbleGame;
-	public GameInPanel(BubbleBobbleGame bubbleGame) {
+	public GameInPanel() {
 		setLayout(null);
 		setOpaque(true);
 		this.setBackground(Color.BLACK);
-		this.bubbleGame = bubbleGame;
 		
 		String serverList[] = {"1","2","3"};
 		
@@ -101,6 +99,14 @@ public class GameInPanel extends JPanel {
 		//this.requestFocusInWindow();
 		//getTextField().setFocusable(true);
 	}
+	
+	public String getServerNum() {
+		return serverComboBox.getSelectedItem().toString();
+	}
+	
+	public String getUserName() {
+		return txtUserName.getText();
+	}
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -119,7 +125,9 @@ public class GameInPanel extends JPanel {
 
 			//JavaObjClientView view = new JavaObjClientView(username, ip_addr, port_no);			
 			
-			
+			BubbleBobbleGame.isChange = true;
+			BubbleBobbleGame.isWaitingRoom = true;
+			//bubbleGame.setPane(new WaitingPanel(username, serverComboBox.getSelectedItem().toString(), bubbleGame));
 			setVisible(false);
 		}
 	}

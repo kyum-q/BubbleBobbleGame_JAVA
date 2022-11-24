@@ -21,7 +21,7 @@ public class MainGamePanel extends JLayeredPane {
 		scorePanel = new ScorePanel();
 		scorePanel.setUp1Name(WaitingPanel.getP1Name());
 		scorePanel.setUp2Name(WaitingPanel.getP2Name());
-		gamePanel = new GamePanel(scorePanel);
+		//gamePanel = new GamePanel(scorePanel);
 		setSplitPane(); 
 		setVisible(true);
 	}
@@ -37,8 +37,6 @@ public class MainGamePanel extends JLayeredPane {
 		splitpane.setDividerSize(0);
 		splitpane.setBorder(null);
 		
-
-		//gamePanel = new GamePanel(scorePanel);
 		splitpane.setBottomComponent(gamePanel);
 		// setLocationRelativeTo(null); 
 		this.add(splitpane, BorderLayout.CENTER);
