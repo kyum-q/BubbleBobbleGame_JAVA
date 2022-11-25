@@ -385,14 +385,14 @@ public class GamePanel extends JLayeredPane {
 					break;
 				}
 			}
-			if (bubble.wallCollision(player1.getX(), player1.getX() + player1.getWidth(), player1.getY(),
+			if (this.myPlayerNum == 1 && bubble.wallCollision(player1.getX(), player1.getX() + player1.getWidth(), player1.getY(),
 					player1.getY() + player1.getHeight())) {
 				if (bubble.bubbleMeetPlayer(player1)) {
 					addItemSet(bubbles.indexOf(bubble), 1);
 					break;
 				}
 			}
-			if (bubble.wallCollision(player2.getX(), player2.getX() + player2.getWidth(), player1.getY(),
+			if (this.myPlayerNum == 2 && bubble.wallCollision(player2.getX(), player2.getX() + player2.getWidth(), player1.getY(),
 					player2.getY() + player2.getHeight())) {
 				if (bubble.bubbleMeetPlayer(player2)) {
 					addItemSet(bubbles.indexOf(bubble), 2);

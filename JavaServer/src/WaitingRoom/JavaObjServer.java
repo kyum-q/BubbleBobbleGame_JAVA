@@ -430,6 +430,7 @@ public class JavaObjServer extends JFrame {
 						WriteOthers(cm.getData(),"502"); 
 					}  else if (cm.getCode().matches("601")) { // bubble 터짐 > item create
 						WriteOthers(cm.getData(),"601"); 
+						WriteOne(cm.getData(),"601");
 					} else if (cm.getCode().matches("602")) { // bubble 천장 랜덤 움직임
 						WriteOthers(cm.getData(),"602"); 
 					} 
