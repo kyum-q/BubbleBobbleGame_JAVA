@@ -413,7 +413,14 @@ public class JavaObjServer extends JFrame {
 					} else if (cm.getCode().matches("402")) { // player 움직임 keyReleased
 						WriteOthers(cm.getData(),"402"); 
 						WriteOne(cm.getData(),"402");
-					} 
+					} else if (cm.getCode().matches("403")) { // player 움직임 keyReleased
+						WriteOthers(cm.getData(),"403"); 
+						WriteOne(cm.getData(),"403");
+					}
+//					 else if (cm.getCode().matches("501")) { // player 움직임 keyReleased
+//							WriteOthers(cm.getData(),"501"); 
+//							WriteOne(cm.getData(),"501");
+//						}
 				} catch (IOException e) {
 					AppendText("ois.readObject() error");
 					try {

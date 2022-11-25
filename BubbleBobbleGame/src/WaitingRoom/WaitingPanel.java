@@ -213,6 +213,19 @@ public class WaitingPanel extends JLayeredPane {
 							gamePanel.movePlayerFalse(cm.getData().split("@@"));
 						}
 						break;
+					case "403":
+						if(gamePanel != null) {
+							gamePanel.movePlayerPosition(cm.getData().split("@@"));
+							// ChatMsg(userName, "403", myPlayerNum+"@@" +x +"," +y);
+
+						}
+						break;
+					case "501":
+						if(gamePanel != null) {
+							System.out.println("501 들어옴");
+							//"myPlayerNum+"@@\x,y/x,y/"
+							gamePanel.moveMostersPosition(cm.getData().split("@@"));
+						}
 					}
 				} catch (IOException e) {
 					AppendText("ois.readObject() error");

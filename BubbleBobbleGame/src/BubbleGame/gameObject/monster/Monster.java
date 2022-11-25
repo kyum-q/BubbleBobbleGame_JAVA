@@ -68,7 +68,16 @@ public class Monster extends JLabel {
 		applyGravity();
 		//this.coordinate.setXCoordinate(getX() + (coordinate.getDXCoordinate() * direction));
 	}
+	
+	
+	public void setX(double x) {
+		this.spriteBase.setXCoordinate(x);
+	}
 
+	public void setY(double y) {
+		this.spriteBase.setYCoordinate(y);
+	}
+	
 	private boolean checkWall() {
 		return (getX() <= 0 + Settings.BLOCK_WIDTH  || getX() + getWidth() >= this.getParent().getWidth()-Settings.BLOCK_WIDTH);
 	}

@@ -44,6 +44,7 @@ public class GamePanel extends JLayeredPane {
 	private ScorePanel scorePanel = null;
 	private int score = 0;
 	private GameThread gameThread;
+	private SendThread sendThread;
 	
 	public boolean threadFlag = true;
 	/**
@@ -89,6 +90,9 @@ public class GamePanel extends JLayeredPane {
 
 		this.gameThread = new GameThread();
 		gameThread.start();
+		
+		this.sendThread = new SendThread();
+		sendThread.start();
 	}
 	
 	public String getUserName() {
@@ -124,7 +128,12 @@ public class GamePanel extends JLayeredPane {
 		@Override
 		public void run() {
 			while (true) {
+				ChatMsg obcm = null;
 				try {
+//					int x = myself.getX();
+//					int y = myself.getY();
+//					obcm = new ChatMsg(userName, "403", myPlayerNum+"@@" +x +"," +y);
+//					WaitingPanel.SendObject(obcm);
 					gameControll();
 					repaint();
 					Thread.sleep(20);
@@ -135,6 +144,37 @@ public class GamePanel extends JLayeredPane {
 		}
 	}
 
+	class SendThread extends Thread{
+		@Override
+		public void run() {
+			while (true) {
+				ChatMsg obcm1 = null;
+				ChatMsg obcm2 = null;
+				try {
+					String s = myPlayerNum+"@@";
+					for(Monster m : monsters) {
+						s += (m.getX()+","+m.getY()+"/");
+					}
+					obcm2 = new ChatMsg(userName, "501", s);
+					System.out.println("send monstes Postions : " +s );
+					WaitingPanel.SendObject(obcm2);
+					
+					//player 좌표를 보냄
+					int x = myself.getX();
+					int y = myself.getY();
+					obcm1 = new ChatMsg(userName, "403", myPlayerNum+"@@" +x +"," +y);
+					WaitingPanel.SendObject(obcm1);
+					
+					
+					
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					return;
+				}
+			}
+		}
+	}
+	
 	// 캐릭터가 벽에 부딪히거나, 몬스터와 충돌하거나, 아이템을 먹는 등 필요한 요소를 체크하는 함수
 	public void gameControll() {
 		player1WallCrushCheck();
@@ -364,7 +404,42 @@ public class GamePanel extends JLayeredPane {
 			break;
 		}
 	}
-	
+	//gamePanel.movePlayerPosition(cm.getData().split("@@"));
+	// ChatMsg(userName, "403", myPlayerNum+"@@" +x +"," +y);
+	public void movePlayerPosition(String[] playerInfo) {
+		String[] position = playerInfo[1].split(",");
+		double x = Integer.parseInt(position[0]);
+		double y = Integer.parseInt(position[1]);
+		System.out.println("GamePanel ###### "+x+":"+y);
+		Player other;
+		if(Integer.parseInt(playerInfo[0])==1) other = player1;
+		else other = player2;
+		
+		other.setX(x);
+		other.setY(y);
+		
+	}
+	public void moveMostersPosition(String[] playerInfo) {
+//		String[] position = playerInfo[1].split(",");
+//		double x = Integer.parseInt(position[0]);
+//		double y = Integer.parseInt(position[1]);
+//		System.out.println("GamePanel ###### "+x+":"+y);
+//		Player other;
+//		if(Integer.parseInt(playerInfo[0])==1) other = player1;
+//		else other = player2;
+		//"myPlayerNum+"@@\x,y/x,y/"
+		System.out.println("RECEIVE monstes Postions : " +playerInfo[1]);
+		String [] monstersPostion = playerInfo[1].split("/");
+		for(int i=0; i< monsters.size(); i++) {
+			Monster monster = monsters.get(i);
+			String [] monsterPostion = monstersPostion[i].split(",");
+			double x = Integer.parseInt(monsterPostion[0]);
+			double y = Integer.parseInt(monsterPostion[1]);
+			monster.setX(x);
+			monster.setY(y);
+		}
+		
+	}
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -487,6 +562,7 @@ public class GamePanel extends JLayeredPane {
 //				add(bubbles.get(bubbles.size() - 1), new Integer(5));
 //				break;
 			}
+			
 			WaitingPanel.SendObject(obcm);
 		}
 	}
