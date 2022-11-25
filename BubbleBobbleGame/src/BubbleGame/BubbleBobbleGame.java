@@ -20,9 +20,6 @@ public class BubbleBobbleGame extends JFrame {
 	private GameInPanel inPanel;
 	private WaitingPanel waitingPanel;
 	private MainGamePanel mainGamePanel;
-	private String player1Name;
-	private String player2Name;
-
 	private GamePanel gamePanel = null;
 	private ScorePanel scorePanel = null;
 	private JSplitPane splitpane = null;
@@ -148,6 +145,9 @@ public class BubbleBobbleGame extends JFrame {
 	         this.getContentPane().remove(this.splitpane);
 	         
 	         ScorePanel scorePanel = gamePanel.getScorePanel();
+	         scorePanel.setUp1Name(waitingPanel.getP1Name());
+	         scorePanel.setUp2Name(waitingPanel.getP2Name());
+	         
 	         Map map = new Map(this.stage);
 	         GamePanel gamePanel = new GamePanel(scorePanel, map);
 	         waitingPanel.setGamePanel(gamePanel);
@@ -155,7 +155,11 @@ public class BubbleBobbleGame extends JFrame {
 		}		
 		else if(isGame) {
 			 System.out.println("			IsGame");  
+			 
 	         ScorePanel scorePanel = new ScorePanel();
+	         scorePanel.setUp1Name(waitingPanel.getP1Name());
+	         scorePanel.setUp2Name(waitingPanel.getP2Name());
+	         
 	         Map map = new Map(1);
 	         this.gamePanel = new GamePanel(scorePanel, map);
 	         setGamePanel(gamePanel);

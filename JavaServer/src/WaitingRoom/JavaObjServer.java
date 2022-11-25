@@ -336,6 +336,12 @@ public class JavaObjServer extends JFrame {
 				Logout(); // 에러가난 현재 객체를 벡터에서 지운다
 			}
 		}
+		
+		
+		
+		public void setRandomItem() {
+			
+		}
 		public void WriteOneObject(Object ob) {
 			try {
 			    oos.writeObject(ob);
@@ -414,6 +420,13 @@ public class JavaObjServer extends JFrame {
 					} else if (cm.getCode().matches("402")) { // player 움직임 keyReleased
 						WriteOthers(cm.getData(),"402"); 
 						WriteOne(cm.getData(),"402");
+					} else if (cm.getCode().matches("502")) { // monster remove
+						WriteOthers(cm.getData(),"502"); 
+					}  else if (cm.getCode().matches("601")) { // bubble 터짐 > item create
+						WriteOthers(cm.getData(),"601"); 
+						WriteOne(cm.getData(),"601");
+					} else if (cm.getCode().matches("602")) { // bubble 천장 랜덤 움직임
+						WriteOthers(cm.getData(),"602"); 
 					} 
 				} catch (IOException e) {
 					AppendText("ois.readObject() error");

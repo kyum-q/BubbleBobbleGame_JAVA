@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import javax.swing.*;
 
@@ -31,12 +32,12 @@ public class GamePanel extends JLayeredPane {
 
 	private Player player1;
 	private Player player2;
-	
+
 	private Player myself;
 	private String userName;
 
 	private int myPlayerNum;
-	
+
 	private Map map;
 	private ArrayList<Monster> monsters = null;
 	private ArrayList<Block> blocks = null;
@@ -45,16 +46,17 @@ public class GamePanel extends JLayeredPane {
 	private ScorePanel scorePanel = null;
 	private int score = 0;
 	private GameThread gameThread;
-	
+
 	public boolean threadFlag = true;
+
 	/**
 	 * Create the panel.
 	 */
 	public GamePanel(ScorePanel scorePanel, Map map) {
-		 
+
 		setLayout(null);
 		this.scorePanel = scorePanel;
-		
+
 		// 배경 색 설정
 		setOpaque(true);
 		this.setBackground(Color.BLACK);
@@ -62,17 +64,19 @@ public class GamePanel extends JLayeredPane {
 		player1 = new Player(1, scorePanel.getScorePanel(1));
 		player2 = new Player(2, scorePanel.getScorePanel(2));
 //		player2.setX(Settings.SCENE_WIDTH-10);
-		add(player1,new Integer(10));
-		add(player2,new Integer(10));
-		
+		add(player1, new Integer(10));
+		add(player2, new Integer(10));
+
 		userName = WaitingPanel.userName;
 		myPlayerNum = WaitingPanel.getMyPlayerNum();
-		if(WaitingPanel.getMyPlayerNum() == 1) myself = player1;
-		else myself = player2;
-		
+		if (WaitingPanel.getMyPlayerNum() == 1)
+			myself = player1;
+		else
+			myself = player2;
+
 		// 맵 그리기
-		//map = new Map("src/resource/map1.txt");
-		//blocks = map.getBlocks();
+		// map = new Map("src/resource/map1.txt");
+		// blocks = map.getBlocks();
 
 		this.map = map;
 		blocks = map.getBlocks();
@@ -82,7 +86,7 @@ public class GamePanel extends JLayeredPane {
 		monsters = map.getMonster();
 		for (Monster monster : monsters)
 			this.add(monster, new Integer(5));
-		
+
 		this.addKeyListener(new KeyListener());
 		this.requestFocus();
 		this.setFocusable(true);
@@ -90,16 +94,33 @@ public class GamePanel extends JLayeredPane {
 		this.gameThread = new GameThread();
 		gameThread.start();
 	}
-	
+
 	public String getUserName() {
 		return userName;
 	}
 
-	public void addItem(int x, int y) {
-		items.add(new Item(x,y));
-		add(items.get(items.size() - 1),new Integer(5)); 
+	public void addItem(Item item) {
+		items.add(item);
+		add(items.get(items.size() - 1), new Integer(5));
 	}
-	
+
+	public void addItemSet(int bubbleNum, int playerNum) {
+		Random rand = new Random();
+		int itemScore = rand.nextInt((Settings.ITEM_MAX_SCORE) + Settings.ITEM_MIN_SCORE) / 100 * 100;
+		int itemNum = rand.nextInt(Settings.ITEM_NUM);
+		ChatMsg obcm = new ChatMsg(userName, "601", playerNum + "," + bubbleNum + "," + itemNum + "," + itemScore);
+		WaitingPanel.SendObject(obcm);
+	}
+
+	public void bubbleChangeItem(String[] s) {
+		Bubble b = bubbles.get(Integer.parseInt(s[1]));
+
+		if (s[0].equals(1))
+			b.bubbleBomb(player1, (Integer.parseInt(s[2])), (Integer.parseInt(s[3])));
+		else
+			b.bubbleBomb(player2, (Integer.parseInt(s[2])), (Integer.parseInt(s[3])));
+	}
+
 	public void addMonster(int x, int y, String name, int i) {
 		monsters.add(new Monster(x, y, name, i));
 		add(monsters.get(monsters.size() - 1));
@@ -110,17 +131,41 @@ public class GamePanel extends JLayeredPane {
 		super.remove(comp);
 
 		// bubble객체일 경우, bubble Arraylist객체에서도 삭제
-		if (comp instanceof Bubble)
+		if (comp instanceof Bubble) {
 			bubbles.remove(comp);
+			
+		}
 		// moster객체일 경우, moster Arraylist객체에서도 삭제
-		else if (comp instanceof Monster)
+		else if (comp instanceof Monster) {
 			monsters.remove(comp);
-		else if (comp instanceof Item)
+			//ChatMsg obcm = new ChatMsg(userName, "502", monsters.indexOf(comp) + "," + comp.getX() + "," + comp.getY());
+			//WaitingPanel.SendObject(obcm);
+		}
+		else if (comp instanceof Item) {
 			items.remove(comp);
+			if (WaitingPanel.getMyPlayerNum() == 1) {
+			//ChatMsg obcm = new ChatMsg(userName, "602", items.indexOf(comp) + "," + comp.getX() + "," + comp.getY());
+			//WaitingPanel.SendObject(obcm);
+			}
+		}
+	}
+	
+	public void sendRandomBubbleMove(Bubble b) {
+		Random rand = new Random();
+		int moveDirection = rand.nextInt(5);
+		
+		ChatMsg obcm = new ChatMsg(WaitingPanel.userName, "602", bubbles.indexOf(b)+","+b.getX()+","+b.getY()+","+((moveDirection>1)?1:-1));
+		WaitingPanel.SendObject(obcm);
+	}
+	
+	public void bubbleMove(String [] s) {
+		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%% "+s.length+","+s[0]+","+s[1]+","+s[2]+","+s[3]);
+		Bubble b = bubbles.get(Integer.parseInt(s[0]));
+		b.topWallMove(Integer.parseInt(s[1]),Integer.parseInt(s[2]),Integer.parseInt(s[3]));
 	}
 
 	class GameThread extends Thread {
-		
+
 		@Override
 		public void run() {
 			while (true) {
@@ -143,70 +188,50 @@ public class GamePanel extends JLayeredPane {
 		monsterWallCrushCheck();
 		ItemWallCrushCheck();
 		checkBubbleMonster();
-		
+
 		checkNextStage();
-		
-		if(!this.threadFlag) {
+
+		if (!this.threadFlag) {
 			this.gameThread.interrupt();
 			this.player1.setThreadFlag(false);
 		}
-			
-		
-		
+
 	}
-	
+
 	public void checkNextStage() {
-		if(monsters.size() <= 0) {
+		if (monsters.size() <= 0) {
 			System.out.println("몬스터 모두 처리");
-			 this.threadFlag = false;
+			this.threadFlag = false;
 			BubbleBobbleGame.isChange = true;
 			BubbleBobbleGame.isNext = true;
 		}
-		}
-			
-//=======
-//	public void playerMonsterCrushCheck() {
-//		for(Monster m : monsters) {
-//			if(myself.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE,
-//					m.getY(), m.getY() + Settings.SPRITE_SIZE)) {
-//				//System.out.println("몬스터 충돌");
-//				myself.setMonsterCrush(true);
-//				return;
-//			}else {
-//				myself.setMonsterCrush(false);
-//			}
-//>>>>>>> KM
-	
-	/*플레이어와 몬스터가 부딪히는지 체크*/
+	}
+
+	/* 플레이어와 몬스터가 부딪히는지 체크 */
 	public void playerMonsterCrushCheck() {
-		//플레이어가 무적이 아닐 때만 체크
-		if(!player1.isImmortal()) {
-			for(Monster m : monsters) {
-				if(player1.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE,
-						m.getY(), m.getY() + Settings.SPRITE_SIZE) ) {
-					//System.out.println("몬스터 충돌");
+		// 플레이어가 무적이 아닐 때만 체크
+		if (!player1.isImmortal()) {
+			for (Monster m : monsters) {
+				if (player1.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE, m.getY(),
+						m.getY() + Settings.SPRITE_SIZE)) {
+					// System.out.println("몬스터 충돌");
 					player1.setMonsterCrush(true);
-				
-				}else {
+
+				} else {
 					player1.setMonsterCrush(false);
 				}
+
+			}
+		}
+		if (!player2.isImmortal()) {
+			for (Monster m : monsters) {
 				
 			}
 		}
-		if(!player2.isImmortal()) {
-			for(Monster m : monsters) {
-				if(player2.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE,
-						m.getY(), m.getY() + Settings.SPRITE_SIZE)) {
-					//System.out.println("몬스터 충돌");
-					player2.setMonsterCrush(true);}
-				else {
-					player2.setMonsterCrush(false);
-				}
-			}
-		}
-		
+
 	}
-	/*플레이어1이 벽이 부딪히는지 체크*/
+
+	/* 플레이어1이 벽이 부딪히는지 체크 */
 	public void player1WallCrushCheck() {
 		ArrayList<Block> blocks = map.getBlocks();
 		for (Block block : blocks) {
@@ -216,10 +241,11 @@ public class GamePanel extends JLayeredPane {
 				break;
 			} else {
 				player1.setWallCrush(false);
-			}	
-		}			
+			}
+		}
 	}
-	/*플레이어2가 벽이 부딪히는지 체크*/
+
+	/* 플레이어2가 벽이 부딪히는지 체크 */
 	public void player2WallCrushCheck() {
 		ArrayList<Block> blocks = map.getBlocks();
 		for (Block block : blocks) {
@@ -236,6 +262,13 @@ public class GamePanel extends JLayeredPane {
 	public void monsterWallCrushCheck() {
 		ArrayList<Block> blocks = map.getBlocks();
 		for (Monster monster : monsters) {
+			if (player2.monsterCollision(monster.getX(), monster.getX() + Settings.SPRITE_SIZE, monster.getY(),
+					monster.getY() + Settings.SPRITE_SIZE)) {
+				System.out.println("몬스터 충돌");
+				player2.setMonsterCrush(true);
+			} else {
+				player2.setMonsterCrush(false);
+			}
 			for (Block block : blocks) {
 				if (monster.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
 						block.getY() + block.getHeight())) {
@@ -251,11 +284,10 @@ public class GamePanel extends JLayeredPane {
 	}
 
 	public void ItemWallCrushCheck() {
-		//ArrayList<Block> blocks = map.getBlocks();
+		// ArrayList<Block> blocks = map.getBlocks();
 		for (Item item : items) {
 			for (Block block : blocks) {
-				if (item.wallCollision(block.getX(), block.getX() + Settings.BLOCK_WIDTH, block.getY(),
-						block.getY())) {
+				if (item.wallCollision(block.getX(), block.getX() + Settings.BLOCK_WIDTH, block.getY(), block.getY())) {
 					item.setWallCrush(true);
 					break;
 				} else {
@@ -282,32 +314,38 @@ public class GamePanel extends JLayeredPane {
 		for (Bubble bubble : bubbles) { // 버블
 			for (Monster monster : monsters) { // 몬스터
 				// 버블하고 몬스터 만났는지 확인
-				if (bubble.wallCollision (monster.getX(), monster.getX() +monster.getWidth(), monster.getY(),
+				if (bubble.wallCollision(monster.getX(), monster.getX() + monster.getWidth(), monster.getY(),
 						monster.getY() + monster.getHeight())) {
 					bubble.monsterCatch(monster);
 					break;
 				}
 			}
-			if (bubble.wallCollision (myself.getX(), myself.getX() +myself.getWidth(), myself.getY(),
-					myself.getY() + myself.getHeight())) {
-				bubble.bubbleMeetPlayer(myself);
-				break;
+			if (bubble.wallCollision(player1.getX(), player1.getX() + player1.getWidth(), player1.getY(),
+					player1.getY() + player1.getHeight())) {
+				if (bubble.bubbleMeetPlayer(player1)) {
+					addItemSet(monsters.indexOf(bubble), 1);
+					break;
+				}
 			}
-			if (bubble.wallCollision (player2.getX(), player2.getX() +player2.getWidth(), player1.getY(),
+			if (bubble.wallCollision(player2.getX(), player2.getX() + player2.getWidth(), player1.getY(),
 					player2.getY() + player2.getHeight())) {
-				bubble.bubbleMeetPlayer(player2);
-				break;
+				if (bubble.bubbleMeetPlayer(player2)) {
+					addItemSet(monsters.indexOf(bubble), 2);
+					break;
+				}
 			}
 		}
 	}
-	
-	public void movePlayerTrue(String[] playerInfo) {	
+
+	public void movePlayerTrue(String[] playerInfo) {
 		String KeyCode = playerInfo[1];
-		System.out.println("GamePanel ###### "+playerInfo[1]);
+		System.out.println("GamePanel ###### " + playerInfo[1]);
 		Player other;
-		if(playerInfo[0].equals("1")) other = player1;
-		else other = player2;
-		
+		if (playerInfo[0].equals("1"))
+			other = player1;
+		else
+			other = player2;
+
 		switch (KeyCode) {
 		case "VK_DOWN":
 			other.setMoveDown(true);
@@ -332,14 +370,16 @@ public class GamePanel extends JLayeredPane {
 			break;
 		}
 	}
-	
-	public void movePlayerFalse(String[] playerInfo) {	
+
+	public void movePlayerFalse(String[] playerInfo) {
 		String KeyCode = playerInfo[1];
-		System.out.println("GamePanel ###### "+playerInfo[0]+":"+playerInfo[1]);
+		System.out.println("GamePanel ###### " + playerInfo[0] + ":" + playerInfo[1]);
 		Player other;
-		if(Integer.parseInt(playerInfo[0])==1) other = player1;
-		else other = player2;
-		
+		if (Integer.parseInt(playerInfo[0]) == 1)
+			other = player1;
+		else
+			other = player2;
+
 		switch (KeyCode) {
 		case "VK_DOWN":
 			other.setMoveDown(false);
@@ -364,7 +404,6 @@ public class GamePanel extends JLayeredPane {
 			break;
 		}
 	}
-	
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -378,57 +417,22 @@ public class GamePanel extends JLayeredPane {
 			ChatMsg obcm = null;
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
-				//myself.setMoveDown(true);
-				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_DOWN");
+				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_DOWN");
 				break;
 			case KeyEvent.VK_UP:
-//				if (myself.getAbleToJump()) {
-//					myself.setMoveUp(true);
-//					myself.setJumping(true);
-//				}
-				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_UP");
+				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_UP");
 				break;
 			case KeyEvent.VK_LEFT:
-				//myself.setMoveLeft(true);
-				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_LEFT");
+				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_LEFT");
 				break;
 			case KeyEvent.VK_RIGHT:
-				//myself.setMoveRight(true);
-				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_RIGHT");
+				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_RIGHT");
 				break;
 			case KeyEvent.VK_SPACE:
-				//myself.setShoot(true);
-				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_SPACE");
+				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_SPACE");
 				break;
-//				if (player1.isDirection()) {
-//					bubbles.add(new Bubble(player1.getX(), player1.getY(), 1));
-//				} else {
-//					bubbles.add(new Bubble(player1.getX(), player1.getY(), -1));
-//				}
-//				add(bubbles.get(bubbles.size() - 1), new Integer(5));
-//				break;
-			/*case KeyEvent.VK_S:
-				player2.setMoveDown(true);
-				break;
-			case KeyEvent.VK_W:
-				if (player2.getAbleToJump()) {
-					player2.setMoveUp(true);
-					player2.setJumping(true);
-				}
-				break;
-			case KeyEvent.VK_A:
-				player2.setMoveLeft(true);
-				break;
-			case KeyEvent.VK_D:
-				player2.setMoveRight(true);
-				break;
-			case KeyEvent.VK_SHIFT:
-				player2.setShoot(true);
-				break;
-				*/
 			case KeyEvent.VK_ESCAPE:
-				//System.exit(0);
-				obcm = new ChatMsg(userName, "401", myPlayerNum+"@@VK_ESCAPE");
+				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_ESCAPE");
 				break;
 			}
 			WaitingPanel.SendObject(obcm);
@@ -439,53 +443,20 @@ public class GamePanel extends JLayeredPane {
 			ChatMsg obcm = null;
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
-				//myself.setMoveDown(false);
-				obcm = new ChatMsg(userName, "402", myPlayerNum+"@@VK_DOWN");
+				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_DOWN");
 				break;
 			case KeyEvent.VK_UP:
-				//myself.setMoveUp(false);
-				obcm = new ChatMsg(userName, "402", myPlayerNum+"@@VK_UP");
+				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_UP");
 				break;
 			case KeyEvent.VK_LEFT:
-				//myself.setMoveLeft(false);
-				obcm = new ChatMsg(userName, "402", myPlayerNum+"@@VK_LEFT");
+				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_LEFT");
 				break;
 			case KeyEvent.VK_RIGHT:
-				//myself.setMoveRight(false);
-				obcm = new ChatMsg(userName, "402", myPlayerNum+"@@VK_RIGHT");
+				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_RIGHT");
 				break;
 			case KeyEvent.VK_SPACE:
-//				myself.setShoot(false);
-//				if (myself.isDirection()) {
-//					bubbles.add(new Bubble(myself.getX(), myself.getY(), 1));
-//				} else {
-//					bubbles.add(new Bubble(myself.getX(), myself.getY(), -1));
-//				}
-//				add(bubbles.get(bubbles.size() - 1), new Integer(5));
-				obcm = new ChatMsg(userName, "402", myPlayerNum+"@@VK_SPACE");
+				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_SPACE");
 				break;
-				
-//			case KeyEvent.VK_S:
-//				player2.setMoveDown(false);
-//				break;
-//			case KeyEvent.VK_W:
-//				player2.setMoveUp(false);
-//				break;
-//			case KeyEvent.VK_A:
-//				player2.setMoveLeft(false);
-//				break;
-//			case KeyEvent.VK_D:
-//				player2.setMoveRight(false);
-//				break;
-//			case KeyEvent.VK_SHIFT:
-//				player2.setShoot(false);
-//				if (player2.isDirection()) {
-//					bubbles.add(new Bubble(player2.getX(), player2.getY(), 1));
-//				} else {
-//					bubbles.add(new Bubble(player2.getX(), player2.getY(), -1));
-//				}
-//				add(bubbles.get(bubbles.size() - 1), new Integer(5));
-//				break;
 			}
 			WaitingPanel.SendObject(obcm);
 		}

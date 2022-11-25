@@ -19,36 +19,29 @@ public class Item extends JLabel {
 	private String itemPath ="src/image/fruit";
 	private boolean isWallCrush = false;
 	private Image itemImg;
-	private int itemScore;
+	private int itemScore = Settings.ITEM_MIN_SCORE;
 
-	public Item(int x, int y) {
+	public Item(int x, int y, int itemNum, int itemScore) {
 		super();
 		this.coordinate = new Coordinates(x, y, 1, 0, 0, 1);
 		this.spriteBase = new SpriteBase(itemPath, coordinate);
 
 		this.spriteBase.setHeight(Settings.ITEM_SIZE);
 		this.spriteBase.setWidth(Settings.ITEM_SIZE);
-		getImagePaths(); // imagePath 알아내기
-		setRandomScore();
+		getImagePaths(itemNum); // imagePath 알아내기
+		this.itemScore = itemScore;
 		this.setBounds(x, y, (int) Settings.ITEM_SIZE, (int) Settings.ITEM_SIZE);
 	}
 
 	  /* 이미지 Path 설정 */
-	   private void getImagePaths() {
+	   private void getImagePaths(int itemNum) {
 	      String dirPath = spriteBase.getDirPath();
 	      File dir = new File(dirPath);
 	      
 	      this.spriteBase.setImagePaths(dir.list());
 	      
-	      Random rand = new Random();
-	      int itemNum = (int) (rand.nextInt((int)(spriteBase.getImagePaths().length)));
 	      String path = spriteBase.getImage(itemNum);
 	      itemImg = new ImageIcon(path).getImage();
-	   }
-	   
-	   private void setRandomScore() {
-		   Random rand = new Random();
-		   itemScore = rand.nextInt((Settings.ITEM_MAX_SCORE)+Settings.ITEM_MIN_SCORE)/100*100;
 	   }
 	   
 

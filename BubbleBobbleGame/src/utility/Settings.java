@@ -45,6 +45,7 @@ public final class Settings {
 	public static final int MONSTER_KILL_SCORE = 1000;
 	public static final int ITEM_MIN_SCORE = 400;
 	public static final int ITEM_MAX_SCORE = 1500 - ITEM_MIN_SCORE;
+	public static final int ITEM_NUM = 16;
 	
 	public static final double PLAYER_SPEED = 5.0;
 	public static final int PLAYER_LIVES = 3;
