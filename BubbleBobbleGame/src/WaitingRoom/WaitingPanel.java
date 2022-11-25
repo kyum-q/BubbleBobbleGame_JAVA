@@ -213,11 +213,6 @@ public class WaitingPanel extends JLayeredPane {
 							gamePanel.movePlayerFalse(cm.getData().split("@@"));
 						}
 						break;
-					case "502": // remove monster
-						if(gamePanel != null) {
-							gamePanel.bubbleChangeItem(cm.getData().split(","));
-						}
-						break;
 					case "601": // bubble 터짐 > item create
 						if(gamePanel != null) {
 							gamePanel.bubbleChangeItem(cm.getData().split(","));
@@ -226,6 +221,7 @@ public class WaitingPanel extends JLayeredPane {
 					case "602": // remove item
 						if(gamePanel != null) {
 							System.out.println("############### "+cm.getData());
+							
 							gamePanel.bubbleMove(cm.getData().split(","));
 						}
 						break;

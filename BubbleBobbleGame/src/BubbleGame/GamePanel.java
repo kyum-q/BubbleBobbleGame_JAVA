@@ -109,10 +109,14 @@ public class GamePanel extends JLayeredPane {
 		int itemScore = rand.nextInt((Settings.ITEM_MAX_SCORE) + Settings.ITEM_MIN_SCORE) / 100 * 100;
 		int itemNum = rand.nextInt(Settings.ITEM_NUM);
 		ChatMsg obcm = new ChatMsg(userName, "601", playerNum + "," + bubbleNum + "," + itemNum + "," + itemScore);
+		System.out
+		.println("!!!!!!!!!!! send items : " + playerNum + "," +bubbleNum + "," + itemNum + "," + itemScore);
 		WaitingPanel.SendObject(obcm);
 	}
 
 	public void bubbleChangeItem(String[] s) {
+		System.out
+		.println("!!!!!!!!!!! items :"+ s[0] + "," + s[1] + "," + s[2] + "," + s[3]);
 		Bubble b = bubbles.get(Integer.parseInt(s[1]));
 
 		if (s[0].equals(1))
@@ -132,36 +136,39 @@ public class GamePanel extends JLayeredPane {
 
 		// bubble객체일 경우, bubble Arraylist객체에서도 삭제
 		if (comp instanceof Bubble) {
-			bubbles.remove(comp);
-			
+			//bubbles.remove(comp);
+
 		}
 		// moster객체일 경우, moster Arraylist객체에서도 삭제
 		else if (comp instanceof Monster) {
 			monsters.remove(comp);
-			//ChatMsg obcm = new ChatMsg(userName, "502", monsters.indexOf(comp) + "," + comp.getX() + "," + comp.getY());
-			//WaitingPanel.SendObject(obcm);
-		}
-		else if (comp instanceof Item) {
+			// ChatMsg obcm = new ChatMsg(userName, "502", monsters.indexOf(comp) + "," +
+			// comp.getX() + "," + comp.getY());
+			// WaitingPanel.SendObject(obcm);
+		} else if (comp instanceof Item) {
 			items.remove(comp);
 			if (WaitingPanel.getMyPlayerNum() == 1) {
-			//ChatMsg obcm = new ChatMsg(userName, "602", items.indexOf(comp) + "," + comp.getX() + "," + comp.getY());
-			//WaitingPanel.SendObject(obcm);
+				// ChatMsg obcm = new ChatMsg(userName, "602", items.indexOf(comp) + "," +
+				// comp.getX() + "," + comp.getY());
+				// WaitingPanel.SendObject(obcm);
 			}
 		}
 	}
-	
+
 	public void sendRandomBubbleMove(Bubble b) {
 		Random rand = new Random();
 		int moveDirection = rand.nextInt(5);
-		
-		ChatMsg obcm = new ChatMsg(WaitingPanel.userName, "602", bubbles.indexOf(b)+","+b.getX()+","+b.getY()+","+((moveDirection>1)?1:-1));
+
+		ChatMsg obcm = new ChatMsg(WaitingPanel.userName, "602",
+				bubbles.indexOf(b) + "," + b.getX() + "," + b.getY() + "," + ((moveDirection > 1) ? 1 : -1));
 		WaitingPanel.SendObject(obcm);
 	}
-	
-	public void bubbleMove(String [] s) {
-		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%% "+s.length+","+s[0]+","+s[1]+","+s[2]+","+s[3]);
+
+	public void bubbleMove(String[] s) {
+		System.out
+				.println("%%%%%%%%%%%%%%%%%%%%%%%%%%% " + s.length + "," + s[0] + "," + s[1] + "," + s[2] + "," + s[3]);
 		Bubble b = bubbles.get(Integer.parseInt(s[0]));
-		b.topWallMove(Integer.parseInt(s[1]),Integer.parseInt(s[2]),Integer.parseInt(s[3]));
+		b.topWallMove(Integer.parseInt(s[1]), Integer.parseInt(s[2]), Integer.parseInt(s[3]));
 	}
 
 	class GameThread extends Thread {
@@ -184,7 +191,8 @@ public class GamePanel extends JLayeredPane {
 	public void gameControll() {
 		player1WallCrushCheck();
 		player2WallCrushCheck();
-		playerMonsterCrushCheck();
+		player1MonsterCrushCheck();
+		player2MonsterCrushCheck();
 		monsterWallCrushCheck();
 		ItemWallCrushCheck();
 		checkBubbleMonster();
@@ -198,8 +206,10 @@ public class GamePanel extends JLayeredPane {
 
 	}
 
+	int count = 0;
 	public void checkNextStage() {
-		if (monsters.size() <= 0) {
+		if (monsters.size() <= 0 && count > 1000) {
+			count++;
 			System.out.println("몬스터 모두 처리");
 			this.threadFlag = false;
 			BubbleBobbleGame.isChange = true;
@@ -207,8 +217,23 @@ public class GamePanel extends JLayeredPane {
 		}
 	}
 
+	public void player2MonsterCrushCheck() {
+		if (!player2.isImmortal()) {
+			for (Monster m : monsters) {
+				if (player2.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE, m.getY(),
+						m.getY() + Settings.SPRITE_SIZE)) {
+					// System.out.println("몬스터 충돌");
+					player2.setMonsterCrush(true);
+					return;
+				} else {
+					player2.setMonsterCrush(false);
+				}
+			}
+		}
+	}
+
 	/* 플레이어와 몬스터가 부딪히는지 체크 */
-	public void playerMonsterCrushCheck() {
+	public void player1MonsterCrushCheck() {
 		// 플레이어가 무적이 아닐 때만 체크
 		if (!player1.isImmortal()) {
 			for (Monster m : monsters) {
@@ -216,16 +241,11 @@ public class GamePanel extends JLayeredPane {
 						m.getY() + Settings.SPRITE_SIZE)) {
 					// System.out.println("몬스터 충돌");
 					player1.setMonsterCrush(true);
-
+					return;
 				} else {
 					player1.setMonsterCrush(false);
 				}
 
-			}
-		}
-		if (!player2.isImmortal()) {
-			for (Monster m : monsters) {
-				
 			}
 		}
 
@@ -294,9 +314,9 @@ public class GamePanel extends JLayeredPane {
 					item.setWallCrush(false);
 				}
 			}
-			if (item.wallCollision(myself.getX(), myself.getX() + myself.getWidth(), myself.getY(),
-					myself.getY() + myself.getHeight())) {
-				myself.addScore(item.getScore());
+			if (item.wallCollision(player1.getX(), player1.getX() + player1.getWidth(), player1.getY(),
+					player1.getY() + player1.getHeight())) {
+				player1.addScore(item.getScore());
 				remove(item);
 				break;
 			}
@@ -323,14 +343,14 @@ public class GamePanel extends JLayeredPane {
 			if (bubble.wallCollision(player1.getX(), player1.getX() + player1.getWidth(), player1.getY(),
 					player1.getY() + player1.getHeight())) {
 				if (bubble.bubbleMeetPlayer(player1)) {
-					addItemSet(monsters.indexOf(bubble), 1);
+					addItemSet(bubbles.indexOf(bubble), 1);
 					break;
 				}
 			}
 			if (bubble.wallCollision(player2.getX(), player2.getX() + player2.getWidth(), player1.getY(),
 					player2.getY() + player2.getHeight())) {
 				if (bubble.bubbleMeetPlayer(player2)) {
-					addItemSet(monsters.indexOf(bubble), 2);
+					addItemSet(bubbles.indexOf(bubble), 2);
 					break;
 				}
 			}
