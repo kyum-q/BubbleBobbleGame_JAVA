@@ -420,9 +420,16 @@ public class JavaObjServer extends JFrame {
 					} else if (cm.getCode().matches("402")) { // player 움직임 keyReleased
 						WriteOthers(cm.getData(),"402"); 
 						WriteOne(cm.getData(),"402");
-					} else if (cm.getCode().matches("502")) { // monster remove
-						WriteOthers(cm.getData(),"502"); 
-					}  else if (cm.getCode().matches("601")) { // bubble 터짐 > item create
+					} else if (cm.getCode().matches("403")) { // player 움직임 keyReleased
+						WriteOthers(cm.getData(),"403"); 
+						WriteOne(cm.getData(),"403");
+					}
+//					 else if (cm.getCode().matches("501")) { // player 움직임 keyReleased
+//							WriteOthers(cm.getData(),"501"); 
+//							WriteOne(cm.getData(),"501");
+//						} else if (cm.getCode().matches("502")) { // monster remove
+//						WriteOthers(cm.getData(),"502"); 
+					else if (cm.getCode().matches("601")) { // bubble 터짐 > item create
 						WriteOthers(cm.getData(),"601"); 
 						WriteOne(cm.getData(),"601");
 					} else if (cm.getCode().matches("602")) { // bubble 천장 랜덤 움직임
