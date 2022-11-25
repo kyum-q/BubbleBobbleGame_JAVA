@@ -186,6 +186,37 @@ public class GamePanel extends JLayeredPane {
 			}
 		}
 	}
+	
+	class SendThread extends Thread{
+	      @Override
+	      public void run() {
+	         while (true) {
+	            ChatMsg obcm1 = null;
+	            ChatMsg obcm2 = null;
+	            try {
+	               String s = myPlayerNum+"@@";
+//	               for(Monster m : monsters) {
+//	                  s += (m.getX()+","+m.getY()+"/");
+//	               }
+//	               obcm2 = new ChatMsg(userName, "501", s);
+//	               System.out.println("send monstes Postions : " +s );
+//	               WaitingPanel.SendObject(obcm2);
+	               
+	               //player 좌표를 보냄
+	               int x = myself.getX();
+	               int y = myself.getY();
+	               obcm1 = new ChatMsg(userName, "403", myPlayerNum+"@@" +x +"," +y);
+	               WaitingPanel.SendObject(obcm1);
+	               
+	               
+	               
+	               Thread.sleep(1000);
+	            } catch (InterruptedException e) {
+	               return;
+	            }
+	         }
+	      }
+	   }
 
 	// 캐릭터가 벽에 부딪히거나, 몬스터와 충돌하거나, 아이템을 먹는 등 필요한 요소를 체크하는 함수
 	public void gameControll() {
