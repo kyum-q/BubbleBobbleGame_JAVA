@@ -199,6 +199,11 @@ public class WaitingPanel extends JLayeredPane {
 					case "104": // 상대방 방 나감
 						startGame();
 						break;
+					case "300": // Map change
+						if (gamePanel != null) {
+							gamePanel.SocketNextStge();
+						}
+						break;
 					case "401": // 게임 player 움직임
 						if (gamePanel != null) {
 							gamePanel.movePlayerTrue(cm.getData().split("@@"));
@@ -213,12 +218,11 @@ public class WaitingPanel extends JLayeredPane {
 						if (gamePanel != null) {
 							gamePanel.movePlayerPosition(cm.getData().split("@@"));
 							// ChatMsg(userName, "403", myPlayerNum+"@@" +x +"," +y);
-
 						}
 						break;
 					case "601": // bubble 터짐 > item create
 						if (gamePanel != null) {
-							gamePanel.bubbleChangeItem(cm.getData().split(","));
+							gamePanel.SoketChangeItem(cm.getData().split(","));
 						}
 						break;
 					case "602": // remove item

@@ -414,13 +414,16 @@ public class JavaObjServer extends JFrame {
 						Login();
 					} else if (cm.getCode().matches("103")) { // 게임 시작
 						WriteOthers("start","103");
+					}else if (cm.getCode().matches("300")) { // stage 이동
+						WriteOthers(cm.getData(),"300"); 
+						WriteOne(cm.getData(),"300");
 					} else if (cm.getCode().matches("401")) { // player 움직임 keyPressed
 						WriteOthers(cm.getData(),"401"); 
 						WriteOne(cm.getData(),"401");
 					} else if (cm.getCode().matches("402")) { // player 움직임 keyReleased
 						WriteOthers(cm.getData(),"402"); 
 						WriteOne(cm.getData(),"402");
-					} else if (cm.getCode().matches("403")) { // player 움직임 keyReleased
+					} else if (cm.getCode().matches("403")) { // player 움직임 (x,y)
 						WriteOthers(cm.getData(),"403"); 
 						WriteOne(cm.getData(),"403");
 					} else if (cm.getCode().matches("502")) { // monster remove

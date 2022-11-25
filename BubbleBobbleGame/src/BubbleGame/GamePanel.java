@@ -46,6 +46,7 @@ public class GamePanel extends JLayeredPane {
 	private ScorePanel scorePanel = null;
 	private int score = 0;
 	private GameThread gameThread;
+	private SendThread sendThread;
 
 	public boolean threadFlag = true;
 
@@ -93,6 +94,9 @@ public class GamePanel extends JLayeredPane {
 
 		this.gameThread = new GameThread();
 		gameThread.start();
+
+		this.sendThread = new SendThread();
+		sendThread.start();
 	}
 
 	public String getUserName() {
@@ -109,14 +113,14 @@ public class GamePanel extends JLayeredPane {
 		int itemScore = rand.nextInt((Settings.ITEM_MAX_SCORE) + Settings.ITEM_MIN_SCORE) / 100 * 100;
 		int itemNum = rand.nextInt(Settings.ITEM_NUM);
 		ChatMsg obcm = new ChatMsg(userName, "601", playerNum + "," + bubbleNum + "," + itemNum + "," + itemScore);
-		System.out
-		.println("!!!!!!!!!!! send items : " + playerNum + "," +bubbleNum + "," + itemNum + "," + itemScore);
+//		System.out
+//		.println("!!!!!!!!!!! send items : " + playerNum + "," +bubbleNum + "," + itemNum + "," + itemScore);
 		WaitingPanel.SendObject(obcm);
 	}
 
-	public void bubbleChangeItem(String[] s) {
-		System.out
-		.println("!!!!!!!!!!! items :"+ s[0] + "," + s[1] + "," + s[2] + "," + s[3]);
+	public void SoketChangeItem(String[] s) {
+//		System.out
+//		.println("!!!!!!!!!!! items :"+ s[0] + "," + s[1] + "," + s[2] + "," + s[3]);
 		Bubble b = bubbles.get(Integer.parseInt(s[1]));
 
 		if (s[0].equals(1))
@@ -136,7 +140,7 @@ public class GamePanel extends JLayeredPane {
 
 		// bubble객체일 경우, bubble Arraylist객체에서도 삭제
 		if (comp instanceof Bubble) {
-			//bubbles.remove(comp);
+			// bubbles.remove(comp);
 
 		}
 		// moster객체일 경우, moster Arraylist객체에서도 삭제
@@ -165,8 +169,8 @@ public class GamePanel extends JLayeredPane {
 	}
 
 	public void bubbleMove(String[] s) {
-		System.out
-				.println("%%%%%%%%%%%%%%%%%%%%%%%%%%% " + s.length + "," + s[0] + "," + s[1] + "," + s[2] + "," + s[3]);
+//		System.out
+//				.println("%%%%%%%%%%%%%%%%%%%%%%%%%%% " + s.length + "," + s[0] + "," + s[1] + "," + s[2] + "," + s[3]);
 		Bubble b = bubbles.get(Integer.parseInt(s[0]));
 		b.topWallMove(Integer.parseInt(s[1]), Integer.parseInt(s[2]), Integer.parseInt(s[3]));
 	}
@@ -186,37 +190,35 @@ public class GamePanel extends JLayeredPane {
 			}
 		}
 	}
-	
-	class SendThread extends Thread{
-	      @Override
-	      public void run() {
-	         while (true) {
-	            ChatMsg obcm1 = null;
-	            ChatMsg obcm2 = null;
-	            try {
-	               String s = myPlayerNum+"@@";
+
+	class SendThread extends Thread {
+		@Override
+		public void run() {
+			while (true) {
+				ChatMsg obcm1 = null;
+				ChatMsg obcm2 = null;
+				try {
+					String s = myPlayerNum + "@@";
 //	               for(Monster m : monsters) {
 //	                  s += (m.getX()+","+m.getY()+"/");
 //	               }
 //	               obcm2 = new ChatMsg(userName, "501", s);
 //	               System.out.println("send monstes Postions : " +s );
 //	               WaitingPanel.SendObject(obcm2);
-	               
-	               //player 좌표를 보냄
-	               int x = myself.getX();
-	               int y = myself.getY();
-	               obcm1 = new ChatMsg(userName, "403", myPlayerNum+"@@" +x +"," +y);
-	               WaitingPanel.SendObject(obcm1);
-	               
-	               
-	               
-	               Thread.sleep(1000);
-	            } catch (InterruptedException e) {
-	               return;
-	            }
-	         }
-	      }
-	   }
+
+					// player 좌표를 보냄
+					int x = myself.getX();
+					int y = myself.getY();
+					obcm1 = new ChatMsg(userName, "403", myPlayerNum + "@@" + x + "," + y);
+					WaitingPanel.SendObject(obcm1);
+
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					return;
+				}
+			}
+		}
+	}
 
 	// 캐릭터가 벽에 부딪히거나, 몬스터와 충돌하거나, 아이템을 먹는 등 필요한 요소를 체크하는 함수
 	public void gameControll() {
@@ -238,14 +240,26 @@ public class GamePanel extends JLayeredPane {
 	}
 
 	int count = 0;
+	boolean isChangeStage = false;
+
 	public void checkNextStage() {
-		if (monsters.size() <= 0 && count > 1000) {
+		if (monsters.size() <= 0 && !isChangeStage) {
 			count++;
-			System.out.println("몬스터 모두 처리");
-			this.threadFlag = false;
-			BubbleBobbleGame.isChange = true;
-			BubbleBobbleGame.isNext = true;
+			if (count > 500) {
+				isChangeStage = true;
+				ChatMsg obcm = new ChatMsg(userName, "300", "nextStage");
+				WaitingPanel.SendObject(obcm);
+			}
 		}
+	}
+	
+	public void SocketNextStge() {
+		System.out.println("몬스터 모두 처리");
+		this.threadFlag = false;
+		BubbleBobbleGame.isChange = true;
+		BubbleBobbleGame.isNext = true;
+		sendThread.interrupt();
+		gameThread.interrupt();
 	}
 
 	public void player2MonsterCrushCheck() {
@@ -388,6 +402,22 @@ public class GamePanel extends JLayeredPane {
 		}
 	}
 
+	public void movePlayerPosition(String[] playerInfo) {
+		String[] position = playerInfo[1].split(",");
+		double x = Integer.parseInt(position[0]);
+		double y = Integer.parseInt(position[1]);
+		System.out.println("GamePanel ###### " + x + ":" + y);
+		Player other;
+		if (Integer.parseInt(playerInfo[0]) == 1)
+			other = player1;
+		else
+			other = player2;
+
+		other.setX(x);
+		other.setY(y);
+
+	}
+
 	public void movePlayerTrue(String[] playerInfo) {
 		String KeyCode = playerInfo[1];
 		System.out.println("GamePanel ###### " + playerInfo[1]);
@@ -486,7 +516,8 @@ public class GamePanel extends JLayeredPane {
 				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_ESCAPE");
 				break;
 			}
-			WaitingPanel.SendObject(obcm);
+			if(obcm != null)
+				WaitingPanel.SendObject(obcm);
 		}
 
 		@Override
@@ -509,7 +540,8 @@ public class GamePanel extends JLayeredPane {
 				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_SPACE");
 				break;
 			}
-			WaitingPanel.SendObject(obcm);
+			if(obcm != null)
+				WaitingPanel.SendObject(obcm);
 		}
 	}
 
