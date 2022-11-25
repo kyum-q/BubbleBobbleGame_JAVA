@@ -35,25 +35,25 @@ import utility.Settings;
 
 public class WaitingPanel extends JLayeredPane {
 	private GamePanel gamePanel;
-
+	
 	private String ip_addr = "127.0.0.1";
 	private String port_no = "30000";
 
 	private String roomNum;
 	public static String userName;
-
+	
 	private static int myPlayerNum;
-
+	
 	private Image player1;
 	private Image player2;
-
+	
 	private static JLabel p1NameLabel;
 	private static JLabel p2NameLabel;
 	private JLabel joinPlayer;
 	private JButton startBtn;
-
+	
 	private static final int BUF_LEN = 128; // Windows 처럼 BUF_LEN 을 정의
-
+	
 	private Socket socket; // 연결소켓
 	private InputStream is;
 	private OutputStream os;
@@ -62,65 +62,65 @@ public class WaitingPanel extends JLayeredPane {
 
 	private ObjectInputStream ois;
 	private static ObjectOutputStream oos;
-
+	
 	public WaitingPanel(String userName, String roomNum) {
 		setLayout(null);
 		this.userName = userName;
 		this.roomNum = roomNum;
 
-		Font font = new Font("HBIOS-SYS", Font.PLAIN, 90);
-
+		Font font = new Font ("HBIOS-SYS", Font.PLAIN, 90);
+		
 		joinPlayer = new JLabel("1 / 2");
-		joinPlayer.setBounds((int) Settings.SCENE_WIDTH / 2 - (300 / 2), 200, 300, 100);
+		joinPlayer.setBounds((int)Settings.SCENE_WIDTH/2-(300/2), 200, 300, 100);
 		joinPlayer.setFont(font);
 		joinPlayer.setForeground(new Color(255, 186, 0));
 		joinPlayer.setHorizontalAlignment(JTextField.CENTER);
 		add(joinPlayer);
-
-		font = new Font("HBIOS-SYS", Font.PLAIN, 30);
+	
+		font = new Font ("HBIOS-SYS", Font.PLAIN, 30);
 		p1NameLabel = new JLabel(userName);
-		p1NameLabel.setBounds((int) Settings.SCENE_WIDTH / 2 - (200) - Settings.WAITING_SPACE, 400, 200, 40);
+		p1NameLabel.setBounds((int)Settings.SCENE_WIDTH/2-(200)-Settings.WAITING_SPACE, 400, 200, 40);
 		p1NameLabel.setFont(font);
 		p1NameLabel.setForeground(new Color(0, 255, 0));
 		p1NameLabel.setHorizontalAlignment(JTextField.RIGHT);
 		add(p1NameLabel);
-
-		font = new Font("HBIOS-SYS", Font.PLAIN, 30);
+		
+		font = new Font ("HBIOS-SYS", Font.PLAIN, 30);
 		p2NameLabel = new JLabel("");
-		p2NameLabel.setBounds((int) Settings.SCENE_WIDTH / 2 + Settings.WAITING_SPACE, 400, 200, 40);
+		p2NameLabel.setBounds((int)Settings.SCENE_WIDTH/2+Settings.WAITING_SPACE, 400, 200, 40);
 		p2NameLabel.setFont(font);
 		p2NameLabel.setForeground(new Color(0, 186, 255));
 		p2NameLabel.setHorizontalAlignment(JTextField.LEFT);
-
-		font = new Font("HBIOS-SYS", Font.PLAIN, 40);
+		
+		font = new Font ("HBIOS-SYS", Font.PLAIN, 40);
 		startBtn = new JButton("START");
-		startBtn.setBounds((int) Settings.SCENE_WIDTH / 2 - (200 / 2), 450, 200, 40);
+		startBtn.setBounds((int)Settings.SCENE_WIDTH/2-(200/2), 450, 200, 40);
 		startBtn.setFont(font);
 		startBtn.setOpaque(true);
 		startBtn.setBackground(Color.BLACK);
 		startBtn.setForeground(Color.RED);
 		startBtn.setBorderPainted(false);
 		startBtn.setFocusPainted(false);
-
+		
 		StartAction startAction = new StartAction();
 		startBtn.addActionListener(startAction);
-
-		player1 = Toolkit.getDefaultToolkit().createImage("src/image/player1-waiting.gif");
-
+	
+		player1 = Toolkit.getDefaultToolkit().createImage("src/image/player1-waiting.gif"); 
+		
 		// 배경 색 설정
 		setOpaque(true);
 		this.setBackground(Color.BLACK);
-
+		
 		connectSet();
 	}
-
+	
 	public void setGamePanel(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 	}
-
+	
 	private void connectSet() {
 		AppendText("User " + userName + " connecting " + ip_addr + " " + port_no);
-
+		
 		try {
 			socket = new Socket(ip_addr, Integer.parseInt(port_no));
 
@@ -128,10 +128,10 @@ public class WaitingPanel extends JLayeredPane {
 			oos.flush();
 			ois = new ObjectInputStream(socket.getInputStream());
 
-			// SendMessage("/login " + userName);
+			//SendMessage("/login " + userName);
 			ChatMsg obcm = new ChatMsg(userName, "101", roomNum);
 			SendObject(obcm);
-
+			
 			ListenNetwork net = new ListenNetwork();
 			net.start();
 
@@ -140,6 +140,7 @@ public class WaitingPanel extends JLayeredPane {
 			AppendText("connect error");
 		}
 	}
+	
 
 	static public int getMyPlayerNum() {
 		return myPlayerNum;
@@ -153,20 +154,23 @@ public class WaitingPanel extends JLayeredPane {
 		return p2NameLabel.getText();
 	}
 
-	public void setAllJoinPlayer(String info[]) {
+	
+	public void setAllJoinPlayer(String info []) {
 		joinPlayer.setText("2 / 2");
-		player2 = Toolkit.getDefaultToolkit().createImage("src/image/player2-waiting.gif");
+		player2 = Toolkit.getDefaultToolkit().createImage("src/image/player2-waiting.gif"); 
 		add(p2NameLabel);
-		if (info[0].trim().equals("player1")) {
+		if(info[0].trim().equals("player1")) {
 			p2NameLabel.setText(info[1]);
 			add(startBtn);
 			myPlayerNum = 1;
-		} else {
+		}
+		else {
 			p1NameLabel.setText(info[1]);
 			p2NameLabel.setText(userName);
 			myPlayerNum = 2;
 		}
 	}
+	
 
 	// Server Message를 수신해서 화면에 표시
 	class ListenNetwork extends Thread {
@@ -200,44 +204,31 @@ public class WaitingPanel extends JLayeredPane {
 						startGame();
 						break;
 					case "401": // 게임 player 움직임
-						if (gamePanel != null) {
+						if(gamePanel != null) {
 							gamePanel.movePlayerTrue(cm.getData().split("@@"));
 						}
 						break;
 					case "402": // 게임 player 움직임
-						if (gamePanel != null) {
+						if(gamePanel != null) {
 							gamePanel.movePlayerFalse(cm.getData().split("@@"));
 						}
 						break;
-					case "403":
-						if (gamePanel != null) {
-							gamePanel.movePlayerPosition(cm.getData().split("@@"));
-							// ChatMsg(userName, "403", myPlayerNum+"@@" +x +"," +y);
-
-						}
-						break;
 					case "502": // remove monster
-						if (gamePanel != null) {
+						if(gamePanel != null) {
 							gamePanel.bubbleChangeItem(cm.getData().split(","));
 						}
 						break;
 					case "601": // bubble 터짐 > item create
-						if (gamePanel != null) {
+						if(gamePanel != null) {
 							gamePanel.bubbleChangeItem(cm.getData().split(","));
 						}
 						break;
 					case "602": // remove item
-						if (gamePanel != null) {
-							System.out.println("############### " + cm.getData());
+						if(gamePanel != null) {
+							System.out.println("############### "+cm.getData());
 							gamePanel.bubbleMove(cm.getData().split(","));
 						}
 						break;
-//					case "501":
-//						if(gamePanel != null) {
-//							System.out.println("501 들어옴");
-//							//"myPlayerNum+"@@\x,y/x,y/"
-//							gamePanel.moveMostersPosition(cm.getData().split("@@"));
-//						}
 					}
 				} catch (IOException e) {
 					AppendText("ois.readObject() error");
@@ -268,7 +259,7 @@ public class WaitingPanel extends JLayeredPane {
 	// 화면에 출력
 	public void AppendText(String msg) {
 		// textArea.append(msg + "\n");
-		// AppendIcon(icon1);
+		//AppendIcon(icon1);
 		msg = msg.trim(); // 앞뒤 blank와 \n을 제거한다.
 //		int len = textArea.getDocument().getLength();
 //		// 끝으로 이동
@@ -295,7 +286,7 @@ public class WaitingPanel extends JLayeredPane {
 			}
 			Image new_img = ori_img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 			ImageIcon new_icon = new ImageIcon(new_img);
-		}
+		} 
 	}
 
 	// Windows 처럼 message 제외한 나머지 부분은 NULL 로 만들기 위한 함수
@@ -348,29 +339,30 @@ public class WaitingPanel extends JLayeredPane {
 			oos.writeObject(ob);
 		} catch (IOException e) {
 			// textArea.append("메세지 송신 에러!!\n");
-			// AppendText("SendObject Error");
+			//AppendText("SendObject Error");
 		}
 	}
-
+	
 	public void startGame() {
 		BubbleBobbleGame.isChange = true;
 		BubbleBobbleGame.isGame = true;
-		// bubbleGame.setPane(new MainGamePanel());
+		//bubbleGame.setPane(new MainGamePanel());
 
 		setVisible(false);
 	}
-
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		if (player1 != null) {
-			g.drawImage(player1, (int) Settings.SCENE_WIDTH / 2 - 50 - Settings.WAITING_SPACE, 330, 50, 50, this);
-		}
-		if (player2 != null) {
-			g.drawImage(player2, (int) Settings.SCENE_WIDTH / 2 + Settings.WAITING_SPACE, 330, 50, 50, this);
-		}
-	}
-
-	class StartAction implements ActionListener {
+	
+	public void paintComponent(Graphics g) {  
+	    super.paintComponent(g);  
+	    if (player1 != null) {  
+	      g.drawImage(player1, (int)Settings.SCENE_WIDTH/2-50-Settings.WAITING_SPACE, 330, 50, 50, this);
+	    }  
+	    if(player2 != null) {  
+		      g.drawImage(player2, (int)Settings.SCENE_WIDTH/2+Settings.WAITING_SPACE, 330, 50, 50, this);
+		    }  
+	  } 
+	
+	class StartAction implements ActionListener 
+	{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			ChatMsg obcm = new ChatMsg(userName, "103", "start");
