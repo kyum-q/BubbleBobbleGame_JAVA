@@ -55,10 +55,18 @@ public class Item extends JLabel {
 	public boolean isWallCrush() {
 		return isWallCrush;
 	}
-
+	
 	public void setWallCrush(boolean isWallCrush) {
 		this.isWallCrush = isWallCrush;
 	}
+
+	public void setWallCrush(boolean isWallCrush,int x, int y) {
+		this.isWallCrush = isWallCrush;
+		
+		coordinate.setXCoordinate(x);
+		coordinate.setYCoordinate(y);
+	}
+	
 
 	public boolean wallCollision(double minX, double maxX, double minY, double maxY) {
 		return spriteBase.causesCollision(minX, maxX, minY, maxY);
