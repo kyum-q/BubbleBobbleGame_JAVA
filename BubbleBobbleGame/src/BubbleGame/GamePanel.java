@@ -108,7 +108,8 @@ public class GamePanel extends JLayeredPane {
 		ChatMsg obcm = new ChatMsg(userName, "501", bubbleNum + "," + monsterNum + "," + x + "," + y);
 //		System.out
 //		.println("!!!!!!!!!!! send items : " + bubbleNum + "," +monsterNum + "," + x + "," + y);
-		WaitingPanel.SendObject(obcm);
+		if(obcm != null)
+			WaitingPanel.SendObject(obcm);
 	}
 	
 	public void SocketMeetBubbleMonster(String[] s) {
@@ -132,15 +133,16 @@ public class GamePanel extends JLayeredPane {
 		ChatMsg obcm = new ChatMsg(userName, "601", playerNum + "," + bubbleNum + "," + itemNum + "," + itemScore);
 //		System.out
 //		.println("!!!!!!!!!!! send items : " + playerNum + "," +bubbleNum + "," + itemNum + "," + itemScore);
-		WaitingPanel.SendObject(obcm);
+		if(obcm != null)
+			WaitingPanel.SendObject(obcm);
 	}
 
 	public void SocketChangeItem(String[] s) {
 //		System.out
 //		.println("!!!!!!!!!!! items :"+ s[0] + "," + s[1] + "," + s[2] + "," + s[3]);
 		Bubble b = bubbles.get(Integer.parseInt(s[1]));
-
-		if (s[0].equals(1))
+	
+		if (s[0].equals("1"))
 			b.bubbleBomb(player1, (Integer.parseInt(s[2])), (Integer.parseInt(s[3])));
 		else
 			b.bubbleBomb(player2, (Integer.parseInt(s[2])), (Integer.parseInt(s[3])));
@@ -148,13 +150,13 @@ public class GamePanel extends JLayeredPane {
 	
 	public void incrementScore(int playerNum, int itemNum) {
 		ChatMsg obcm = new ChatMsg(userName, "602", playerNum + "," + itemNum);
-		WaitingPanel.SendObject(obcm);
+		if(obcm != null) WaitingPanel.SendObject(obcm);
 	}
 	
 	public void SocketIncrementScore(String[] s) {
 		Item i = items.get(Integer.parseInt(s[1]));
 		System.out.println("!!!!!!!!!!! items :"+ s[0] + "," + s[1]);
-		if (s[0].equals(1))
+		if (s[0].equals("1"))
 			player1.addScore(i.getScore());
 		else
 			player2.addScore(i.getScore());
@@ -189,7 +191,7 @@ public class GamePanel extends JLayeredPane {
 
 		ChatMsg obcm = new ChatMsg(WaitingPanel.userName, "502",
 				bubbles.indexOf(b) + "," + b.getX() + "," + b.getY() + "," + ((moveDirection > 1) ? 1 : -1));
-		WaitingPanel.SendObject(obcm);
+		if(obcm != null) WaitingPanel.SendObject(obcm);
 	}
 
 	public void SocketbubbleMove(String[] s) {
@@ -234,7 +236,7 @@ public class GamePanel extends JLayeredPane {
 					int x = myself.getX();
 					int y = myself.getY();
 					obcm1 = new ChatMsg(userName, "403", myPlayerNum + "@@" + x + "," + y);
-					WaitingPanel.SendObject(obcm1);
+					if(obcm1 != null) WaitingPanel.SendObject(obcm1);
 
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -272,7 +274,7 @@ public class GamePanel extends JLayeredPane {
 			if (count > 200) {
 				isChangeStage = true;
 				ChatMsg obcm = new ChatMsg(userName, "300", "nextStage");
-				WaitingPanel.SendObject(obcm);
+				if(obcm != null) WaitingPanel.SendObject(obcm);
 			}
 		}
 	}
@@ -383,12 +385,12 @@ public class GamePanel extends JLayeredPane {
 					item.setWallCrush(false);
 				}
 			}
-			if (item.wallCollision(player1.getX(), player1.getX() + player1.getWidth(), player1.getY(),
+			if (this.myPlayerNum == 1 && item.wallCollision(player1.getX(), player1.getX() + player1.getWidth(), player1.getY(),
 					player1.getY() + player1.getHeight())) {
 				incrementScore(1, items.indexOf(item));
 				break;
 			}
-			if (item.wallCollision(player2.getX(), player2.getX() + player2.getWidth(), player2.getY(),
+			if (this.myPlayerNum == 2 && item.wallCollision(player2.getX(), player2.getX() + player2.getWidth(), player2.getY(),
 					player2.getY() + player2.getHeight())) {
 				incrementScore(2, items.indexOf(item));
 				break;
