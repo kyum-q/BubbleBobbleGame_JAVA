@@ -406,9 +406,10 @@ public class JavaObjServer extends JFrame {
 					if (cm.getCode().matches("101")) { // 방 만들기/방 참가
 						UserName = cm.getId();
 						UserStatus = "O"; // Online 상태
+						//1,2,3
 						roomNum = Integer.parseInt(cm.getData());
 						addRoomCount(roomNum);
-						if(getRoomCount(roomNum) >= 2) {
+						if(getRoomCount(roomNum) >= 1) {
 							WriteJoin();
 						}
 						Login();

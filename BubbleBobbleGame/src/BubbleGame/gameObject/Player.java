@@ -413,13 +413,13 @@ public class Player extends JLabel{
 
 			 else if(this.isMonsterCrush) {
 				 if(this.isDirection)
-//						spriteBase.setDirPath("src/image/player"+playerNumber+"-death-right");
-//					else
-//						spriteBase.setDirPath("src/image/player"+playerNumber+"-death-left");
-					 
-						spriteBase.setDirPath("src/image/player1-death-right");
+						spriteBase.setDirPath("src/image/player"+playerNumber+"-death-right");
 					else
-						spriteBase.setDirPath("src/image/player1-death-left");
+						spriteBase.setDirPath("src/image/player"+playerNumber+"-death-left");
+					 
+//						spriteBase.setDirPath("src/image/player1-death-right");
+//					else
+//						spriteBase.setDirPath("src/image/player1-death-left");
 
 			 }
 
@@ -442,10 +442,11 @@ public class Player extends JLabel{
 			}
 		//몬스터와 맞았을 때
 		} else {
-			 if(this.isDirection)
-					spriteBase.setDirPath("src/image/player1-death-right");
-				else
-					spriteBase.setDirPath("src/image/player1-death-left");
+			if(this.isDirection)
+				spriteBase.setDirPath("src/image/player"+playerNumber+"-death-right");
+			else
+				spriteBase.setDirPath("src/image/player"+playerNumber+"-death-left");
+			 
 		}
 		String dirPath = spriteBase.getDirPath();
 		File dir = new File(dirPath);

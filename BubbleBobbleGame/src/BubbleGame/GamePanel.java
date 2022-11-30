@@ -212,7 +212,7 @@ public class GamePanel extends JLayeredPane {
 					obcm1 = new ChatMsg(userName, "403", myPlayerNum + "@@" + x + "," + y);
 					WaitingPanel.SendObject(obcm1);
 
-					Thread.sleep(1000);
+					Thread.sleep(300);
 				} catch (InterruptedException e) {
 					return;
 				}
@@ -261,7 +261,7 @@ public class GamePanel extends JLayeredPane {
 		sendThread.interrupt();
 		gameThread.interrupt();
 	}
-
+	/* 플레이어와 몬스터가 부딪히는지 체크 */
 	public void player2MonsterCrushCheck() {
 		if (!player2.isImmortal()) {
 			for (Monster m : monsters) {
