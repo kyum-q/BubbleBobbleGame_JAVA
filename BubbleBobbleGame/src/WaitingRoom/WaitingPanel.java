@@ -178,6 +178,7 @@ public class WaitingPanel extends JLayeredPane {
 					ChatMsg cm;
 					try {
 						obcm = ois.readObject();
+						if (obcm == null) break;
 					} catch (ClassNotFoundException e) {
 						e.printStackTrace();
 						break;
