@@ -220,16 +220,29 @@ public class WaitingPanel extends JLayeredPane {
 							// ChatMsg(userName, "403", myPlayerNum+"@@" +x +"," +y);
 						}
 						break;
-					case "601": // bubble 터짐 > item create
+					case "501": // bubble이랑 monster이랑 만남
 						if (gamePanel != null) {
-							gamePanel.SoketChangeItem(cm.getData().split(","));
+							gamePanel.SocketMeetBubbleMonster(cm.getData().split(","));
 						}
 						break;
-					case "602": // remove item
+					case "502": // bubble 천장 랜덤 움직임
 						if (gamePanel != null) {
-							System.out.println("############### " + cm.getData());
-
-							gamePanel.bubbleMove(cm.getData().split(","));
+							gamePanel.SocketbubbleMove(cm.getData().split(","));
+						}
+						break;
+					case "601": // bubble 터짐 > item create
+						if (gamePanel != null) {
+							gamePanel.SocketChangeItem(cm.getData().split(","));
+						}
+						break;
+					case "602": // item 위치 조정
+						if (gamePanel != null) {
+							gamePanel.SocketItemLocation(cm.getData().split(","));
+						}
+						break;
+					case "603": // item 점수 증가
+						if (gamePanel != null) {
+							gamePanel.SocketIncrementScore(cm.getData().split(","));
 						}
 						break;
 					}
