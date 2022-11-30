@@ -426,13 +426,17 @@ public class JavaObjServer extends JFrame {
 					} else if (cm.getCode().matches("403")) { // player 움직임 (x,y)
 						WriteOthers(cm.getData(),"403"); 
 						WriteOne(cm.getData(),"403");
-					} else if (cm.getCode().matches("502")) { // monster remove
+					} else if (cm.getCode().matches("501")) { // bubble이랑 monster이랑 만남
+						WriteOthers(cm.getData(),"501"); 
+						WriteOne(cm.getData(),"501");
+					} else if (cm.getCode().matches("502")) { // bubble 천장 랜덤 움직임
 						WriteOthers(cm.getData(),"502"); 
-					}  else if (cm.getCode().matches("601")) { // bubble 터짐 > item create
+					} else if (cm.getCode().matches("601")) { // bubble 터짐 > item create
 						WriteOthers(cm.getData(),"601"); 
 						WriteOne(cm.getData(),"601");
-					} else if (cm.getCode().matches("602")) { // bubble 천장 랜덤 움직임
+					}  else if (cm.getCode().matches("602")) { // item 점수 증가
 						WriteOthers(cm.getData(),"602"); 
+						WriteOne(cm.getData(),"602");
 					} 
 				} catch (IOException e) {
 					AppendText("ois.readObject() error");

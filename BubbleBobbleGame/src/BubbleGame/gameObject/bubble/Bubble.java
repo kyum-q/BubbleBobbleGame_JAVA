@@ -112,8 +112,11 @@ public class Bubble extends JLabel {
 	}
 
 	/* Bubble이 monster랑 만났을 경우 */
-	public void monsterCatch(Monster m) {
+	public void monsterCatch(Monster m, int x, int y) {
 		if (!monsterCapture) {
+			coordinate.setXCoordinate(x);
+			coordinate.setYCoordinate(y);
+			
 			String monsterName = m.getMonsterName();
 			setBubblePath(monsterName);
 			this.setSize((int) Settings.MONSTER_BUBBLE_SIZE, (int) Settings.MONSTER_BUBBLE_SIZE);
