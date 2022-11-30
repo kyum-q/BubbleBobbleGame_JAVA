@@ -235,7 +235,12 @@ public class WaitingPanel extends JLayeredPane {
 							gamePanel.SocketChangeItem(cm.getData().split(","));
 						}
 						break;
-					case "602": // bubble 터짐 > item create
+					case "602": // item 위치 조정
+						if (gamePanel != null) {
+							gamePanel.SocketItemLocation(cm.getData().split(","));
+						}
+						break;
+					case "603": // item 점수 증가
 						if (gamePanel != null) {
 							gamePanel.SocketIncrementScore(cm.getData().split(","));
 						}

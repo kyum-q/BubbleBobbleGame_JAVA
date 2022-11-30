@@ -434,9 +434,12 @@ public class JavaObjServer extends JFrame {
 					} else if (cm.getCode().matches("601")) { // bubble 터짐 > item create
 						WriteOthers(cm.getData(),"601"); 
 						WriteOne(cm.getData(),"601");
-					}  else if (cm.getCode().matches("602")) { // item 점수 증가
+					} else if (cm.getCode().matches("602")) { // item 위치 조정
 						WriteOthers(cm.getData(),"602"); 
 						WriteOne(cm.getData(),"602");
+					}   else if (cm.getCode().matches("603")) { // item 점수 증가
+						WriteOthers(cm.getData(),"603"); 
+						WriteOne(cm.getData(),"603");
 					} 
 				} catch (IOException e) {
 					AppendText("ois.readObject() error");
