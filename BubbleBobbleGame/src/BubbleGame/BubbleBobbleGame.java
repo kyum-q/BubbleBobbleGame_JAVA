@@ -95,8 +95,32 @@ public class BubbleBobbleGame extends JFrame {
 	      gamePanel.setFocusable(true);
 	      gamePanel.requestFocus();
 	   }
+	 private void setEndingPanel(EndingPanel endingPanel) {
+		 Container c = getContentPane();
+    	 c.setLayout(new BorderLayout());
 
+   	      splitpane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+   	      splitpane.setTopComponent(gamePanel.getScorePanel());
+   	      
+   	      splitpane.setDividerLocation(55);
+   	      splitpane.setEnabled(false); // splitPane 위치 고정
+   	      splitpane.setDividerSize(0);
+   	      splitpane.setBorder(null);
+   	      
+   	      splitpane.setBottomComponent(endingPanel);
+   	      c.add(splitpane, BorderLayout.CENTER);
+   	      this.isGame = false; 	      
+   	     // repaint();
+   	      //이거 안주면 안보임 왜 안보이지..??
+   	      setVisible(true);
+	 }
 	
+
+	public GamePanel getGamePanel() {
+		return gamePanel;
+	}
+
+
 
 	class GameProcessThread extends Thread {
 		public void run() {
@@ -126,6 +150,7 @@ public class BubbleBobbleGame extends JFrame {
 			public void run() { 
 				this.cancel() ;
 				c.remove(loadingPanel);
+				c.remove(getGamePanel());
 				setGamePanel(gamePanel);		
 			}
 		};
@@ -149,10 +174,16 @@ public class BubbleBobbleGame extends JFrame {
 	         scorePanel.setUp1Name(waitingPanel.getP1Name());
 	         scorePanel.setUp2Name(waitingPanel.getP2Name());
 	         
-	         Map map = new Map(this.stage);
-	         GamePanel gamePanel = new GamePanel(scorePanel, map);
-	         waitingPanel.setGamePanel(gamePanel);
-	         changePanelTimer(1000, gamePanel);
+	         if(this.stage > 6) {
+	        	 EndingPanel endingPanel = new EndingPanel("GAME CLEAR !!!","HAPPY");
+	        	 setEndingPanel(endingPanel);
+	         }
+	         else {
+		         Map map = new Map(this.stage);
+		         GamePanel gamePanel = new GamePanel(scorePanel, map);
+		         waitingPanel.setGamePanel(gamePanel);
+		         changePanelTimer(1000, gamePanel);
+	         }
 		}
 		else if(isGame) {
 			 System.out.println("			IsGame");  
