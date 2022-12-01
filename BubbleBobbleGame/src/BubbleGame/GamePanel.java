@@ -381,13 +381,6 @@ public class GamePanel extends JLayeredPane {
 	public void monsterWallCrushCheck() {
 		ArrayList<Block> blocks = map.getBlocks();
 		for (Monster monster : monsters) {
-			if (player2.monsterCollision(monster.getX(), monster.getX() + Settings.SPRITE_SIZE, monster.getY(),
-					monster.getY() + Settings.SPRITE_SIZE)) {
-				//System.out.println("몬스터 충돌");
-				player2.setMonsterCrush(true);
-			} else {
-				player2.setMonsterCrush(false);
-			}
 			for (Block block : blocks) {
 				if (monster.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
 						block.getY() + block.getHeight())) {

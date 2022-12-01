@@ -88,7 +88,7 @@ public class BubbleBobbleGame extends JFrame {
 	      c.add(splitpane, BorderLayout.CENTER);
 	      this.isGame = false;
 	      
-	      //music.paly("background");
+	      music.paly("background");
 	     // repaint();
 	      //이거 안주면 안보임 왜 안보이지..??
 	      setVisible(true);
