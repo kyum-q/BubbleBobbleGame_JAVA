@@ -243,15 +243,8 @@ public class GamePanel extends JLayeredPane {
 		public void run() {
 			while (true) {
 				ChatMsg obcm1 = null;
-				ChatMsg obcm2 = null;
 				try {
 					String s = myPlayerNum + "@@";
-//	               for(Monster m : monsters) {
-//	                  s += (m.getX()+","+m.getY()+"/");
-//	               }
-//	               obcm2 = new ChatMsg(userName, "501", s);
-//	               System.out.println("send monstes Postions : " +s );
-//	               WaitingPanel.SendObject(obcm2);
 
 					// player 좌표를 보냄
 					int x = myself.getX();
@@ -281,7 +274,9 @@ public class GamePanel extends JLayeredPane {
 
 		if (!this.threadFlag) {
 			this.gameThread.interrupt();
+			//this.sendThread.interrupt();
 			this.player1.setThreadFlag(false);
+			this.player2.setThreadFlag(false);
 		}
 
 	}
@@ -314,7 +309,7 @@ public class GamePanel extends JLayeredPane {
 			for (Monster m : monsters) {
 				if (player2.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE, m.getY(),
 						m.getY() + Settings.SPRITE_SIZE)) {
-					// System.out.println("몬스터 충돌");
+					System.out.println("player2222 몬스터 충돌");
 					player2.setMonsterCrush(true);
 					return;
 				} else {
@@ -331,7 +326,7 @@ public class GamePanel extends JLayeredPane {
 			for (Monster m : monsters) {
 				if (player1.monsterCollision(m.getX(), m.getX() + Settings.SPRITE_SIZE, m.getY(),
 						m.getY() + Settings.SPRITE_SIZE)) {
-					// System.out.println("몬스터 충돌");
+					System.out.println("player11111 몬스터 충돌");
 					player1.setMonsterCrush(true);
 					return;
 				} else {
@@ -350,6 +345,12 @@ public class GamePanel extends JLayeredPane {
 			if (player1.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
 					block.getY() + block.getHeight())) {
 				player1.setWallCrush(true);
+				if(myPlayerNum == 1 && myself.isJumping() && myself.getSpriteBase().getDyCoordinate() > 0) {
+					int x = myself.getX();
+					int y = myself.getY();
+					ChatMsg obcm1 = new ChatMsg(userName, "403", myPlayerNum + "@@" + x + "," + y);
+					if(obcm1 != null) WaitingPanel.SendObject(obcm1);
+				}
 				break;
 			} else {
 				player1.setWallCrush(false);
@@ -364,6 +365,12 @@ public class GamePanel extends JLayeredPane {
 			if (player2.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
 					block.getY() + block.getHeight())) {
 				player2.setWallCrush(true);
+				if(myPlayerNum == 2 && myself.isJumping() && myself.getSpriteBase().getDyCoordinate() > 0) {
+					int x = myself.getX();
+					int y = myself.getY();
+					ChatMsg obcm1 = new ChatMsg(userName, "403", myPlayerNum + "@@" + x + "," + y);
+					if(obcm1 != null) WaitingPanel.SendObject(obcm1);
+				}
 				return;
 			} else {
 				player2.setWallCrush(false);
@@ -384,8 +391,6 @@ public class GamePanel extends JLayeredPane {
 			for (Block block : blocks) {
 				if (monster.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
 						block.getY() + block.getHeight())) {
-					// System.out.println("X : " + block.getX() + ",Y: " + block.getY() + " 블록
-					// 부딪힘");
 					monster.setWallCrush(true);
 					break;
 				} else {
@@ -457,6 +462,7 @@ public class GamePanel extends JLayeredPane {
 		double x = Integer.parseInt(position[0]);
 		double y = Integer.parseInt(position[1]);
 		//System.out.println("GamePanel position ###### " + x + ":" + y);
+
 		Player other;
 		if (Integer.parseInt(playerInfo[0]) == 1)
 			other = player1;
@@ -470,6 +476,8 @@ public class GamePanel extends JLayeredPane {
 
 	public void movePlayerTrue(String[] playerInfo) {
 		String KeyCode = playerInfo[1];
+		//System.out.println("GamePanel ###### " + playerInfo[1]);
+
 		Player other;
 		if (playerInfo[0].equals("1"))
 			other = player1;

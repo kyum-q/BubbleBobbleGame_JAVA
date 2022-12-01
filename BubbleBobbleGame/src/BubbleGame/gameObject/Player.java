@@ -53,7 +53,7 @@ public class Player extends JLabel{
 	private boolean isDirection;
     private boolean isWallCrush;
     private boolean isMonsterCrush;
-    private boolean isImmortal=false;
+    private boolean isImmortal = false;
     private boolean threadFlag = true;
 
     public void setThreadFlag(boolean threadFlag) {
@@ -65,18 +65,20 @@ public class Player extends JLabel{
     
 	public Player(int playerNumber, ScoreLabel scoreLabel) {
 		super();
-		
+		this.playerNumber = playerNumber;
         this.scoreLabel = scoreLabel;
         
 		String path;
 		path = "src/image/player"+playerNumber+"-move-left";
 		
-		if(playerNumber==2) this.xStartLocation = 550;
+		if(playerNumber==2) {
+			this.xStartLocation = 550;
+		}
 
-		this.coordinate = new Coordinates(xStartLocation, yStartLocation, 1, 3, 3, 1);
+		this.coordinate = new Coordinates(this.xStartLocation, this.yStartLocation, 1, 3, 3, 1);
 		System.out.println("path: "+path);
 		this.spriteBase = new SpriteBase(path, coordinate);
-		this.playerNumber = playerNumber;
+		
 		
 		this.spriteBase.setHeight(height);
 		this.spriteBase.setWidth(width);
@@ -86,7 +88,7 @@ public class Player extends JLabel{
 		this.score = 0;
         this.setUp();
         
-        
+        System.out.println("player: "+playerNumber + " 생성");
         this.setBounds(0,0,(int)width, (int)height);
         moveThread = new moveThread();
 
@@ -173,52 +175,56 @@ public class Player extends JLabel{
 			this.moveThread.interrupt();
 	}
 	public void monsterCrushEvent() {
+		
 		//몬스터와 처음 부딪혔을 때 무적 시작
 			if(isMonsterCrush) { // immortal 상태가 아닐 때만 체크함
 				beforeTime = System.currentTimeMillis(); // 코드 실행 전에 시간 받아오기
 				this.lives -=1;
+				if(lives <0)this.setVisible(false);
 				this.setDead(true);
-				this.setImmortal(true);
+				this.isImmortal = true;
+				System.out.println(this.playerNumber + "isMonsterCrush");
 				this.setMonsterCrush(false);
 		
 			}
 			else {
+				//몬스터 부딪혔을 때 죽는 애니메이션이 발동하고 부활하면 무적
+				 if(isDead) {
+					 System.out.println(this.playerNumber + ": isDead");
+					 //애니메이션 발동동안 player의 스레드를 독점함 - 안움직이게
+					 //deadEvent();
+					 //애니메이션 끝나고 부활
+					 revival();
+				 }	
 				//일정시간 동안 깜빡여짐
 				 if(isBlink)
 					blinkEvent();
 				 //일정시간 몬스터와 맞아도 생명력이 안닳음
-				 if(isImmortal)
-					immortalEvent();
-				 //몬스터 부딪혔을 때 죽는 애니메이션이 발동하고 부활하면 무적
-				 if(isDead) {
-					 //애니메이션 발동동안 player의 스레드를 독점함 - 안움직이게
-					 deadEvent();
-					 //애니메이션 끝나고 부활
-					 revival();
-				 }		
+//				 if(isImmortal)
+//					immortalEvent();
+				 	
 			}
 			
 	}
 	
 	
    /*2000ms 시간 무적*/
-	public void immortalEvent() {	
-		//다시 살아났을 때 일정시간 동안 깜빡임
-		if(this.isImmortal && !this.isDead) {	
-			long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
-			long secDiffTime = (afterTime - beforeTime); // 두 시간에 차 계산
-			this.isBlink = true;
-			if(secDiffTime >= 2000) {
-				this.setImmortal(false);
-				System.out.println("무적 끝");
-				//this.isBlink = false;
-			}
-		}
-	}
+//	public void immortalEvent() {	
+//		//다시 살아났을 때 일정시간 동안 깜빡임
+//		if(this.isImmortal && !this.isDead) {	
+//			long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
+//			long secDiffTime = (afterTime - beforeTime); // 두 시간에 차 계산
+//			this.isBlink = true;
+////			if(secDiffTime >= 2000) {
+////				this.setImmortal(false);
+////				System.out.println(this.playerNumber + ": 무적 끝");
+////			}
+//		}
+//	}
 	
 	/*캐릭터 부활 */
 	public void revival() {
-		
+		System.out.println(this.playerNumber + ": 부활");
 		this.setDead(false);
 		spriteBase.setXCoordinate(this.xStartLocation);
 		spriteBase.setYCoordinate(this.yStartLocation);
@@ -241,6 +247,7 @@ public class Player extends JLabel{
 		}
 		if(secDiffTime >= 2000) {
 			this.isBlink = false;
+			this.isImmortal = false;
 			this.alpha = 255;
 		}
 	}
@@ -501,7 +508,6 @@ public class Player extends JLabel{
 	private void moveRight() {
 
 		spriteBase.setDxCoordinate(speed);
-		
 		isMoveRight = true;
 		isDirection = true;
 	}
@@ -509,8 +515,7 @@ public class Player extends JLabel{
 
 	private void moveLeft() {
 
-		spriteBase.setDxCoordinate(-speed);
-		
+		spriteBase.setDxCoordinate(-speed);	
 		isMoveLeft = true;
 		isDirection = false;
 	}
@@ -603,9 +608,11 @@ public class Player extends JLabel{
 	}
 	
 	public boolean isMonsterCrush() {
+		
 		return isMonsterCrush;
 	}
 	public void setMonsterCrush(boolean isMonsterCrush) {
+		
 		this.isMonsterCrush = isMonsterCrush;
 	}
 	public void setCrushBlock(Block crushBlock) {
@@ -615,6 +622,7 @@ public class Player extends JLabel{
 		return isImmortal;
 	}
 	public void setImmortal(boolean isImmortal) {
+		
 		this.isImmortal = isImmortal;
 	}
 }
