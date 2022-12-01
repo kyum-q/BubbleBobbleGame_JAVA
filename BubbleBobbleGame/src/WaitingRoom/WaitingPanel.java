@@ -168,6 +168,8 @@ public class WaitingPanel extends JLayeredPane {
 		}
 	}
 
+	
+	
 	// Server Message를 수신해서 화면에 표시
 	class ListenNetwork extends Thread {
 		public void run() {
