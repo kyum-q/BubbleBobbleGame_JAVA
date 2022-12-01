@@ -95,8 +95,8 @@ public class GamePanel extends JLayeredPane {
 		this.gameThread = new GameThread();
 		gameThread.start();
 
-		this.sendThread = new SendThread();
-		sendThread.start();
+		//this.sendThread = new SendThread();
+		//sendThread.start();
 	}
 
 	public String getUserName() {
@@ -155,11 +155,11 @@ public class GamePanel extends JLayeredPane {
 	}
 	
 	public void SocketItemLocation(String[] s) {
-		System.out.println("!!!!!!!!!!! items :"+ s[0] + "," + s[1] + "," + s[2]);
+		//System.out.println("!!!!!!!!!!! items :"+ s[0] + "," + s[1] + "," + s[2]);
 		if(items.size() > Integer.parseInt(s[0])) {
 			Item i = items.get(Integer.parseInt(s[0]));
 			i.setWallCrush(true, (Integer.parseInt(s[1])), (Integer.parseInt(s[2])));
-			System.out.println("######################## item Location");
+			//System.out.println("######################## item Location");
 		}
 	}
 	
@@ -171,7 +171,7 @@ public class GamePanel extends JLayeredPane {
 	public void SocketIncrementScore(String[] s) {
 		if(items.size() > Integer.parseInt(s[1])) {
 			Item i = items.get(Integer.parseInt(s[1]));
-			System.out.println("!!!!!!!!!!! items :"+ s[0] + "," + s[1]);
+			//System.out.println("!!!!!!!!!!! items :"+ s[0] + "," + s[1]);
 			if (s[0].equals("1"))
 				player1.addScore(i.getScore());
 			else
@@ -245,12 +245,6 @@ public class GamePanel extends JLayeredPane {
 				ChatMsg obcm1 = null;
 				try {
 					String s = myPlayerNum + "@@";
-//	               for(Monster m : monsters) {
-//	                  s += (m.getX()+","+m.getY()+"/");
-//	               }
-//	               obcm2 = new ChatMsg(userName, "501", s);
-//	               System.out.println("send monstes Postions : " +s );
-//	               WaitingPanel.SendObject(obcm2);
 
 					// player 좌표를 보냄
 					int x = myself.getX();
@@ -280,7 +274,7 @@ public class GamePanel extends JLayeredPane {
 
 		if (!this.threadFlag) {
 			this.gameThread.interrupt();
-			this.sendThread.interrupt();
+			//this.sendThread.interrupt();
 			this.player1.setThreadFlag(false);
 			this.player2.setThreadFlag(false);
 		}
@@ -302,7 +296,7 @@ public class GamePanel extends JLayeredPane {
 	}
 	
 	public void SocketNextStge() {
-		System.out.println("몬스터 모두 처리");
+		//System.out.println("몬스터 모두 처리");
 		this.threadFlag = false;
 		BubbleBobbleGame.isChange = true;
 		BubbleBobbleGame.isNext = true;
@@ -351,6 +345,12 @@ public class GamePanel extends JLayeredPane {
 			if (player1.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
 					block.getY() + block.getHeight())) {
 				player1.setWallCrush(true);
+				if(myPlayerNum == 1 && myself.isJumping() && myself.getSpriteBase().getDyCoordinate() > 0) {
+					int x = myself.getX();
+					int y = myself.getY();
+					ChatMsg obcm1 = new ChatMsg(userName, "403", myPlayerNum + "@@" + x + "," + y);
+					if(obcm1 != null) WaitingPanel.SendObject(obcm1);
+				}
 				break;
 			} else {
 				player1.setWallCrush(false);
@@ -365,6 +365,12 @@ public class GamePanel extends JLayeredPane {
 			if (player2.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
 					block.getY() + block.getHeight())) {
 				player2.setWallCrush(true);
+				if(myPlayerNum == 2 && myself.isJumping() && myself.getSpriteBase().getDyCoordinate() > 0) {
+					int x = myself.getX();
+					int y = myself.getY();
+					ChatMsg obcm1 = new ChatMsg(userName, "403", myPlayerNum + "@@" + x + "," + y);
+					if(obcm1 != null) WaitingPanel.SendObject(obcm1);
+				}
 				return;
 			} else {
 				player2.setWallCrush(false);
@@ -375,13 +381,13 @@ public class GamePanel extends JLayeredPane {
 	public void monsterWallCrushCheck() {
 		ArrayList<Block> blocks = map.getBlocks();
 		for (Monster monster : monsters) {
-//			if (player2.monsterCollision(monster.getX(), monster.getX() + Settings.SPRITE_SIZE, monster.getY(),
-//					monster.getY() + Settings.SPRITE_SIZE)) {
-//				
-//				player2.setMonsterCrush(true);
-//			} else {
-//				player2.setMonsterCrush(false);
-//			}
+			if (player2.monsterCollision(monster.getX(), monster.getX() + Settings.SPRITE_SIZE, monster.getY(),
+					monster.getY() + Settings.SPRITE_SIZE)) {
+				//System.out.println("몬스터 충돌");
+				player2.setMonsterCrush(true);
+			} else {
+				player2.setMonsterCrush(false);
+			}
 			for (Block block : blocks) {
 				if (monster.wallCollision(block.getX(), block.getX() + block.getWidth(), block.getY(),
 						block.getY() + block.getHeight())) {
@@ -455,7 +461,8 @@ public class GamePanel extends JLayeredPane {
 		String[] position = playerInfo[1].split(",");
 		double x = Integer.parseInt(position[0]);
 		double y = Integer.parseInt(position[1]);
-		//System.out.println("GamePanel ###### " + x + ":" + y);
+		//System.out.println("GamePanel position ###### " + x + ":" + y);
+
 		Player other;
 		if (Integer.parseInt(playerInfo[0]) == 1)
 			other = player1;
@@ -470,6 +477,7 @@ public class GamePanel extends JLayeredPane {
 	public void movePlayerTrue(String[] playerInfo) {
 		String KeyCode = playerInfo[1];
 		//System.out.println("GamePanel ###### " + playerInfo[1]);
+
 		Player other;
 		if (playerInfo[0].equals("1"))
 			other = player1;
@@ -544,53 +552,47 @@ public class GamePanel extends JLayeredPane {
 	class KeyListener extends KeyAdapter {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			ChatMsg obcm = null;
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
-				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_DOWN");
+				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_DOWN"));
 				break;
 			case KeyEvent.VK_UP:
-				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_UP");
+				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_UP"));
 				break;
 			case KeyEvent.VK_LEFT:
-				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_LEFT");
+				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_LEFT"));
 				break;
 			case KeyEvent.VK_RIGHT:
-				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_RIGHT");
+				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_RIGHT"));
 				break;
 			case KeyEvent.VK_SPACE:
-				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_SPACE");
+				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_SPACE"));
 				break;
 			case KeyEvent.VK_ESCAPE:
-				obcm = new ChatMsg(userName, "401", myPlayerNum + "@@VK_ESCAPE");
+				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_ESCAPE"));
 				break;
 			}
-			if(obcm != null)
-				WaitingPanel.SendObject(obcm);
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			ChatMsg obcm = null;
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_DOWN:
-				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_DOWN");
+				WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_DOWN"));
 				break;
 			case KeyEvent.VK_UP:
-				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_UP");
+				WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_UP"));
 				break;
 			case KeyEvent.VK_LEFT:
-				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_LEFT");
+				WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_LEFT"));
 				break;
 			case KeyEvent.VK_RIGHT:
-				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_RIGHT");
+				WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_RIGHT"));
 				break;
 			case KeyEvent.VK_SPACE:
-				obcm = new ChatMsg(userName, "402", myPlayerNum + "@@VK_SPACE");
+				WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_SPACE"));
 				break;
 			}
-			if(obcm != null)
-				WaitingPanel.SendObject(obcm);
 		}
 	}
 

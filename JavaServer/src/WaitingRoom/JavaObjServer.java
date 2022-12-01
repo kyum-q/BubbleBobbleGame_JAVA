@@ -296,7 +296,7 @@ public class JavaObjServer extends JFrame {
 //				bb = MakePacket(msg);
 //				dos.write(bb, 0, bb.length);
 				ChatMsg obcm = new ChatMsg("SERVER", code, msg);
-				oos.writeObject(obcm);
+				if(obcm!=null) oos.writeObject(obcm);
 			} catch (IOException e) {
 				AppendText("dos.writeObject() error");
 				try {
@@ -419,26 +419,42 @@ public class JavaObjServer extends JFrame {
 						WriteOthers(cm.getData(),"300"); 
 						WriteOne(cm.getData(),"300");
 					} else if (cm.getCode().matches("401")) { // player 움직임 keyPressed
+						System.out.println("401");
+						
 						WriteOthers(cm.getData(),"401"); 
 						WriteOne(cm.getData(),"401");
 					} else if (cm.getCode().matches("402")) { // player 움직임 keyReleased
+						System.out.println("402");
+						
 						WriteOthers(cm.getData(),"402"); 
 						WriteOne(cm.getData(),"402");
 					} else if (cm.getCode().matches("403")) { // player 움직임 (x,y)
+						System.out.println("403");
+						
 						WriteOthers(cm.getData(),"403"); 
 						WriteOne(cm.getData(),"403");
 					} else if (cm.getCode().matches("501")) { // bubble이랑 monster이랑 만남
+						System.out.println("501");
+						
 						WriteOthers(cm.getData(),"501"); 
 						WriteOne(cm.getData(),"501");
 					} else if (cm.getCode().matches("502")) { // bubble 천장 랜덤 움직임
+						System.out.println("502");
+						
 						WriteOthers(cm.getData(),"502"); 
 					} else if (cm.getCode().matches("601")) { // bubble 터짐 > item create
+						System.out.println("601");
+						
 						WriteOthers(cm.getData(),"601"); 
 						WriteOne(cm.getData(),"601");
 					} else if (cm.getCode().matches("602")) { // item 위치 조정
+						System.out.println("602");
+						
 						WriteOthers(cm.getData(),"602"); 
 						WriteOne(cm.getData(),"602");
 					}   else if (cm.getCode().matches("603")) { // item 점수 증가
+						System.out.println("603");
+						
 						WriteOthers(cm.getData(),"603"); 
 						WriteOne(cm.getData(),"603");
 					} 
