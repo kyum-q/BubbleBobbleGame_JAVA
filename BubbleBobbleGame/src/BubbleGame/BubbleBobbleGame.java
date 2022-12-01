@@ -2,15 +2,13 @@ package BubbleGame;
 
 
 import utility.Settings;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.*;
-
+import BubbleGame.Music;
 import WaitingRoom.GameInPanel;
 import WaitingRoom.WaitingPanel;
 import utility.Settings;
@@ -33,6 +31,9 @@ public class BubbleBobbleGame extends JFrame {
 	public static boolean isNext;
 	public static boolean isInit;
 	public static boolean isWaitingRoom;
+	
+	Music music;
+	
 	GameProcessThread gameThread;
 	int check = 0;
 	public int stage =1;
@@ -48,7 +49,7 @@ public class BubbleBobbleGame extends JFrame {
 		
 		//시작하고 싶은 flag 하나면 true 시키면 됨, isChange는 꼭 true
 		init();
-		
+		music = new Music();
 		gameThread = new GameProcessThread();
 		gameThread.start();
 		setResizable(false); 	
@@ -86,7 +87,8 @@ public class BubbleBobbleGame extends JFrame {
 	      splitpane.setBottomComponent(gamePanel);
 	      c.add(splitpane, BorderLayout.CENTER);
 	      this.isGame = false;
-	      	  
+	      
+	      //music.paly("background");
 	     // repaint();
 	      //이거 안주면 안보임 왜 안보이지..??
 	      setVisible(true);
@@ -152,7 +154,7 @@ public class BubbleBobbleGame extends JFrame {
 	         GamePanel gamePanel = new GamePanel(scorePanel, map);
 	         waitingPanel.setGamePanel(gamePanel);
 	         changePanelTimer(1000, gamePanel);
-		}		
+		}
 		else if(isGame) {
 			 System.out.println("			IsGame");  
 			 
@@ -163,6 +165,7 @@ public class BubbleBobbleGame extends JFrame {
 	         Map map = new Map(1);
 	         this.gamePanel = new GamePanel(scorePanel, map);
 	         setGamePanel(gamePanel);
+	         
 	         waitingPanel.setGamePanel(gamePanel);
 	         isGame= false;
 		} else if(isInit) {
