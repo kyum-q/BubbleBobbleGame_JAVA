@@ -88,7 +88,6 @@ public class BubbleBobbleGame extends JFrame {
 	      c.add(splitpane, BorderLayout.CENTER);
 	      this.isGame = false;
 	      
-	      music.paly("background");
 	     // repaint();
 	      //이거 안주면 안보임 왜 안보이지..??
 	      setVisible(true);
@@ -167,11 +166,15 @@ public class BubbleBobbleGame extends JFrame {
 	         setGamePanel(gamePanel);
 	         
 	         waitingPanel.setGamePanel(gamePanel);
+	         music.allStop();
+		     music.paly("background");
 	         isGame= false;
 		} else if(isInit) {
 			this.isInit = false;
 			inPanel = new GameInPanel();
+			
 			add(inPanel);
+			music.paly("menu");
 			this.setVisible(true);
 		} else if(isWaitingRoom) {
 			this.isWaitingRoom = false;

@@ -9,7 +9,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Music {
-	public Clip backgroundMusic, gameMusic1, gameMusic2;
+	public Clip backgroundMusic, menuMusic, gameMusic2;
 	public Clip effect1, effect2, effect3;
 	
 	public Music() {
@@ -24,10 +24,10 @@ public class Music {
 			AudioInputStream audioStream1 = AudioSystem.getAudioInputStream(audioFile);
 			backgroundMusic.open(audioStream1);
 			
-//			gameMusic1 = AudioSystem.getClip();
-//			audioFile = new File("src/music/game1.wav");
-//			AudioInputStream audioStream2 = AudioSystem.getAudioInputStream(audioFile);
-//			gameMusic1.open(audioStream2);
+			menuMusic = AudioSystem.getClip();
+			audioFile = new File("src/resource/music/menu.wav");
+			AudioInputStream audioStream2 = AudioSystem.getAudioInputStream(audioFile);
+			menuMusic.open(audioStream2);
 //			
 //			gameMusic2 = AudioSystem.getClip();
 //			audioFile = new File("src/music/game2.wav");
@@ -64,10 +64,10 @@ public class Music {
 			backgroundMusic.setFramePosition(0);
 			backgroundMusic.start();
 			break;
-//		case "game1":
-//			gameMusic1.setFramePosition(0);
-//			gameMusic1.start();
-//			break;
+		case "menu":
+			menuMusic.setFramePosition(0);
+			menuMusic.start();
+			break;
 //		case "game2":
 //			gameMusic2.setFramePosition(0);
 //			gameMusic2.start();
@@ -89,7 +89,7 @@ public class Music {
 	
 	public void allStop() {
 		backgroundMusic.stop();
-//		gameMusic1.stop();
+		menuMusic.stop();
 //		gameMusic2.stop();
 	}
 	
@@ -99,8 +99,8 @@ public class Music {
 		case "background":
 			backgroundMusic.stop();
 			break;
-//		case "game1":
-//			gameMusic1.stop();
+		case "menu":
+			menuMusic.stop();
 //		case "game2":
 //			gameMusic2.stop();
 		
