@@ -22,7 +22,6 @@ public class Player extends JLabel{
 
 	private double speed;
 	private int score;
-	private int lives =3;
 	private float alpha = 255;
 	private SpriteBase spriteBase;
 	private double width = Settings.SPRITE_SIZE;
@@ -57,6 +56,9 @@ public class Player extends JLabel{
     private boolean isMonsterCrush;
     private boolean isImmortal = false;
     private boolean threadFlag = true;
+    
+    public static int player1Live = 3;
+    public static int player2Live = 3;
 
     public void setThreadFlag(boolean threadFlag) {
 		this.threadFlag = threadFlag;
@@ -183,14 +185,18 @@ public class Player extends JLabel{
 		//몬스터와 처음 부딪혔을 때 무적 시작
 			if(isMonsterCrush) { // immortal 상태가 아닐 때만 체크함
 				beforeTime = System.currentTimeMillis(); // 코드 실행 전에 시간 받아오기
-				this.lives -=1;
-				if(lives <=0) {
-					if(this.playerNumber == 1) {
+				if(this.playerNumber == 1) {
+					Player.player1Live --;
+					if(Player.player1Live <=0) {
 						BubbleBobbleGame.player1Dead = true;
-					}else {
-						BubbleBobbleGame.player2Dead = true;
+						this.setVisible(false);
 					}
-					this.setVisible(false);
+				}else {
+					Player.player2Live --;
+					if(Player.player2Live <=0) {
+						BubbleBobbleGame.player2Dead = true;
+						this.setVisible(false);
+					}
 				}
 				this.setDead(true);
 				this.isImmortal = true;
@@ -636,8 +642,6 @@ public class Player extends JLabel{
 		
 		this.isImmortal = isImmortal;
 	}
-	public int getLives() {
-		return this.lives;
-	}
+
 }
 
