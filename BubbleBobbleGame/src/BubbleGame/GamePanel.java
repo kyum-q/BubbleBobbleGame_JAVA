@@ -542,12 +542,12 @@ public class GamePanel extends JLayeredPane {
 		super.paintComponent(g);
 		
 		if(! BubbleBobbleGame.player1Dead) {
-			for(int i=0; i< player1.getLives(); i++) {
+			for(int i=0; i< Player.player1Live; i++) {
 				g.drawImage(heartImg, 20 + 45*i, (int) (Settings.SCENE_HEIGHT -140), myself);
 			}
 		}
 		if(! BubbleBobbleGame.player2Dead) {
-			for(int i=0; i< player2.getLives(); i++) {
+			for(int i=0; i< Player.player2Live; i++) {
 				g.drawImage(heartImg, (int) ((Settings.SCENE_WIDTH) - 180 + 20 + 45*i),  (int) (Settings.SCENE_HEIGHT -140), myself);
 			}
 		}	

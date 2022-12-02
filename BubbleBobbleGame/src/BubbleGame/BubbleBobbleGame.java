@@ -213,7 +213,7 @@ public class BubbleBobbleGame extends JFrame {
 	         
 	         waitingPanel.setGamePanel(gamePanel);
 	         music.stop("menu");
-//		     music.paly("background");
+		   //  music.paly("background");
 	         isGame= false;
 		} else if(isInit) {
 			this.isInit = false;
