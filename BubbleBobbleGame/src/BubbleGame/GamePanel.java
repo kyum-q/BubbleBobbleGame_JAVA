@@ -285,7 +285,7 @@ public class GamePanel extends JLayeredPane {
 	boolean isChangeStage = false;
 
 	public void checkNextStage() {
-		if (monsters.size() <= 0 && !isChangeStage) {
+		if (myPlayerNum == 1 && monsters.size() <= 0 && !isChangeStage) {
 			count++;
 			if (count > 200) {
 				isChangeStage = true;
