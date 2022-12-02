@@ -51,13 +51,13 @@ public class GameInPanel extends JPanel {
 		//serverComboBox.setForeground(Color.gray.brighter());
 		serverComboBox.setAlignmentX(JTextField.CENTER);
 		//serverComboBox.setAlignmentY(JTextField.CENTER);
-		serverComboBox.setBounds((int)Settings.SCENE_WIDTH/2-(100/2), 100, 100, 30);
+		serverComboBox.setBounds((int)Settings.SCENE_WIDTH/2-(100/2), 120, 100, 30);
 		add(serverComboBox);
 
 		font = new Font ("HBIOS-SYS", Font.PLAIN, 30);
 		
 		JLabel nameLabel = new JLabel("UserName");
-		nameLabel.setBounds((int)Settings.SCENE_WIDTH/2-(200/2), 420, 200, 40);
+		nameLabel.setBounds((int)Settings.SCENE_WIDTH/2-(200/2), 440, 200, 40);
 		nameLabel.setFont(font);
 		nameLabel.setForeground(new Color(255, 186, 0));
 		nameLabel.setHorizontalAlignment(JTextField.CENTER);
@@ -66,7 +66,7 @@ public class GameInPanel extends JPanel {
 		txtUserName = new JTextField(10);
 		//txtUserName.setBackground(Color.BLACK);
 		//txtUserName.setForeground(Color.WHITE);
-		txtUserName.setBounds((int)Settings.SCENE_WIDTH/2-(200/2), 460, 200, 30);
+		txtUserName.setBounds((int)Settings.SCENE_WIDTH/2-(200/2), 480, 200, 30);
 		txtUserName.setFont(font);
 		txtUserName.setHorizontalAlignment(JTextField.CENTER);
 		txtUserName.setBorder(BorderFactory.createCompoundBorder( null, null)); //new LineBorder(Color.gray.brighter(),1)
@@ -74,7 +74,7 @@ public class GameInPanel extends JPanel {
 		
 		font = new Font ("HBIOS-SYS", Font.PLAIN, 50);
 		joinBtn = new JButton("JOIN");
-		joinBtn.setBounds((int)Settings.SCENE_WIDTH/2-(370/2), 500, 370, 40);
+		joinBtn.setBounds((int)Settings.SCENE_WIDTH/2-(370/2), 520, 370, 40);
 		//startText.setBounds((int)Settings.SCENE_WIDTH/2-(370/2), 540, 370, 40);
 		joinBtn.setHorizontalAlignment(JLabel.CENTER);
 		joinBtn.setFont(font);
@@ -89,7 +89,7 @@ public class GameInPanel extends JPanel {
 		joinBtn.addActionListener(joinAction);
 		
 		JLabel back = new JLabel("");
-		back.setBounds((int)Settings.SCENE_WIDTH/2-(450/2), 420, 450, 100);
+		back.setBounds((int)Settings.SCENE_WIDTH/2-(450/2), 440, 450, 100);
 		back.setOpaque(true);
 		back.setBackground(Color.BLACK);
 		add(back);

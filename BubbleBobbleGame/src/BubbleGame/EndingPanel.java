@@ -23,7 +23,7 @@ public class EndingPanel extends JPanel {
 	private JTextField txtUserName;
 	private JButton joinBtn;
 	private Image image;
-	public EndingPanel(String endingText1, String endingText2) {
+	public EndingPanel(String endingText1, String endingText2, Color endingColor) {
 		setLayout(null);
 		setOpaque(true);
 		this.setBackground(Color.BLACK);
@@ -33,7 +33,7 @@ public class EndingPanel extends JPanel {
 		gameEnding.setBounds((int)Settings.SCENE_WIDTH/2-(500/2), 150, 500, 40);
 		gameEnding.setHorizontalAlignment(JLabel.CENTER);
 		gameEnding.setFont(font);
-		gameEnding.setForeground(new Color(2,252,2));
+		gameEnding.setForeground(endingColor);
 		add(gameEnding);
 		
 		font = new Font ("던파 비트비트체 TTF", Font.PLAIN, 40);

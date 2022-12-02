@@ -132,6 +132,16 @@ public class BubbleBobbleGame extends JFrame {
 					isChange = false;
 					gameMode();
 				}
+				if(player1Dead && player2Dead) {
+					getContentPane().remove(splitpane);
+					 ScorePanel scorePanel = gamePanel.getScorePanel();
+			         scorePanel.setUp1Name(waitingPanel.getP1Name());
+			         scorePanel.setUp2Name(waitingPanel.getP2Name());
+			         
+					EndingPanel endingPanel = new EndingPanel("GAME OVER !!!","BAD", Color.red);
+					setEndingPanel(endingPanel);
+					this.interrupt();
+				} 
 				repaint();
 				try {
 					Thread.sleep(100);
@@ -179,7 +189,7 @@ public class BubbleBobbleGame extends JFrame {
 	         
 
 	         if(this.stage > 6) {
-	        	 EndingPanel endingPanel = new EndingPanel("GAME CLEAR !!!","HAPPY");
+	        	 EndingPanel endingPanel = new EndingPanel("GAME CLEAR !!!","HAPPY", new Color(2,252,2));
 	        	 setEndingPanel(endingPanel);
 	         }
 	         else {
