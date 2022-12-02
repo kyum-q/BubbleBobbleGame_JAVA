@@ -21,7 +21,7 @@ public final class Settings {
 	public static final int WAITING_SPACE = 80;
 	
 	public static final double SCENE_WIDTH = 693;
-	public static final double SCENE_HEIGHT = 675;
+	public static final double SCENE_HEIGHT = 710;
 	public static final double SPRITE_SIZE = 35;
 	
 	public static final int AMOUNT_MAPS = 6;

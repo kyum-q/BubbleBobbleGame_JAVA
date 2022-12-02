@@ -47,7 +47,7 @@ public class GamePanel extends JLayeredPane {
 	private int score = 0;
 	private GameThread gameThread;
 	private SendThread sendThread;
-
+	Image heartImg = new ImageIcon("src/image/heart.png").getImage();
 	public boolean threadFlag = true;
 
 	/**
@@ -95,8 +95,8 @@ public class GamePanel extends JLayeredPane {
 		this.gameThread = new GameThread();
 		gameThread.start();
 
-		//this.sendThread = new SendThread();
-		//sendThread.start();
+//		this.sendThread = new SendThread();
+//		sendThread.start();
 	}
 
 	public String getUserName() {
@@ -540,52 +540,77 @@ public class GamePanel extends JLayeredPane {
 	public void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
+		
+		for(int i=0; i< player1.getLives(); i++) {
+			g.drawImage(heartImg, 20 + 45*i, (int) (Settings.SCENE_HEIGHT -140), myself);
+			//g.drawImage(heartImg, 20 + 25*i, (int) (Settings.SCENE_HEIGHT - 25), myself);
+			//g.drawImage(heartImg, 0, (int) (Settings.SCENE_HEIGHT - 25), myself);
+			//g.drawImage(heartImg, 20 + 25*i, i, 25, 25, myself);
+		}
+		for(int i=0; i< player2.getLives(); i++) {
+			g.drawImage(heartImg, (int) ((Settings.SCENE_WIDTH) - 200 + 20 + 45*i),  (int) (Settings.SCENE_HEIGHT -140), myself);
+		}
+		
 	}
 
 	class KeyListener extends KeyAdapter {
+		public boolean plag = true;
 		@Override
 		public void keyPressed(KeyEvent e) {
-			switch (e.getKeyCode()) {
-			case KeyEvent.VK_DOWN:
-				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_DOWN"));
-				break;
-			case KeyEvent.VK_UP:
-				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_UP"));
-				break;
-			case KeyEvent.VK_LEFT:
-				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_LEFT"));
-				break;
-			case KeyEvent.VK_RIGHT:
-				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_RIGHT"));
-				break;
-			case KeyEvent.VK_SPACE:
-				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_SPACE"));
-				break;
-			case KeyEvent.VK_ESCAPE:
-				WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_ESCAPE"));
-				break;
+			 {
+			if(myPlayerNum == 1 ) plag = BubbleBobbleGame.player1Dead;
+			else plag = BubbleBobbleGame.player2Dead;
+			if(!plag) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_DOWN:
+					WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_DOWN"));
+					break;
+				case KeyEvent.VK_UP:
+					WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_UP"));
+					break;
+				case KeyEvent.VK_LEFT:
+					WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_LEFT"));
+					break;
+				case KeyEvent.VK_RIGHT:
+					WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_RIGHT"));
+					break;
+				case KeyEvent.VK_SPACE:
+					WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_SPACE"));
+					break;
+				case KeyEvent.VK_ESCAPE:
+					WaitingPanel.SendObject(new ChatMsg(userName, "401", myPlayerNum + "@@VK_ESCAPE"));
+					break;
+				}
+			}
+			
 			}
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			switch (e.getKeyCode()) {
-			case KeyEvent.VK_DOWN:
-				WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_DOWN"));
-				break;
-			case KeyEvent.VK_UP:
-				WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_UP"));
-				break;
-			case KeyEvent.VK_LEFT:
-				WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_LEFT"));
-				break;
-			case KeyEvent.VK_RIGHT:
-				WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_RIGHT"));
-				break;
-			case KeyEvent.VK_SPACE:
-				WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_SPACE"));
-				break;
+			
+			if(myPlayerNum == 1 ) plag = BubbleBobbleGame.player1Dead;
+			else plag = BubbleBobbleGame.player2Dead;
+			if(!plag) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_DOWN:
+					WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_DOWN"));
+					break;
+				case KeyEvent.VK_UP:
+					WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_UP"));
+					break;
+				case KeyEvent.VK_LEFT:
+					WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_LEFT"));
+					break;
+				case KeyEvent.VK_RIGHT:
+					WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_RIGHT"));
+					break;
+				case KeyEvent.VK_SPACE:
+					WaitingPanel.SendObject(new ChatMsg(userName, "402", myPlayerNum + "@@VK_SPACE"));
+					break;
+				}
 			}
+			
 		}
 	}
 

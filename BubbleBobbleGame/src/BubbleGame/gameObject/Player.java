@@ -10,18 +10,19 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import BubbleGame.BubbleBobbleGame;
 import BubbleGame.ScorePanel.ScoreLabel;
 import utility.Settings;
 
 public class Player extends JLabel{
-	private final int playerNumber;
+	public final int playerNumber;
 
 	private double xStartLocation=40;
 	private double yStartLocation= 480;
 
 	private double speed;
 	private int score;
-	private int lives;
+	private int lives =3;
 	private float alpha = 255;
 	private SpriteBase spriteBase;
 	private double width = Settings.SPRITE_SIZE;
@@ -49,6 +50,7 @@ public class Player extends JLabel{
     private boolean isShoot;
    
 	private boolean isMoveDown;
+	private boolean isRealDead = false;
     
 	private boolean isDirection;
     private boolean isWallCrush;
@@ -72,9 +74,12 @@ public class Player extends JLabel{
 		path = "src/image/player"+playerNumber+"-move-left";
 		
 		if(playerNumber==2) {
+			if(BubbleBobbleGame.player2Dead) this.setVisible(false);
 			this.xStartLocation = 550;
+		}else {
+			if(BubbleBobbleGame.player1Dead) this.setVisible(false);
 		}
-
+		
 		this.coordinate = new Coordinates(this.xStartLocation, this.yStartLocation, 1, 3, 3, 1);
 		System.out.println("path: "+path);
 		this.spriteBase = new SpriteBase(path, coordinate);
@@ -84,7 +89,6 @@ public class Player extends JLabel{
 		this.spriteBase.setWidth(width);
 		//getImagePaths();
 		
-		this.lives = 3;
 		this.score = 0;
         this.setUp();
         
@@ -180,7 +184,14 @@ public class Player extends JLabel{
 			if(isMonsterCrush) { // immortal 상태가 아닐 때만 체크함
 				beforeTime = System.currentTimeMillis(); // 코드 실행 전에 시간 받아오기
 				this.lives -=1;
-				if(lives <0)this.setVisible(false);
+				if(lives <=0) {
+					if(this.playerNumber == 1) {
+						BubbleBobbleGame.player1Dead = true;
+					}else {
+						BubbleBobbleGame.player2Dead = true;
+					}
+					this.setVisible(false);
+				}
 				this.setDead(true);
 				this.isImmortal = true;
 				System.out.println(this.playerNumber + "isMonsterCrush");
@@ -624,6 +635,9 @@ public class Player extends JLabel{
 	public void setImmortal(boolean isImmortal) {
 		
 		this.isImmortal = isImmortal;
+	}
+	public int getLives() {
+		return this.lives;
 	}
 }
 

@@ -32,6 +32,9 @@ public class BubbleBobbleGame extends JFrame {
 	public static boolean isInit;
 	public static boolean isWaitingRoom;
 	
+	public static boolean player1Dead = false;
+	public static boolean player2Dead = false;
+	
 	Music music;
 	
 	GameProcessThread gameThread;
@@ -151,6 +154,7 @@ public class BubbleBobbleGame extends JFrame {
 	         
 	         Map map = new Map(this.stage);
 	         GamePanel gamePanel = new GamePanel(scorePanel, map);
+	         
 	         waitingPanel.setGamePanel(gamePanel);
 	         changePanelTimer(1000, gamePanel);
 		}
@@ -166,8 +170,8 @@ public class BubbleBobbleGame extends JFrame {
 	         setGamePanel(gamePanel);
 	         
 	         waitingPanel.setGamePanel(gamePanel);
-	         music.allStop();
-		     music.paly("background");
+	         music.stop("menu");
+//		     music.paly("background");
 	         isGame= false;
 		} else if(isInit) {
 			this.isInit = false;
