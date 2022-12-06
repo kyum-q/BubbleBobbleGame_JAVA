@@ -188,7 +188,7 @@ public class BubbleBobbleGame extends JFrame {
 	         scorePanel.setUp2Name(waitingPanel.getP2Name());
 	         
 
-	         if(this.stage > 6) {
+	         if(this.stage > 3) {
 	        	 EndingPanel endingPanel = new EndingPanel("GAME CLEAR !!!","HAPPY", new Color(2,252,2));
 	        	 setEndingPanel(endingPanel);
 	         }
