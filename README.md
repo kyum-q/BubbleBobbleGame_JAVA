@@ -28,14 +28,10 @@
   
 ## 🖥&nbsp; 실행 영상
 
-[![Video Label](https://github-production-user-asset-6210df.s3.amazonaws.com/109158497/261343046-84b4a585-1e24-4c8d-bdcb-5b75f6496731.png)](https://www.youtube.com/watch?v=WQnkbN7b0SA)
-<br>
+<img width="1100" alt="image" src="https://github.com/kyum-q/BubbleBobbleGame_JAVA/assets/109158497/2a24f5c7-b22e-454c-88e5-40f7a1110861">
 
-## 📍&nbsp; 프로토콜
 
-서버와 클라이언트는 다음과 같이 프로토콜을 설계하였다.
-
-<img width="800" alt="image" src="https://github.com/kyum-q/BubbleBobbleGame_JAVA/assets/109158497/206373ca-ba49-4bd2-bfec-43a8b7ff37a4">
+[![Video Label]()](https://youtu.be/8sF1T_Hj6PY)
 <br>
 
 
