@@ -28,7 +28,7 @@
   
 ## 🖥&nbsp; 실행 영상
 
-[![Video Label](https://github-production-user-asset-6210df.s3.amazonaws.com/109158497/261343046-84b4a585-1e24-4c8d-bdcb-5b75f6496731.png)](https://youtu.be/QYNwbZHmh8g?t=0s)
+[![Video Label](https://github-production-user-asset-6210df.s3.amazonaws.com/109158497/261343046-84b4a585-1e24-4c8d-bdcb-5b75f6496731.png)](https://www.youtube.com/watch?v=WQnkbN7b0SA)
 <br>
 
 ## 📍&nbsp; 프로토콜
