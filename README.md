@@ -1,4 +1,4 @@
-# 🫧&nbsp; 소켓 통신을 이용한 2인 협동 보글보글 게임
+# 🫧&nbsp; 소켓 통신을 이용한 2인 협동 게임 - 보글보글
 
 기존에 보글보글 게임을 재현한 프로젝트로 총 6stage로 이루어져 있으며 소켓 통신을 이용한	2인 협동 게임
 
@@ -28,7 +28,7 @@
   
 ## 🖥&nbsp; 실행 영상
 
-[![BubbleBobbleGame 실행 영상](https://github.com/kyum-q/BubbleBobbleGame_JAVA/assets/109158497/84b4a585-1e24-4c8d-bdcb-5b75f6496731)](https://youtu.be/QYNwbZHmh8g?t=0s) 
+[![Video Label](https://github.com/kyum-q/BubbleBobbleGame_JAVA/assets/109158497/84b4a585-1e24-4c8d-bdcb-5b75f6496731)](https://youtu.be/QYNwbZHmh8g?t=0s)
 <br>
 
 ## 📍&nbsp; 프로토콜
