@@ -28,10 +28,7 @@
   
 ## 🖥&nbsp; 실행 영상
 
-<img width="1100" alt="image" src="https://github.com/kyum-q/BubbleBobbleGame_JAVA/assets/109158497/2a24f5c7-b22e-454c-88e5-40f7a1110861">
-
-
-[![Video Label]()](https://youtu.be/8sF1T_Hj6PY)
+[![BubbleBobbleGame 시연영상](https://github-production-user-asset-6210df.s3.amazonaws.com/109158497/261663402-a3f683bc-d5c1-4c73-bb26-138669d8c127.png)](https://youtu.be/WQnkbN7b0SA)
 <br>
 
 
